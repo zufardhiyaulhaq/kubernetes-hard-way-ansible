@@ -1,0 +1,4 @@
+- name: apply the environment configurations to all node
+  hosts: deployer
+  roles:
+    - generate-ca

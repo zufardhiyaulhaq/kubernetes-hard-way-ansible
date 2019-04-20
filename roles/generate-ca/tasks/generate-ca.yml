@@ -1,0 +1,129 @@
+- name: install git
+  apt:
+    name: git
+    update_cache: yes
+
+- name: install cfssl
+  get_url:
+    url: https://pkg.cfssl.org/R1.2/cfssl_linux-amd64
+    dest: /usr/local/bin/cfssl
+    mode: a+x
+
+- name: install cfssljson
+  get_url:
+    url: https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
+    dest: /usr/local/bin/cfssljson
+    mode: a+x
+
+- name: create certificate directory
+  file:
+    path: ~/certificate-template
+    state: directory
+
+- name: copy worker certificate
+  template:
+    src: "worker-csr.json.j2"
+    dest: "~/certificate-template/{{ item }}-csr.json"
+  with_items: "{{ groups['worker'] }}"
+
+- name: copy all template
+  template:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+  with_items:
+    - { src: 'admin-csr.json.j2', dest: '~/certificate-template/admin-csr.json' }
+    - { src: 'ca-config.json.j2', dest: '~/certificate-template/ca-config.json' }
+    - { src: 'ca-csr.json.j2', dest: '~/certificate-template/ca-csr.json' }
+    - { src: 'kube-controller-manager-csr.json.j2', dest: '~/certificate-template/kube-controller-manager-csr.json' }
+    - { src: 'kube-proxy-csr.json.j2', dest: '~/certificate-template/kube-proxy-csr.json' }
+    - { src: 'kube-scheduler-csr.json.j2', dest: '~/certificate-template/kube-scheduler-csr.json.json' }
+    - { src: 'kubernetes-csr.json.j2', dest: '~/certificate-template/kubernetes-csr.json' }
+    - { src: 'service-account-csr.json.j2', dest: '~/certificate-template/service-account-csr.json' }
+
+- name: generate CA 
+  shell: cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+  args:
+    chdir: ~/certificate-template
+
+- name: generate admin certificate
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    cfssl gencert \
+    -ca=ca.pem \
+    -ca-key=ca-key.pem \
+    -config=ca-config.json \
+    -profile=kubernetes \
+    admin-csr.json | cfssljson -bare admin
+
+- name: generate worker certificate
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    cfssl gencert \
+    -ca=ca.pem \
+    -ca-key=ca-key.pem \
+    -config=ca-config.json \
+    -hostname={{ item }} \
+    -profile=kubernetes \
+    {{ item }}-csr.json | cfssljson -bare {{ item }}
+  with_items: "{{ groups['worker'] }}"
+
+- name: generate controller-manager certificate
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    cfssl gencert \
+    -ca=ca.pem \
+    -ca-key=ca-key.pem \
+    -config=ca-config.json \
+    -profile=kubernetes \
+    kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager
+
+- name: generate kube-proxy certificate
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    cfssl gencert \
+    -ca=ca.pem \
+    -ca-key=ca-key.pem \
+    -config=ca-config.json \
+    -profile=kubernetes \
+    kube-proxy-csr.json | cfssljson -bare kube-proxy
+
+- name: generate scheduler certificate
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    cfssl gencert \
+    -ca=ca.pem \
+    -ca-key=ca-key.pem \
+    -config=ca-config.json \
+    -profile=kubernetes \
+    kube-scheduler-csr.json | cfssljson -bare kube-scheduler
+
+- name: generate api-server certificate
+  vars:
+    etcd_ip: "{{ groups['etcd'] | map('extract', hostvars, ['ansible_host']) | join(',') }}"
+    master_ip: "{{ groups['master'] | map('extract', hostvars, ['ansible_host']) | join(',') }}"
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    cfssl gencert \
+    -ca=ca.pem \
+    -ca-key=ca-key.pem \
+    -config=ca-config.json \
+    -hostname=10.32.0.1,{{ etcd_ip }},{{ master_ip }},{{ virtual_ip }},127.0.0.1,kubernetes.default \
+    -profile=kubernetes \
+    kubernetes-csr.json | cfssljson -bare kubernetes
+    
+- name: generate service-account certificate
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    cfssl gencert \
+    -ca=ca.pem \
+    -ca-key=ca-key.pem \
+    -config=ca-config.json \
+    -profile=kubernetes \
+    service-account-csr.json | cfssljson -bare service-account

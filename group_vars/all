@@ -1,0 +1,3 @@
+
+ansible_python_interpreter=/usr/bin/python3
+virtual_ip=10.200.200.100
