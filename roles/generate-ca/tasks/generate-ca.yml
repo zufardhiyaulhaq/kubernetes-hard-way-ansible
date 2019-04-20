@@ -4,6 +4,13 @@
     name: git
     update_cache: yes
 
+- name: install kubectl
+  become: true
+  get_url:
+    url: https://storage.googleapis.com/kubernetes-release/release/v1.13.3/bin/linux/amd64/kubectl
+    dest: /usr/local/bin/kubectl
+    mode: a+x
+
 - name: install cfssl
   become: true
   get_url:
@@ -130,3 +137,115 @@
     -hostname=10.32.0.1,{{ etcd_ip }},{{ master_ip }},{{ virtual_ip }},127.0.0.1,kubernetes.default \
     -profile=kubernetes \
     kubernetes-csr.json | cfssljson -bare kubernetes
+
+- name: copy cert into worker node
+  vars:
+    worker_ip: "{{ groups['worker'] | join(' ') }}"
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    for instance in {{ worker_ip }}; do
+      scp ca.pem ${instance}:~/
+      scp ${instance}-key.pem ${instance}:~/
+      scp ${instance}.pem ${instance}:~/
+    done
+
+- name: copy cert into etcd node
+  vars:
+    etcd_ip: "{{ groups['etcd'] | join(' ') }}"
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    for instance in {{ etcd_ip }}; do
+      scp ca.pem ${instance}:~/
+      scp kubernetes-key.pem ${instance}:~/
+      scp kubernetes.pem ${instance}:~/
+    done
+
+- name: copy cert into master node
+  vars:
+    master_ip: "{{ groups['master'] | join(' ') }}"
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    for instance in {{ master_ip }}; do
+      scp ca.pem ${instance}:~/
+      scp ca-key.pem ${instance}:~/
+      scp kubernetes-key.pem ${instance}:~/
+      scp kubernetes.pem ${instance}:~/
+      scp service-account-key.pem ${instance}:~/
+      scp service-account.pem ${instance}:~/
+    done
+
+- name: generate kubeconfig for kubelet
+  vars:
+    worker_ip: "{{ groups['worker'] | join(' ') }}"
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    for instance in {{ worker_ip }}; do
+      kubectl config set-cluster kubernetes-the-hard-way \
+        --certificate-authority=ca.pem \
+        --embed-certs=true \
+        --server=https://{{ virtual_ip }}:6443 \
+        --kubeconfig=${instance}.kubeconfig
+
+      kubectl config set-credentials system:node:${instance} \
+        --client-certificate=${instance}.pem \
+        --client-key=${instance}-key.pem \
+        --embed-certs=true \
+        --kubeconfig=${instance}.kubeconfig
+
+      kubectl config set-context default \
+        --cluster=kubernetes-the-hard-way \
+        --user=system:node:${instance} \
+        --kubeconfig=${instance}.kubeconfig
+
+      kubectl config use-context default --kubeconfig=${instance}.kubeconfig
+    done
+
+- name: generate kubeconfig for kubeproxy
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    kubectl config set-cluster kubernetes-the-hard-way \
+        --certificate-authority=ca.pem \
+        --embed-certs=true \
+        --server=https://{{ virtual_ip }}:6443 \
+        --kubeconfig=kube-proxy.kubeconfig
+    
+    kubectl config set-credentials system:kube-proxy \
+        --client-certificate=kube-proxy.pem \
+        --client-key=kube-proxy-key.pem \
+        --embed-certs=true \
+        --kubeconfig=kube-proxy.kubeconfig
+    
+    kubectl config set-context default \
+        --cluster=kubernetes-the-hard-way \
+        --user=system:kube-proxy \
+        --kubeconfig=kube-proxy.kubeconfig
+    
+    kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
+
+- name: generate kubeconfig for controller-manager
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    kubectl config set-cluster kubernetes-the-hard-way \
+        --certificate-authority=ca.pem \
+        --embed-certs=true \
+        --server=https://127.0.0.1:6443 \
+        --kubeconfig=kube-controller-manager.kubeconfig
+
+    kubectl config set-credentials system:kube-controller-manager \
+        --client-certificate=kube-controller-manager.pem \
+        --client-key=kube-controller-manager-key.pem \
+        --embed-certs=true \
+        --kubeconfig=kube-controller-manager.kubeconfig
+
+    kubectl config set-context default \
+        --cluster=kubernetes-the-hard-way \
+        --user=system:kube-controller-manager \
+        --kubeconfig=kube-controller-manager.kubeconfig
+
+    kubectl config use-context default --kubeconfig=kube-controller-manager.kubeconfig
