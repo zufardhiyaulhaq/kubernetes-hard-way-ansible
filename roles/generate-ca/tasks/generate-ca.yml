@@ -118,8 +118,8 @@
 
 - name: generate api-server certificate
   vars:
-    etcd_ip: "{{ groups['etcd'] | |join(',') }}"
-    master_ip: "{{ groups['master'] | |join(',') }}"
+    etcd_ip: "{{ groups['etcd'] | join(',') }}"
+    master_ip: "{{ groups['master'] | join(',') }}"
   args:
     chdir: ~/certificate-template
   shell: |
