@@ -1,15 +1,18 @@
 - name: install git
+  become: true
   apt:
     name: git
     update_cache: yes
 
 - name: install cfssl
+  become: true
   get_url:
     url: https://pkg.cfssl.org/R1.2/cfssl_linux-amd64
     dest: /usr/local/bin/cfssl
     mode: a+x
 
 - name: install cfssljson
+  become: true
   get_url:
     url: https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
     dest: /usr/local/bin/cfssljson
@@ -116,6 +119,11 @@
     -hostname=10.32.0.1,{{ etcd_ip }},{{ master_ip }},{{ virtual_ip }},127.0.0.1,kubernetes.default \
     -profile=kubernetes \
     kubernetes-csr.json | cfssljson -bare kubernetes
+  register: ps
+
+- name: print api-server command
+  debug:
+    var: ps.stdout_lines
     
 - name: generate service-account certificate
   args:

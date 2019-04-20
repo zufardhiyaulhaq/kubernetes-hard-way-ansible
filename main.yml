@@ -1,5 +1,4 @@
 - name: apply the environment configurations to all node
   hosts: deployer
-  become: true
   roles:
     - generate-ca
