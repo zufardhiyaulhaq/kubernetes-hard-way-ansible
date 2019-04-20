@@ -104,26 +104,6 @@
     -config=ca-config.json \
     -profile=kubernetes \
     kube-scheduler-csr.json | cfssljson -bare kube-scheduler
-
-- name: generate api-server certificate
-  vars:
-    etcd_ip: "{{ groups['etcd'] | map('extract', hostvars, ['ansible_host']) | join(',') }}"
-    master_ip: "{{ groups['master'] | map('extract', hostvars, ['ansible_host']) | join(',') }}"
-  args:
-    chdir: ~/certificate-template
-  shell: |
-    cfssl gencert \
-    -ca=ca.pem \
-    -ca-key=ca-key.pem \
-    -config=ca-config.json \
-    -hostname=10.32.0.1,{{ etcd_ip }},{{ master_ip }},{{ virtual_ip }},127.0.0.1,kubernetes.default \
-    -profile=kubernetes \
-    kubernetes-csr.json | cfssljson -bare kubernetes
-  register: ps
-
-- name: print api-server command
-  debug:
-    var: ps.stdout_lines
     
 - name: generate service-account certificate
   args:
@@ -135,3 +115,18 @@
     -config=ca-config.json \
     -profile=kubernetes \
     service-account-csr.json | cfssljson -bare service-account
+
+- name: generate api-server certificate
+  vars:
+    etcd_ip: "{{ groups['etcd'] | |join(',') }}"
+    master_ip: "{{ groups['master'] | |join(',') }}"
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    cfssl gencert \
+    -ca=ca.pem \
+    -ca-key=ca-key.pem \
+    -config=ca-config.json \
+    -hostname=10.32.0.1,{{ etcd_ip }},{{ master_ip }},{{ virtual_ip }},127.0.0.1,kubernetes.default \
+    -profile=kubernetes \
+    kubernetes-csr.json | cfssljson -bare kubernetes
