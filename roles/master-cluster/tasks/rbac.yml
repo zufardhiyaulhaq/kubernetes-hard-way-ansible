@@ -4,5 +4,5 @@
     dest: "~/rbac.yaml"
   when: inventory_hostname == '{{ keepalived_master }}'
 - name: apply rbac template
-  shell: kubectl apply -f ~/rbac.yaml
+  shell: kubectl create -f ~/rbac.yaml
   when: inventory_hostname == '{{ keepalived_master }}'
