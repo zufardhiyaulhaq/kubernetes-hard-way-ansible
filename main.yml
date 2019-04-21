@@ -1,14 +1,15 @@
 - name: generate CA & kubeconfig
   hosts: deployer
   roles:
-    - initial_setup
+    - initial-setup
 
 - name: Setup etcd cluster
   hosts: etcd
   roles:
-    - etcd_cluster
+    - etcd-cluster
 
 - name: Setup haproxy & keepalived
   hosts: master
   roles:
     - haproxy-keepalived
+    - master-cluster

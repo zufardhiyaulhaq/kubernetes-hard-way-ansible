@@ -1,5 +1,7 @@
 
 ansible_python_interpreter: /usr/bin/python3
+kubernetes_version: v1.13.3
+kubernetes_master_number: 3
 
 virtual_ip: 10.202.202.100
 virtual_ip_k8s_port: 64430

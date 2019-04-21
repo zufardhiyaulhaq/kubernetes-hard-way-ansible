@@ -1,0 +1,75 @@
+- name: create kubernetes directory
+  file:
+    path: /etc/kubernetes/config/
+    state: directory
+
+- name: create kubernetes directory
+  file:
+    path: /var/lib/kubernetes/
+    state: directory
+
+- name: install kubectl
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+    mode: a+x
+  with_items:
+  - { url: 'https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kube-apiserver', dest: '/usr/local/bin/kube-apiserver' }
+  - { url: 'https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kube-controller-manager', dest: '/usr/local/bin/kube-controller-manager' }
+  - { url: 'https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kube-scheduler', dest: '/usr/local/bin/kube-scheduler' }
+  - { url: 'https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kubectl', dest: '/usr/local/bin/kubectl' }
+
+- name: Copy cert
+  copy: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    remote_src: yes
+    mode: 400
+  with_items:
+    - { src: '~/ca.pem', dest: '/var/lib/kubernetes/ca.pem' }
+    - { src: '~/ca-key.pem', dest: '/var/lib/kubernetes/ca-key.pem' }
+    - { src: '~/kubernetes-key.pem', dest: '/var/lib/kubernetes/kubernetes-key.pem' }
+    - { src: '~/kubernetes.pem', dest: '/var/lib/kubernetes/kubernetes.pem' }
+    - { src: '~/service-account-key.pem', dest: '/var/lib/kubernetes/service-account-key.pem' }
+    - { src: '~/service-account.pem', dest: '/var/lib/kubernetes/service-account.pem' }
+    - { src: '~/encryption-config.yaml', dest: '/var/lib/kubernetes/encryption-config.yaml' }
+
+- name: create kubernetes service files
+  template:
+    src: "kube-scheduler.yaml.j2"
+    dest: "/var/lib/kubernetes/kube-scheduler.yaml"
+
+- name: create kubernetes service files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 644
+  with_items:
+    - { src: 'kube-controller-manager.service.j2', dest: '/etc/systemd/system/kube-controller-manager.service' }
+    - { src: 'kube-apiserver.service.j2', dest: '/etc/systemd/system/kube-apiserver.service' }
+    - { src: 'kube-scheduler.service.j2', dest: '/etc/systemd/system/kube-scheduler.service' }
+
+- name: restart kube-apiserver
+  systemd:
+    name: kube-apiserver
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+
+- name: restart kube-controller-manager
+  systemd:
+    name: kube-controller-manager
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+
+- name: restart kube-scheduler
+  systemd:
+    name: kube-scheduler
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+
+
+
+
