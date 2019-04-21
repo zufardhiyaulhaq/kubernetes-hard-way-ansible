@@ -33,6 +33,8 @@
     - { src: '~/service-account-key.pem', dest: '/var/lib/kubernetes/service-account-key.pem' }
     - { src: '~/service-account.pem', dest: '/var/lib/kubernetes/service-account.pem' }
     - { src: '~/encryption-config.yaml', dest: '/var/lib/kubernetes/encryption-config.yaml' }
+    - { src: '~/kube-controller-manager.kubeconfig', dest: '/var/lib/kubernetes/kube-controller-manager.kubeconfig' }
+    - { src: '~/kube-scheduler.kubeconfig', dest: '/var/lib/kubernetes/kube-scheduler.kubeconfig' }
 
 - name: create kubernetes service files
   template:
