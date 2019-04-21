@@ -1,0 +1,42 @@
+- name: Downlaod and Extract etcd-{{ etcd_version }}-linux-amd64.tar.gz into /tmp/
+  unarchive:
+    src: https://github.com/coreos/etcd/releases/download/{{ etcd_version }}/etcd-{{ etcd_version }}-linux-amd64.tar.gz
+    dest: /tmp/etcd-{{ etcd_version }}-linux-amd64
+    remote_src: yes
+
+- name: Move etcd files
+  copy:
+    src: "/tmp/etcd-{{ etcd_version }}-linux-amd64/{{item}}"
+    dest: "/usr/local/bin/{{item}}"
+    remote_src: yes
+  with_items:
+  - etcd
+  - etcdctl
+
+- name: create etcd directory
+  file:
+    path: /etc/etcd
+    state: directory
+
+- name: create etcd directory
+  file:
+    path: /var/lib/etcd
+    state: directory
+
+- name: Copy cert
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: '~/ca.pem', dest: '/etc/etcd/ca.pem' }
+    - { src: '~/kubernetes-key.pem', dest: '/etc/etcd/kubernetes-key.pem' }
+    - { src: '~/kubernetes.pem', dest: '/etc/etcd/kubernetes.pem' }
+
+- name: create etcd systemd unit file
+  template:
+    src: etcd.service.j2
+    dest: /etc/systemd/system/etcd.service
+
+- name: restart etcd
+  systemd:
+    name: etcd
+    state: restarted
+  daemon_reload: yes

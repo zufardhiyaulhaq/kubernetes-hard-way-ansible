@@ -1,0 +1,23 @@
+---
+- name: install git
+  apt:
+    name: git
+    update_cache: yes
+
+- name: install kubectl
+  get_url:
+    url: https://storage.googleapis.com/kubernetes-release/release/v1.13.3/bin/linux/amd64/kubectl
+    dest: /usr/local/bin/kubectl
+    mode: a+x
+
+- name: install cfssl
+  get_url:
+    url: https://pkg.cfssl.org/R1.2/cfssl_linux-amd64
+    dest: /usr/local/bin/cfssl
+    mode: a+x
+
+- name: install cfssljson
+  get_url:
+    url: https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
+    dest: /usr/local/bin/cfssljson
+    mode: a+x

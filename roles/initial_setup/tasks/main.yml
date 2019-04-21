@@ -1,0 +1,5 @@
+---
+- include: install-requirement.yml
+- include: generate-ca.yml
+- include: generate-kubeconfig.yml
+- include: generate-data-encryption.yml

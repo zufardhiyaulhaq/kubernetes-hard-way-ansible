@@ -1,4 +1,9 @@
-- name: apply the environment configurations to all node
+- name: generate CA & kubeconfig
   hosts: deployer
   roles:
-    - generate-ca
+    - initial_setup
+
+- name: Setup etcd cluster
+  hosts: etcd
+  roles:
+    - etcd_cluster

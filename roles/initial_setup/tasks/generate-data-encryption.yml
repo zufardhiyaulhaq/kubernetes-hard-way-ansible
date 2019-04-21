@@ -1,0 +1,25 @@
+---
+- name: Generate random key
+  command: "head -c 32 /dev/urandom | base64"
+  register: random_key_raw
+
+- name: set variable 
+  set_fact:
+    random_key: "{{ random_key_raw.stdout }}"
+
+- name: copy data encryption template
+  template:
+    src: "encryption-config.yaml.j2"
+    dest: "~/certificate-template/encryption-config.yaml"
+
+- name: copy into master node
+  vars:
+    master_ip: "{{ groups['master'] | join(' ') }}"
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    for instance in {{ master_ip }}; do
+      scp encryption-config.yaml ${instance}:~/
+    done
+
+  
