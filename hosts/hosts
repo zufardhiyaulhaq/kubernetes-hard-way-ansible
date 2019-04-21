@@ -4,14 +4,14 @@
 10.202.202.30
 
 [master]
-zu-master1
-zu-master2
-zu-master3
+10.202.202.40
+10.202.202.50
+10.202.202.60
 
 [worker]
-zu-worker1
-zu-worker2
-zu-worker3
+10.202.202.70
+10.202.202.80
+10.202.202.90
 
 [deployer]
 10.202.202.200
