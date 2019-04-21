@@ -1,3 +1,3 @@
-keepalived_master: 10.202.202.40
+keepalived_master: zu-master1
 keepalived_interface: ens3
 keepalived_rid: 50

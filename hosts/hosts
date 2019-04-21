@@ -1,17 +1,17 @@
 [etcd]
-10.202.202.10
-10.202.202.20
-10.202.202.30
+zu-etcd1
+zu-etcd2
+zu-etcd3
 
 [master]
-10.202.202.40
-10.202.202.50
-10.202.202.60
+zu-master1
+zu-master2
+zu-master3
 
 [worker]
-10.202.202.70
-10.202.202.80
-10.202.202.90
+zu-worker1
+zu-worker2
+zu-worker3
 
 [deployer]
 10.202.202.200
