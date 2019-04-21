@@ -1,3 +1,5 @@
 
 ansible_python_interpreter: /usr/bin/python3
+
 virtual_ip: 10.202.202.100
+virtual_ip_k8s_port: 64430

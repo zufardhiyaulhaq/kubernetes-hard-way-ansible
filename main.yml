@@ -7,3 +7,8 @@
   hosts: etcd
   roles:
     - etcd_cluster
+
+- name: Setup haproxy & keepalived
+  hosts: master
+  roles:
+    - haproxy-keepalived

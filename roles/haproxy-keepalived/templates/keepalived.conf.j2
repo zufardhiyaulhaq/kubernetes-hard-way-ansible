@@ -1,0 +1,28 @@
+vrrp_script haproxy-check {
+    script "killall -0 haproxy"
+    interval 2
+    weight 20
+}
+
+vrrp_instance haproxy-vip {
+
+interface {{ keepalived_interface }}
+state {% if ansible_default_ipv4.address == keepalived_master %} MASTER {% else %} backup {% endif %}
+priority {% if ansible_default_ipv4.address == keepalived_master %} 100 {% else %} 99 {% endif %}
+
+virtual_router_id {{ keepalived_rid }}
+unicast_src_ip {{ ansible_default_ipv4.address }}
+
+unicast_peer {
+{% for node in groups['master'] %}
+    {% if node == ansible_default_ipv4.address %}
+    {% else %}
+        {{ node }}
+    {% endif %}
+{% endfor %}
+}
+
+virtual_ipaddress {
+        {{ virtual_ip }}
+    }
+}
