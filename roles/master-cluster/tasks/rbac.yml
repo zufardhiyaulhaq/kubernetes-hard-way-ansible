@@ -1,3 +1,7 @@
+- name: pause 1 minute
+  pause:
+    minutes: 1
+
 - name: create rbac from template
   template:
     src: "rbac.yaml.j2"

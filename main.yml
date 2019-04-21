@@ -15,6 +15,6 @@
     - master-cluster
 
 - name: Setup Worker
-  hosts: master
+  hosts: worker
   roles:
     - worker-cluster
