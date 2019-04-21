@@ -1,6 +1,6 @@
 - name: create rbac from template
   template:
-    src: "rbac.yaml"
+    src: "rbac.yaml.j2"
     dest: "~/rbac.yaml"
   when: inventory_hostname == '{{ keepalived_master }}'
 - name: apply rbac template
