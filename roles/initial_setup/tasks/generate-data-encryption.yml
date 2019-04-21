@@ -1,6 +1,6 @@
 ---
 - name: Generate random key
-  command: "head -c 32 /dev/urandom | base64"
+  shell: "head -c 32 /dev/urandom | base64"
   register: random_key_raw
 
 - name: set variable 
