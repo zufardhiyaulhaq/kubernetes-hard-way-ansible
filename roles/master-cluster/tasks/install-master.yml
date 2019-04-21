@@ -39,7 +39,7 @@
 - name: create kubernetes service files
   template:
     src: "kube-scheduler.yaml.j2"
-    dest: "/var/lib/kubernetes/kube-scheduler.yaml"
+    dest: "/etc/kubernetes/config/kube-scheduler.yaml"
 
 - name: create kubernetes service files
   template:
