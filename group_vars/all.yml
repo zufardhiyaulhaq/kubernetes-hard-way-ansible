@@ -1,5 +1,3 @@
 
 ansible_python_interpreter: /usr/bin/python3
-ansible_ssh_user: btech
-
 virtual_ip: 10.202.202.100
