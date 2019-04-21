@@ -25,8 +25,8 @@
 
 - name: Copy cert
   copy: 
-    src: {{ item.src }}
-    dest: {{ item.dest }}
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     remote_src: yes
   with_items:
     - { src: '~/ca.pem', dest: '/etc/etcd/ca.pem' }
