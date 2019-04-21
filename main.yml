@@ -8,8 +8,13 @@
   roles:
     - etcd-cluster
 
-- name: Setup haproxy & keepalived
+- name: Setup Master Cluter
   hosts: master
   roles:
     - haproxy-keepalived
     - master-cluster
+
+- name: Setup Worker
+  hosts: master
+  roles:
+    - worker-cluster
