@@ -1,7 +1,7 @@
 [etcd]
-zu-etcd1
-zu-etcd2
-zu-etcd3
+10.202.202.10
+10.202.202.20
+10.202.202.30
 
 [master]
 zu-master1
