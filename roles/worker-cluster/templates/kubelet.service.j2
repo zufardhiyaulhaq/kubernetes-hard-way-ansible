@@ -1,0 +1,22 @@
+[Unit]
+Description=Kubernetes Kubelet
+Documentation=https://github.com/kubernetes/kubernetes
+After=docker.service
+Requires=docker.service
+
+[Service]
+ExecStart=/usr/local/bin/kubelet \
+  --config=/var/lib/kubelet/kubelet-config.yaml \
+  --pod-cidr="10.244.0.0/16" \
+  --cni-bin-dir=/opt/cni/bin \
+  --cni-conf-dir=/etc/cni/net.d \
+  --image-pull-progress-deadline=2m \
+  --kubeconfig=/var/lib/kubelet/kubeconfig \
+  --network-plugin=cni \
+  --register-node=true \
+  --v=2
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

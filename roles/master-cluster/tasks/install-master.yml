@@ -8,6 +8,11 @@
     path: /var/lib/kubernetes/
     state: directory
 
+- name: create kubectl directory
+  file:
+    path: /root/.kube/
+    state: directory
+
 - name: install kubectl
   get_url:
     url: "{{ item.url }}"
@@ -35,6 +40,7 @@
     - { src: '~/encryption-config.yaml', dest: '/var/lib/kubernetes/encryption-config.yaml' }
     - { src: '~/kube-controller-manager.kubeconfig', dest: '/var/lib/kubernetes/kube-controller-manager.kubeconfig' }
     - { src: '~/kube-scheduler.kubeconfig', dest: '/var/lib/kubernetes/kube-scheduler.kubeconfig' }
+    - { src: '~/admin.kubeconfig', dest: '/root/.kube/config' }
 
 - name: create kubernetes service files
   template:

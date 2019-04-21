@@ -1,2 +1,3 @@
 ---
 - include: install-master.yml
+- include: rbac.yml
