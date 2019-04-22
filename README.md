@@ -1,0 +1,45 @@
+# Kubernetes the easy way
+Ansible template to create kubernetes cluster with the following specs:
+* Kubernetes 1.13.3
+* Latest Docker
+* Latest Flannel
+* CNI 0.6.0
+* etcd 3.3.9
+* core-dns 1.2.5
+* Haproxy & keepalived
+* Secure communication between component
+
+### Testing in
+* 3 etcd nodes
+* 3 master nodes
+* 3 worker nodes
+* Ubuntu 16.04
+
+## Step
+* Prepare deployer nodes (ansible is installed in here)
+```
+sudo apt-add-repository ppa:ansible/ansible
+sudo apt update
+sudo apt install ansible
+```
+* Make sure deployer have root access into all nodes (tips using ssh-copy-id)
+```
+ssh-copy-id root@deployer
+ssh-copy-id root@etcdX
+ssh-copy-id root@masterX
+ssh-copy-id root@workerX
+```
+* Clone this repository
+```
+git clone https://github.com/zufardhiyaulhaq/kubernetes-the-easy-way-with-ansible.git
+```
+* Change some variable
+```
+group_vars/all.yml
+group_vars/master.yml
+hosts/hosts
+```
+* Run ansible
+```
+ansible-playbook main.yml -i hosts/hosts
+```
