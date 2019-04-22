@@ -18,3 +18,8 @@
   hosts: worker
   roles:
     - worker-cluster
+
+- name: Setup CNI & core-dns
+  hosts: master
+  roles:
+    - cni-dns

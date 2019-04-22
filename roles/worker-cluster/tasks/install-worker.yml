@@ -72,7 +72,7 @@
 - name: Downlaod and Extract cni-plugins-amd64-{{ cni_version }}.tgz
   unarchive:
     src: https://github.com/containernetworking/plugins/releases/download/{{ cni_version }}/cni-plugins-amd64-{{ cni_version }}.tgz
-    dest: /usr/local/bin/
+    dest: /opt/cni/bin/
     remote_src: yes
 
 - name: Copy cert
@@ -124,3 +124,8 @@
     state: restarted
     daemon_reload: yes
     enabled: yes
+
+- name: fix DNS
+  shell: ln -s /run/resolvconf/ /run/systemd/resolve
+
+
