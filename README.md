@@ -43,3 +43,6 @@ hosts/hosts
 ```
 ansible-playbook main.yml -i hosts/hosts
 ```
+
+### Additional Setup
+* [metrics-server](additional_setup/metrics-server.md)
