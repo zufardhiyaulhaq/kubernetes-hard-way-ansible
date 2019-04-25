@@ -125,6 +125,11 @@ git clone https://github.com/kubernetes-incubator/metrics-server.git
 cd metrics-server
 kubectl create -f deploy/1.8+/
 ```
+### Edit deployment
+```
+kubectl -n kube-system edit deployment metrics-server
+Add hostNetwork:true under spec:template:spec (the same level with containers)
+```
 ### Checking
 ```
 root@zu-master1:~# kubectl top pod --all-namespaces
