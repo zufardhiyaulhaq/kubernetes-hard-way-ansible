@@ -6,6 +6,7 @@ Ansible template to create kubernetes cluster with the following specs:
 * CNI 0.6.0
 * etcd 3.3.9
 * core-dns 1.2.5
+* metrics-server
 * Haproxy & keepalived
 * Secure communication between component
 

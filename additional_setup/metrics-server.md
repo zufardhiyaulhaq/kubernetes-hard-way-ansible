@@ -1,83 +1,19 @@
 # Metrics Server
 Metrics server is a incubating project in Kubernetes to enable Kubernetes horizonal pod scaling.
 
-The setup in this architecture is little bit difference, because API Server cannot connect into metrics-server pod directly.
-
-### Step
-#### Generate additional certificate
-* Go into deployer node
-```
-cd certificate-template/
-```
-* Add this json template
-```
-cat > metrics-server-csr.json << EOF
-{
-  "CN": "aggregator",
-  "key": {
-    "algo": "rsa",
-    "size": 2048
-  },
-  "names": [
-    {
-      "C": "US",
-      "L": "Portland",
-      "O": "metrics-server",
-      "OU": "Kubernetes The Hard Way",
-      "ST": "Oregon"
-    }
-  ]
-}
-EOF
-```
-* Generate certificate
-```
-cfssl gencert \
-    -ca=ca.pem \
-    -ca-key=ca-key.pem \
-    -config=ca-config.json \
-    -profile=kubernetes \
-    metrics-server-csr.json | cfssljson -bare aggregator-proxy-client
-```
-### Copy certificate into Master
-* Copy from deployer
-```
-scp ca.pem root@10.202.202.40:~/
-scp aggregator-proxy-client.pem root@10.202.202.40:~/
-scp aggregator-proxy-client-key.pem root@10.202.202.40:~/
-
-scp ca.pem root@10.202.202.50:~/
-scp aggregator-proxy-client.pem root@10.202.202.50:~/
-scp aggregator-proxy-client-key.pem root@10.202.202.50:~/
-
-scp ca.pem root@10.202.202.60:~/
-scp aggregator-proxy-client.pem root@10.202.202.60:~/
-scp aggregator-proxy-client-key.pem root@10.202.202.60:~/
-```
-* Create certificate directory
-```
-mkdir /var/lib/kubernetes/aggregator-ca/
-```
-* Copy into directory
-```
-cp ca.pem /var/lib/kubernetes/aggregator-ca/
-cp aggregator-proxy-client.pem /var/lib/kubernetes/aggregator-ca/
-cp aggregator-proxy-client-key.pem /var/lib/kubernetes/aggregator-ca/
-```
 ### Edit kube-apiserver service
 ```
 nano /etc/systemd/system/kube-apiserver.service
 ```
 Add this following configuration
 ```
-    --requestheader-client-ca-file=/var/lib/kubernetes/aggregator-ca/ca.pem \
-    --proxy-client-cert-file=/var/lib/kubernetes/aggregator-ca/aggregator-proxy-client.pem \
-    --proxy-client-key-file=/var/lib/kubernetes/aggregator-ca/aggregator-proxy-client-key.pem \
+    --requestheader-client-ca-file=/var/lib/kubernetes/ca.pem \
+    --proxy-client-cert-file=/var/lib/kubernetes/aggregator-proxy-client.pem \
+    --proxy-client-key-file=/var/lib/kubernetes/aggregator-proxy-client-key.pem \
     --requestheader-allowed-names=aggregator \
     --requestheader-extra-headers-prefix=X-Remote-Extra- \
     --requestheader-group-headers=X-Remote-Group \
     --requestheader-username-headers=X-Remote-User \
-    --enable-aggregator-routing=true \
 ```
 ### Restart API Server
 ```

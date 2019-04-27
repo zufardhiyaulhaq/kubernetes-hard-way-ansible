@@ -1,0 +1,5 @@
+- name: copy worker certificate
+  template:
+    src: "worker-csr.json.j2"
+    dest: "~/certificate-template/{{ item }}-csr.json"
+  with_items: "{{ groups['worker'] }}"

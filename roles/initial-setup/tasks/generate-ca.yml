@@ -10,6 +10,12 @@
     dest: "~/certificate-template/{{ item }}-csr.json"
   with_items: "{{ groups['worker'] }}"
 
+- name: copy master certificate
+  template:
+    src: "master-csr.json.j2"
+    dest: "~/certificate-template/{{ item }}-csr.json"
+  with_items: "{{ groups['master'] }}"
+
 - name: copy all template
   template:
     src: "{{item.src}}"
@@ -23,6 +29,8 @@
     - { src: 'kube-scheduler-csr.json.j2', dest: '~/certificate-template/kube-scheduler-csr.json' }
     - { src: 'kubernetes-csr.json.j2', dest: '~/certificate-template/kubernetes-csr.json' }
     - { src: 'service-account-csr.json.j2', dest: '~/certificate-template/service-account-csr.json' }
+    - { src: 'metrics-server.json.j2', dest: '~/certificate-template/metrics-server.json' }
+
 
 - name: generate CA 
   shell: cfssl gencert -initca ca-csr.json | cfssljson -bare ca
@@ -52,6 +60,19 @@
     -profile=kubernetes \
     {{ item }}-csr.json | cfssljson -bare {{ item }}
   with_items: "{{ groups['worker'] }}"
+
+- name: generate master certificate
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    cfssl gencert \
+    -ca=ca.pem \
+    -ca-key=ca-key.pem \
+    -config=ca-config.json \
+    -hostname={{ item }} \
+    -profile=kubernetes \
+    {{ item }}-csr.json | cfssljson -bare {{ item }}
+  with_items: "{{ groups['master'] }}"
 
 - name: generate controller-manager certificate
   args:
@@ -96,6 +117,17 @@
     -config=ca-config.json \
     -profile=kubernetes \
     service-account-csr.json | cfssljson -bare service-account
+
+- name: generate metrics-server certificate
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    cfssl gencert \
+    -ca=ca.pem \
+    -ca-key=ca-key.pem \
+    -config=ca-config.json \
+    -profile=kubernetes \
+    metrics-server-csr.json | cfssljson -bare aggregator-proxy-client
 
 - name: generate api-server certificate
   vars:
@@ -149,4 +181,8 @@
       scp kubernetes.pem ${instance}:~/
       scp service-account-key.pem ${instance}:~/
       scp service-account.pem ${instance}:~/
+      scp aggregator-proxy-client.pem ${instance}:~/
+      scp aggregator-proxy-client-key.pem ${instance}:~/
+      scp ${instance}-key.pem ${instance}:~/
+      scp ${instance}.pem ${instance}:~/
     done

@@ -1,0 +1,13 @@
+- name: pause 1 minute
+  pause:
+    minutes: 1
+
+- name: label master node
+  shell: kubectl label node {{ item }} node-role.kubernetes.io/master=""
+  with_items: "{{ groups['master'] }}"
+  when: inventory_hostname == '{{ keepalived_master }}'
+
+- name: taint master node
+  shell: kubectl taint nodes {{ item }} node-role.kubernetes.io/master="":NoSchedule
+  with_items: "{{ groups['master'] }}"
+  when: inventory_hostname == '{{ keepalived_master }}'
