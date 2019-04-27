@@ -1,3 +1,4 @@
 ---
+- include: taint-node.yml
 - include: flannel.yml
 - include: core-dns.yml

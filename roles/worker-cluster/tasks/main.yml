@@ -1,3 +1,2 @@
 ---
 - include: install-worker.yml
-- include: taint-node.yml
