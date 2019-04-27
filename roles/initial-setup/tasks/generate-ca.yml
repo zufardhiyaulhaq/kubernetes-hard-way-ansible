@@ -29,7 +29,7 @@
     - { src: 'kube-scheduler-csr.json.j2', dest: '~/certificate-template/kube-scheduler-csr.json' }
     - { src: 'kubernetes-csr.json.j2', dest: '~/certificate-template/kubernetes-csr.json' }
     - { src: 'service-account-csr.json.j2', dest: '~/certificate-template/service-account-csr.json' }
-    - { src: 'metrics-server.json.j2', dest: '~/certificate-template/metrics-server.json' }
+    - { src: 'metrics-server-csr.json.j2', dest: '~/certificate-template/metrics-server-csr.json' }
 
 
 - name: generate CA 
