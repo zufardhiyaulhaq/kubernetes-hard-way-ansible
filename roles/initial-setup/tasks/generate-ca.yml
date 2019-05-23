@@ -140,7 +140,7 @@
     -ca=ca.pem \
     -ca-key=ca-key.pem \
     -config=ca-config.json \
-    -hostname=10.32.0.1,{{ etcd_ip }},{{ master_ip }},{{ virtual_ip }},127.0.0.1,kubernetes.default \
+    -hostname=10.32.0.1,{{ etcd_ip }},{{ master_ip }},{{ virtual_ip }},127.0.0.1,kubernetes,kubernetes.default \
     -profile=kubernetes \
     kubernetes-csr.json | cfssljson -bare kubernetes
 
