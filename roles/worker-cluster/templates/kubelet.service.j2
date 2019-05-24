@@ -12,6 +12,9 @@ ExecStart=/usr/local/bin/kubelet \
   --cni-conf-dir=/etc/cni/net.d \
   --image-pull-progress-deadline=2m \
   --kubeconfig=/var/lib/kubelet/kubeconfig \
+  --eviction-hard==memory.available<{{ evicted_pod_when_memory_less_than }} \
+  --system-reserved=memory={{ reserve_memory_utilization }} \
+  --max-pods={{ max_pod_per_node }} \
   --network-plugin=cni \
   --register-node=true \
   --v=2 \
