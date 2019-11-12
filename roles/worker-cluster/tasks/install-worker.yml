@@ -64,6 +64,7 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     mode: a+x
+    remote_src: yes
   with_items:
   - { src: '/opt/kubernetes/server/bin/kubelet', dest: '/usr/local/bin/kubelet' }
   - { src: '/opt/kubernetes/server/bin/kube-proxy', dest: '/usr/local/bin/kube-proxy' }

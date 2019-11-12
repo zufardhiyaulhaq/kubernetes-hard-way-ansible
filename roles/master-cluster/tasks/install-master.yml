@@ -24,6 +24,7 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     mode: a+x
+    remote_src: yes
   with_items:
   - { src: '/opt/kubernetes/server/bin/kube-apiserver', dest: '/usr/local/bin/kube-apiserver' }
   - { src: '/opt/kubernetes/server/bin/kube-controller-manager', dest: '/usr/local/bin/kube-controller-manager' }
