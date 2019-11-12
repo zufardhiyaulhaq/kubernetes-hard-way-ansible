@@ -53,15 +53,21 @@
   - '/var/run/kubernetes'
   - '/etc/kubernetes/manifests'
 
+- name: Download and extract Kubernetes server
+  unarchive:
+    src: https://dl.k8s.io/{{ kubernetes_version }}/kubernetes-server-linux-amd64.tar.gz
+    dest: /opt/
+    remote_src: yes
+
 - name: install kubectl, kube-proxy, and kubelet
-  get_url:
-    url: "{{ item.url }}"
+  copy:
+    src: "{{ item.url }}"
     dest: "{{ item.dest }}"
     mode: a+x
   with_items:
-  - { url: 'https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kubelet', dest: '/usr/local/bin/kubelet' }
-  - { url: 'https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kube-proxy', dest: '/usr/local/bin/kube-proxy' }
-  - { url: 'https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kubectl', dest: '/usr/local/bin/kubectl' }
+  - { url: '/opt/kubernetes/server/bin/kubelet', dest: '/usr/local/bin/kubelet' }
+  - { url: '/opt/kubernetes/server/bin/kube-proxy', dest: '/usr/local/bin/kube-proxy' }
+  - { url: '/opt/kubernetes/server/bin/kubectl', dest: '/usr/local/bin/kubectl' }
 
 - name: Downlaod and crictl-{{ cri_version }}-linux-amd64.tar.gz
   unarchive:

@@ -1,11 +1,12 @@
 # Kubernetes the easy way
 Ansible template to create kubernetes cluster with the following specs:
-* Kubernetes 1.13.3
+* Kubernetes 1.16.0
 * Latest Docker
 * Latest Flannel
-* CNI 0.6.0
+* CNI 0.7.5
+* CRI 1.14.0
 * etcd 3.3.9
-* core-dns 1.2.5
+* core-dns 1.6.2
 * metrics-server
 * Haproxy & keepalived
 * Secure communication between component
