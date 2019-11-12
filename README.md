@@ -15,7 +15,7 @@ Ansible template to create kubernetes cluster with the following specs:
 * 3 etcd nodes
 * 3 master nodes
 * 3 worker nodes
-* Ubuntu 16.04
+* Ubuntu 18.04
 
 ## Step
 * Prepare deployer nodes (ansible is installed in here)

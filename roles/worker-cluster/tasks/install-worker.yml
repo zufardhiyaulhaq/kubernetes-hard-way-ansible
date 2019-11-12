@@ -65,9 +65,9 @@
     dest: "{{ item.dest }}"
     mode: a+x
   with_items:
-  - { url: '/opt/kubernetes/server/bin/kubelet', dest: '/usr/local/bin/kubelet' }
-  - { url: '/opt/kubernetes/server/bin/kube-proxy', dest: '/usr/local/bin/kube-proxy' }
-  - { url: '/opt/kubernetes/server/bin/kubectl', dest: '/usr/local/bin/kubectl' }
+  - { src: '/opt/kubernetes/server/bin/kubelet', dest: '/usr/local/bin/kubelet' }
+  - { src: '/opt/kubernetes/server/bin/kube-proxy', dest: '/usr/local/bin/kube-proxy' }
+  - { src: '/opt/kubernetes/server/bin/kubectl', dest: '/usr/local/bin/kubectl' }
 
 - name: Downlaod and crictl-{{ cri_version }}-linux-amd64.tar.gz
   unarchive:
