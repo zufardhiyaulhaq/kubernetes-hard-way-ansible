@@ -83,6 +83,7 @@
     url: https://github.com/opencontainers/runc/releases/download/{{ runc_version }}/runc.amd64
     dest: /usr/local/bin/runc
     remote_src: yes
+    mode: a+x
 
 - name: Downlaod and Extract cni-plugins-amd64-{{ cni_version }}.tgz
   unarchive:
