@@ -11,8 +11,8 @@ kubernetes_master_number: 3
 virtual_ip: 10.202.202.100
 virtual_ip_k8s_port: 64430
 
-#max_pod_per_node: 110
+max_pod_per_node: 110
 
-#  "System reserved" should include the amount of memory covered by the eviction threshold.
-#reserve_memory_utilization: 1.5Gi
-#evicted_pod_when_memory_less_than: 500Mi
+# "System reserved" should include the amount of memory covered by the eviction threshold.
+reserve_memory_utilization: 1.5Gi
+evicted_pod_when_memory_less_than: 500Mi
