@@ -1,8 +1,10 @@
 
 ansible_python_interpreter: /usr/bin/python3
 kubernetes_version: v1.16.0
-cri_version: v1.14.0
-cni_version: v0.7.5
+cri_version: v1.15.0
+cni_version: v0.8.2
+runc_version: v1.0.0-rc8
+containerd_version: 1.2.9
 coredns_version: 1.6.2
 kubernetes_master_number: 3
 
