@@ -71,13 +71,13 @@
 
 - name: Downlaod runc
   get_url:
-    src: https://github.com/opencontainers/runc/releases/download/{{ runc_version }}/runc.amd64
+    url: https://github.com/opencontainers/runc/releases/download/{{ runc_version }}/runc.amd64
     dest: /usr/local/bin/
     remote_src: yes
 
 - name: Downlaod and Extract cni-plugins-amd64-{{ cni_version }}.tgz
   unarchive:
-    src: https://github.com/containernetworking/plugins/releases/download/{{ cni_version }}/cni-plugins-amd64-{{ cni_version }}.tgz
+    src: https://github.com/containernetworking/plugins/releases/download/{{ cni_version }}/cni-plugins-linux-amd64-{{ cni_version }}.tgz
     dest: /opt/cni/bin/
     remote_src: yes
     
