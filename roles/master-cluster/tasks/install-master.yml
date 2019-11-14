@@ -13,16 +13,23 @@
     path: /root/.kube/
     state: directory
 
-- name: install kubectl
-  get_url:
-    url: "{{ item.url }}"
+- name: Download and extract Kubernetes server
+  unarchive:
+    src: https://dl.k8s.io/{{ kubernetes_version }}/kubernetes-server-linux-amd64.tar.gz
+    dest: /opt/
+    remote_src: yes
+
+- name: install kubernetes service
+  copy:
+    src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     mode: a+x
+    remote_src: yes
   with_items:
-  - { url: 'https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kube-apiserver', dest: '/usr/local/bin/kube-apiserver' }
-  - { url: 'https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kube-controller-manager', dest: '/usr/local/bin/kube-controller-manager' }
-  - { url: 'https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kube-scheduler', dest: '/usr/local/bin/kube-scheduler' }
-  - { url: 'https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kubectl', dest: '/usr/local/bin/kubectl' }
+  - { src: '/opt/kubernetes/server/bin/kube-apiserver', dest: '/usr/local/bin/kube-apiserver' }
+  - { src: '/opt/kubernetes/server/bin/kube-controller-manager', dest: '/usr/local/bin/kube-controller-manager' }
+  - { src: '/opt/kubernetes/server/bin/kube-scheduler', dest: '/usr/local/bin/kube-scheduler' }
+  - { src: '/opt/kubernetes/server/bin/kubectl', dest: '/usr/local/bin/kubectl' }
 
 - name: Copy cert
   copy: 

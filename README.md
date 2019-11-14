@@ -1,11 +1,13 @@
 # Kubernetes the easy way
 Ansible template to create kubernetes cluster with the following specs:
-* Kubernetes 1.13.3
-* Latest Docker
+* Kubernetes 1.15.5
 * Latest Flannel
-* CNI 0.6.0
-* etcd 3.3.9
-* core-dns 1.2.5
+* CNI 0.8.2
+* CRI 1.15.0
+* runc v1.0.0-rc8
+* containerd 1.2.9
+* etcd v3.3.15
+* core-dns 1.6.2
 * metrics-server
 * Haproxy & keepalived
 * Secure communication between component
@@ -14,7 +16,7 @@ Ansible template to create kubernetes cluster with the following specs:
 * 3 etcd nodes
 * 3 master nodes
 * 3 worker nodes
-* Ubuntu 16.04
+* Ubuntu 18.04
 
 ## Step
 * Prepare deployer nodes (ansible is installed in here)

@@ -11,34 +11,14 @@
   - 'conntrack'
   - 'ipset'
 
-- name: Add Docker GPG key
-  apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
+- name: Remove swapfile from /etc/fstab
+  mount:
+    name: swap
+    fstype: swap
+    state: absent
 
-- name: Add Docker APT repository
-  apt_repository:
-    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
-
-- name: Install Docker
-  apt:
-    name: docker-ce
-
-- name: copy docker daemon
-  template:
-    src: "daemon.json"
-    dest: "/etc/docker/daemon.json"
-
-- name: create docker directory
-  file:
-    path: /etc/systemd/system/docker.service.d
-    state: directory
-
-- name: restart docker
-  systemd:
-    name: docker
-    state: restarted
-    daemon_reload: yes
-    enabled: yes
+- name: Disable swap
+  command: swapoff -a
 
 - name: create required directory
   file:
@@ -47,21 +27,50 @@
   with_items:
   - '/etc/cni/net.d'
   - '/opt/cni/bin'
+  - '/opt/containerd'
   - '/var/lib/kubelet'
   - '/var/lib/kube-proxy'
   - '/var/lib/kubernetes'
   - '/var/run/kubernetes'
   - '/etc/kubernetes/manifests'
+  - '/etc/containerd/'
+
+- name: Download and extract Kubernetes server
+  unarchive:
+    src: https://dl.k8s.io/{{ kubernetes_version }}/kubernetes-server-linux-amd64.tar.gz
+    dest: /opt/
+    remote_src: yes
 
 - name: install kubectl, kube-proxy, and kubelet
-  get_url:
-    url: "{{ item.url }}"
+  copy:
+    src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     mode: a+x
+    remote_src: yes
   with_items:
-  - { url: 'https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kubelet', dest: '/usr/local/bin/kubelet' }
-  - { url: 'https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kube-proxy', dest: '/usr/local/bin/kube-proxy' }
-  - { url: 'https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kubectl', dest: '/usr/local/bin/kubectl' }
+  - { src: '/opt/kubernetes/server/bin/kubelet', dest: '/usr/local/bin/kubelet' }
+  - { src: '/opt/kubernetes/server/bin/kube-proxy', dest: '/usr/local/bin/kube-proxy' }
+  - { src: '/opt/kubernetes/server/bin/kubectl', dest: '/usr/local/bin/kubectl' }
+
+- name: Download and extract containerd
+  unarchive:
+    src:   https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/containerd-{{ containerd_version }}.linux-amd64.tar.gz
+    dest: /opt/containerd
+    remote_src: yes
+
+- name: install containerd
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: a+x
+    remote_src: yes
+  with_items:
+  - { src: '/opt/containerd/bin/containerd', dest: '/bin/containerd' }
+  - { src: '/opt/containerd/bin/containerd-shim', dest: '/bin/containerd-shim' }
+  - { src: '/opt/containerd/bin/containerd-shim-runc-v1', dest: '/bin/containerd-shim-runc-v1' }
+  - { src: '/opt/containerd/bin/containerd-stress', dest: '/bin/containerd-stress' }
+  - { src: '/opt/containerd/bin/ctr', dest: '/bin/ctr' }
+
 
 - name: Downlaod and crictl-{{ cri_version }}-linux-amd64.tar.gz
   unarchive:
@@ -69,12 +78,19 @@
     dest: /usr/local/bin/
     remote_src: yes
 
+- name: Downlaod runc
+  get_url:
+    url: https://github.com/opencontainers/runc/releases/download/{{ runc_version }}/runc.amd64
+    dest: /usr/local/bin/runc
+    remote_src: yes
+    mode: a+x
+
 - name: Downlaod and Extract cni-plugins-amd64-{{ cni_version }}.tgz
   unarchive:
-    src: https://github.com/containernetworking/plugins/releases/download/{{ cni_version }}/cni-plugins-amd64-{{ cni_version }}.tgz
+    src: https://github.com/containernetworking/plugins/releases/download/{{ cni_version }}/cni-plugins-linux-amd64-{{ cni_version }}.tgz
     dest: /opt/cni/bin/
     remote_src: yes
-
+    
 - name: Copy cert
   copy: 
     src: "{{ item.src }}"
@@ -86,6 +102,25 @@
     - { src: '~/{{ inventory_hostname }}.kubeconfig', dest: '/var/lib/kubelet/kubeconfig' }
     - { src: '~/ca.pem', dest: '/var/lib/kubernetes/ca.pem' }
     - { src: '~/kube-proxy.kubeconfig', dest: '/var/lib/kube-proxy/kubeconfig' }
+
+- name: copy containerd config
+  template:
+    src: "config.toml.j2"
+    dest: "/etc/containerd/config.toml"
+    mode: 644
+
+- name: copy containerd service
+  template:
+    src: "containerd.service.j2"
+    dest: "/etc/systemd/system/containerd.service"
+    mode: 644
+
+- name: restart containerd
+  systemd:
+    name: containerd
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
 
 - name: copy kubelet config
   template:

@@ -4,9 +4,15 @@
     name: git
     update_cache: yes
 
+- name: Download and extract Kubernetes Client
+  unarchive:
+    src: https://dl.k8s.io/{{ kubernetes_version }}/kubernetes-client-linux-amd64.tar.gz
+    dest: /opt/
+    remote_src: yes
+
 - name: install kubectl
-  get_url:
-    url: https://storage.googleapis.com/kubernetes-release/release/{{ kubernetes_version }}/bin/linux/amd64/kubectl
+  copy:
+    src: /opt/kubernetes/client/bin/kubectl
     dest: /usr/local/bin/kubectl
     mode: a+x
 
