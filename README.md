@@ -11,6 +11,7 @@ Ansible template to create kubernetes cluster with the following specs:
 * metrics-server
 * Haproxy & keepalived
 * Secure communication between component
+* playbook for renewing certificate
 
 ### Testing in
 * 3 etcd nodes
