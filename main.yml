@@ -23,3 +23,15 @@
   hosts: master
   roles:
     - cni-dns
+
+#############################
+##### Renew Certificate #####
+#############################
+#
+# run this roles if certificate is expired
+#
+
+#- name: renew Certificate
+#  hosts: deployer
+#  roles:
+#    - renew-certificate
