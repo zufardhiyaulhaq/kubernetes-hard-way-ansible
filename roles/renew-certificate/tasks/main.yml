@@ -1,0 +1,3 @@
+---
+- include: renew-certificate.yml
+- include: generate-kubeconfig.yml
