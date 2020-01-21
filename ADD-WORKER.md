@@ -10,6 +10,6 @@ hosts/hosts.new.worker
 ```
 * Run ansible with inventory files spesific for adding worker
 ```
-ansible-playbook add-worker.yml -i hosts/hosts.new.worker
+ansible-playbook add-worker.yml -i hosts/hosts-new-worker
 ```
 * After new node is deployed, dont forget to append `worker` section in `hosts/hosts` file with new worker IP Address
