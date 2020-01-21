@@ -18,7 +18,7 @@
 # This roles setup worker cluster in the node
 #
 - name: Deploy New Worker
-  hosts: deployer
+  hosts: worker
   roles:
     - worker-cluster
 
