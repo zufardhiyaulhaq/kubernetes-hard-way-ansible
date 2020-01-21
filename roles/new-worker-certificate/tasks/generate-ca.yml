@@ -1,0 +1,25 @@
+---
+- name: generate worker certificate
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    cfssl gencert \
+    -ca=ca.pem \
+    -ca-key=ca-key.pem \
+    -config=ca-config.json \
+    -hostname={{ item }} \
+    -profile=kubernetes \
+    {{ item }}-csr.json | cfssljson -bare {{ item }}
+  with_items: "{{ groups['worker'] }}"
+
+- name: copy cert into worker node
+  vars:
+    worker_ip: "{{ groups['worker'] | join(' ') }}"
+  args:
+    chdir: ~/certificate-template
+  shell: |
+    for instance in {{ worker_ip }}; do
+      scp ca.pem ${instance}:~/
+      scp ${instance}-key.pem ${instance}:~/
+      scp ${instance}.pem ${instance}:~/
+    done

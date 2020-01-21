@@ -1,0 +1,3 @@
+---
+- include: generate-ca.yml
+- include: generate-kubeconfig.yml

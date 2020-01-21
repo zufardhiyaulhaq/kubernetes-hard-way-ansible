@@ -19,7 +19,7 @@ Ansible template to create kubernetes cluster with the following specs:
 * 3 worker nodes
 * Ubuntu 18.04
 
-## Step
+## Step Installation
 * Prepare deployer nodes (ansible is installed in here)
 ```
 sudo apt-add-repository ppa:ansible/ansible
