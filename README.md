@@ -49,4 +49,5 @@ ansible-playbook main.yml -i hosts/hosts
 ```
 
 ### Additional Setup
-* [metrics-server](additional_setup/metrics-server.md)
+* [metrics-server](https://github.com/zufardhiyaulhaq/kubernetes-the-easy-way-with-ansible/blob/master/additional_setup/metrics-server.md)
+* [Private Insecure Registry](https://github.com/zufardhiyaulhaq/kubernetes-the-easy-way-with-ansible/blob/master/additional_setup/insecure-registry.md)
