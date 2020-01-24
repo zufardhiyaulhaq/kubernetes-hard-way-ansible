@@ -5,7 +5,7 @@ Ansible template to create kubernetes cluster with the following specs:
 * CNI 0.8.2
 * CRI 1.15.0
 * runc v1.0.0-rc8
-* containerd 1.2.9
+* containerd 1.2.9 / 1.3.2
 * etcd v3.3.15
 * core-dns 1.6.2
 * metrics-server

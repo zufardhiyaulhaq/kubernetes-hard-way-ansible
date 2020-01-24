@@ -4,7 +4,8 @@ kubernetes_version: v1.15.5
 cri_version: v1.15.0
 cni_version: v0.8.2
 runc_version: v1.0.0-rc8
-containerd_version: 1.2.9
+#containerd_version: 1.2.9
+containerd_version: 1.3.2
 kubernetes_master_number: 3
 
 virtual_ip: 10.200.200.20
