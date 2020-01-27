@@ -14,9 +14,8 @@ Ansible template to create kubernetes cluster with the following specs:
 * playbook for renewing certificate
 
 ### Testing in
-* 3 etcd nodes
-* 3 master nodes
-* 3 worker nodes
+* 3 etcd nodes, 3 master nodes, 3 worker nodes
+* 3 etcd & master nodes, 3 worker nodes
 * Ubuntu 18.04
 
 ## Step Installation
@@ -35,7 +34,7 @@ ssh-copy-id root@workerX
 ```
 * Clone this repository
 ```
-git clone https://github.com/zufardhiyaulhaq/kubernetes-the-easy-way-with-ansible.git
+git clone https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible.git
 ```
 * Change some variable
 ```
@@ -49,5 +48,5 @@ ansible-playbook main.yml -i hosts/hosts
 ```
 
 ### Additional Setup
-* [metrics-server](https://github.com/zufardhiyaulhaq/kubernetes-the-easy-way-with-ansible/blob/master/additional_setup/metrics-server.md)
-* [Private Insecure Registry](https://github.com/zufardhiyaulhaq/kubernetes-the-easy-way-with-ansible/blob/master/additional_setup/insecure-registry.md)
+* [metrics-server](https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible/blob/master/additional_setup/metrics-server.md)
+* [Private Insecure Registry](https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible/blob/master/additional_setup/insecure-registry.md)
