@@ -151,9 +151,9 @@
     chdir: ~/certificate-template
   shell: |
     for instance in {{ worker_ip }}; do
-      scp ca.pem ${instance}:~/
-      scp ${instance}-key.pem ${instance}:~/
-      scp ${instance}.pem ${instance}:~/
+      scp ca.pem {{user}}@${instance}:~/
+      scp ${instance}-key.pem {{user}}@${instance}:~/
+      scp ${instance}.pem {{user}}@${instance}:~/
     done
 
 - name: copy cert into etcd node
@@ -163,9 +163,9 @@
     chdir: ~/certificate-template
   shell: |
     for instance in {{ etcd_ip }}; do
-      scp ca.pem ${instance}:~/
-      scp kubernetes-key.pem ${instance}:~/
-      scp kubernetes.pem ${instance}:~/
+      scp ca.pem {{user}}@${instance}:~/
+      scp kubernetes-key.pem {{user}}@${instance}:~/
+      scp kubernetes.pem {{user}}@${instance}:~/
     done
 
 - name: copy cert into master node
@@ -175,14 +175,14 @@
     chdir: ~/certificate-template
   shell: |
     for instance in {{ master_ip }}; do
-      scp ca.pem ${instance}:~/
-      scp ca-key.pem ${instance}:~/
-      scp kubernetes-key.pem ${instance}:~/
-      scp kubernetes.pem ${instance}:~/
-      scp service-account-key.pem ${instance}:~/
-      scp service-account.pem ${instance}:~/
-      scp aggregator-proxy-client.pem ${instance}:~/
-      scp aggregator-proxy-client-key.pem ${instance}:~/
-      scp ${instance}-key.pem ${instance}:~/
-      scp ${instance}.pem ${instance}:~/
+      scp ca.pem {{user}}@${instance}:~/
+      scp ca-key.pem {{user}}@${instance}:~/
+      scp kubernetes-key.pem {{user}}@${instance}:~/
+      scp kubernetes.pem {{user}}@${instance}:~/
+      scp service-account-key.pem {{user}}@${instance}:~/
+      scp service-account.pem {{user}}@${instance}:~/
+      scp aggregator-proxy-client.pem {{user}}@${instance}:~/
+      scp aggregator-proxy-client-key.pem {{user}}@${instance}:~/
+      scp ${instance}-key.pem {{user}}@${instance}:~/
+      scp ${instance}.pem {{user}}@${instance}:~/
     done

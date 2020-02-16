@@ -7,6 +7,11 @@
   with_items: "{{ groups['master'] }}"
   when: inventory_hostname == '{{ keepalived_master }}'
 
+- name: label master node
+  shell: kubectl label node {{ item }} node-role.kubernetes.io/worker=""
+  with_items: "{{ groups['worker'] }}"
+  when: inventory_hostname == '{{ keepalived_master }}'
+
 - name: taint master node
   shell: kubectl taint nodes {{ item }} node-role.kubernetes.io/master="":NoSchedule
   with_items: "{{ groups['master'] }}"

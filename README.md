@@ -21,16 +21,40 @@ Ansible template to create kubernetes cluster with the following specs:
 ## Step Installation
 * Prepare deployer nodes (ansible is installed in here)
 ```
-sudo apt-add-repository ppa:ansible/ansible
+sudo apt-add-repository ppa:ansible/ansible -y
 sudo apt update
-sudo apt install ansible
+sudo apt install ansible -y
 ```
-* Make sure deployer have root access into all nodes (tips using ssh-copy-id)
+* Make sure deployer have access into all nodes (tips using ssh-copy-id)
+
+please make sure that user have privilege access, you can add the user in sudoers files, after bootstrap is done, fell free to remove that.
 ```
-ssh-copy-id root@deployer
-ssh-copy-id root@etcdX
-ssh-copy-id root@masterX
-ssh-copy-id root@workerX
+ssh-keygen
+
+# copy to deployer itself
+ssh-copy-id ubuntu@10.102.102.40
+
+# copy to etcd node
+ssh-copy-id ubuntu@10.102.102.10
+ssh-copy-id ubuntu@10.102.102.11
+ssh-copy-id ubuntu@10.102.102.12
+
+# copy to master node
+ssh-copy-id ubuntu@10.102.102.20
+ssh-copy-id ubuntu@10.102.102.21
+ssh-copy-id ubuntu@10.102.102.22
+
+# copy to master node
+ssh-copy-id ubuntu@10.102.102.30
+ssh-copy-id ubuntu@10.102.102.31
+ssh-copy-id ubuntu@10.102.102.32
+```
+* disable ansible hostkey checking
+```
+vi ~/.ansible.cfg
+
+[defaults]
+host_key_checking = False
 ```
 * Clone this repository
 ```
@@ -48,5 +72,7 @@ ansible-playbook main.yml -i hosts/hosts
 ```
 
 ### Additional Setup
-* [metrics-server](https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible/blob/master/additional_setup/metrics-server.md)
-* [Private Insecure Registry](https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible/blob/master/additional_setup/insecure-registry.md)
+* [metrics-server](additional_setup/metrics-server.md)
+* [Private Insecure Registry](additional_setup/insecure-registry.md)
+* [Renew Certificate](additional_setup/insecure-registry.md)
+* [Add new Worker](additional_setup/insecure-registry.md)

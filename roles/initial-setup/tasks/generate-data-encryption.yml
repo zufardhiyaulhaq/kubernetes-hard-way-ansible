@@ -19,7 +19,7 @@
     chdir: ~/certificate-template
   shell: |
     for instance in {{ master_ip }}; do
-      scp encryption-config.yaml ${instance}:~/
+      scp encryption-config.yaml {{user}}@${instance}:~/
     done
 
   
