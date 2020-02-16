@@ -146,7 +146,7 @@
 
 - name: copy cert into worker node
   become: yes
-  become_user: {{ user }}
+  become_user: "{{ user }}"
   vars:
     worker_ip: "{{ groups['worker'] | join(' ') }}"
   args:
@@ -160,7 +160,7 @@
 
 - name: copy cert into etcd node
   become: yes
-  become_user: {{ user }}
+  become_user: "{{ user }}"
   vars:
     etcd_ip: "{{ groups['etcd'] | join(' ') }}"
   args:
@@ -174,7 +174,7 @@
 
 - name: copy cert into master node
   become: yes
-  become_user: {{ user }}
+  become_user: "{{ user }}"
   vars:
     master_ip: "{{ groups['master'] | join(' ') }}"
   args:
