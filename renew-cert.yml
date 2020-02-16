@@ -6,7 +6,7 @@
 #
 
 - name: renew Certificate
-  become: true
+  become: yes
   hosts: deployer
   roles:
     - renew-certificate

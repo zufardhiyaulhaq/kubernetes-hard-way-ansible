@@ -3,7 +3,7 @@
 # deployer node send the CA & kubeconfig into all nodes
 #
 - name: generate CA & kubeconfig
-  become: true
+  become: yes
   hosts: deployer
   roles:
     - initial-setup
@@ -14,7 +14,7 @@
 # by changing etcd group IP into master IP
 #
 - name: Setup etcd cluster
-  become: true
+  become: yes
   hosts: etcd
   roles:
     - etcd-cluster
@@ -24,7 +24,7 @@
 # and setup master cluster
 #
 - name: Setup Master Cluter
-  become: true
+  become: yes
   hosts: master
   roles:
     - haproxy-keepalived
@@ -34,7 +34,7 @@
 # This roles setup worker cluster in master & worker node
 #
 - name: Setup Worker
-  become: true
+  become: yes
   hosts: worker,master
   roles:
     - worker-cluster
@@ -43,7 +43,7 @@
 # this roles setup CNI, DNS, and taint master node
 #
 - name: Setup CNI & core-dns
-  become: true
+  become: yes
   hosts: master
   roles:
     - cni-dns
