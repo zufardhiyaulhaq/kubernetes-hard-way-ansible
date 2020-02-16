@@ -25,7 +25,9 @@ sudo apt-add-repository ppa:ansible/ansible -y
 sudo apt update
 sudo apt install ansible -y
 ```
-* Make sure deployer have root access into all nodes (tips using ssh-copy-id)
+* Make sure deployer have access into all nodes (tips using ssh-copy-id)
+
+please make sure that user have privilege access, you can add the user in sudoers files, after bootstrap is done, fell free to remove that.
 ```
 ssh-keygen
 
@@ -70,5 +72,7 @@ ansible-playbook main.yml -i hosts/hosts
 ```
 
 ### Additional Setup
-* [metrics-server](https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible/blob/master/additional_setup/metrics-server.md)
-* [Private Insecure Registry](https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible/blob/master/additional_setup/insecure-registry.md)
+* [metrics-server](additional_setup/metrics-server.md)
+* [Private Insecure Registry](additional_setup/insecure-registry.md)
+* [Renew Certificate](additional_setup/insecure-registry.md)
+* [Add new Worker](additional_setup/insecure-registry.md)

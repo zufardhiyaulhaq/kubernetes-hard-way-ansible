@@ -13,3 +13,8 @@ hosts/hosts.new.worker
 ansible-playbook add-worker.yml -i hosts/hosts-new-worker
 ```
 * After new node is deployed, dont forget to append `worker` section in `hosts/hosts` file with new worker IP Address
+* Tag the new worker manually
+```
+kubectl get nodes
+kubectl label node NODE_NAME node-role.kubernetes.io/worker=""
+```
