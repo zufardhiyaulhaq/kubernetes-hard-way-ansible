@@ -19,8 +19,6 @@
   with_items: "{{ groups['worker'] }}"
 
 - name: copy cert into worker node
-  become: yes
-  become_user: "{{ user }}"
   vars:
     worker_ip: "{{ groups['worker'] | join(' ') }}"
   args:

@@ -13,8 +13,6 @@
     dest: "~/certificate-template/encryption-config.yaml"
 
 - name: copy into master node
-  become: yes
-  become_user: "{{ user }}"
   vars:
     master_ip: "{{ groups['master'] | join(' ') }}"
   args:
