@@ -97,11 +97,11 @@
     dest: "{{ item.dest }}"
     remote_src: yes
   with_items:
-    - { src: '~/{{ inventory_hostname }}-key.pem', dest: '/var/lib/kubelet/{{ inventory_hostname }}-key.pem' }
-    - { src: '~/{{ inventory_hostname }}.pem', dest: '/var/lib/kubelet/{{ inventory_hostname }}.pem' }
-    - { src: '~/{{ inventory_hostname }}.kubeconfig', dest: '/var/lib/kubelet/kubeconfig' }
-    - { src: '~/ca.pem', dest: '/var/lib/kubernetes/ca.pem' }
-    - { src: '~/kube-proxy.kubeconfig', dest: '/var/lib/kube-proxy/kubeconfig' }
+    - { src: '/home/{{ user }}/{{ inventory_hostname }}-key.pem', dest: '/var/lib/kubelet/{{ inventory_hostname }}-key.pem' }
+    - { src: '/home/{{ user }}/{{ inventory_hostname }}.pem', dest: '/var/lib/kubelet/{{ inventory_hostname }}.pem' }
+    - { src: '/home/{{ user }}/{{ inventory_hostname }}.kubeconfig', dest: '/var/lib/kubelet/kubeconfig' }
+    - { src: '/home/{{ user }}/ca.pem', dest: '/var/lib/kubernetes/ca.pem' }
+    - { src: '/home/{{ user }}/kube-proxy.kubeconfig', dest: '/var/lib/kube-proxy/kubeconfig' }
 
 - name: copy containerd config
   template:

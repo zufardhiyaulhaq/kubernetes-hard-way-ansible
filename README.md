@@ -21,9 +21,9 @@ Ansible template to create kubernetes cluster with the following specs:
 ## Step Installation
 * Prepare deployer nodes (ansible is installed in here)
 ```
-sudo apt-add-repository ppa:ansible/ansible
+sudo apt-add-repository ppa:ansible/ansible -y
 sudo apt update
-sudo apt install ansible
+sudo apt install ansible -y
 ```
 * Make sure deployer have root access into all nodes (tips using ssh-copy-id)
 ```
@@ -46,6 +46,13 @@ ssh-copy-id ubuntu@10.102.102.22
 ssh-copy-id ubuntu@10.102.102.30
 ssh-copy-id ubuntu@10.102.102.31
 ssh-copy-id ubuntu@10.102.102.32
+```
+* disable ansible hostkey checking
+```
+vi ~/.ansible.cfg
+
+[defaults]
+host_key_checking = False
 ```
 * Clone this repository
 ```

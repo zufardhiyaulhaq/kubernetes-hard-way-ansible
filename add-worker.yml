@@ -10,7 +10,7 @@
 # and send into the node
 #
 - name: Generate Certificate
-  become: yes
+  become: true
   hosts: deployer
   roles:
     - new-worker-certificate
@@ -19,7 +19,7 @@
 # This roles setup worker cluster in the node
 #
 - name: Deploy New Worker
-  become: yes
+  become: true
   hosts: worker
   roles:
     - worker-cluster

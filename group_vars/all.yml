@@ -1,18 +1,27 @@
 
+# python installed on remote
 ansible_python_interpreter: /usr/bin/python3
+
+# user on all nodes
+user: ubuntu
+
+# kubernetes version
 kubernetes_version: v1.15.5
+
+# cri version
 cri_version: v1.15.0
+
+# cni version
 cni_version: v0.8.2
+
+# runc version
 runc_version: v1.0.0-rc8
-#containerd_version: 1.2.9
+
+# kubernetes version
 containerd_version: 1.3.2
 kubernetes_master_number: 3
 
+# virtual ip configuration
 virtual_ip: 10.102.102.100
 virtual_ip_k8s_port: 64430
 
-#max_pod_per_node: 110
-
-# "System reserved" should include the amount of memory covered by the eviction threshold.
-#reserve_memory_utilization: 1.5Gi
-#evicted_pod_when_memory_less_than: 500Mi

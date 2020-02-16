@@ -31,9 +31,9 @@
     remote_src: yes
     mode: 400
   with_items:
-    - { src: '~/ca.pem', dest: '/etc/etcd/ca.pem' }
-    - { src: '~/kubernetes-key.pem', dest: '/etc/etcd/kubernetes-key.pem' }
-    - { src: '~/kubernetes.pem', dest: '/etc/etcd/kubernetes.pem' }
+    - { src: '/home/{{user}}/ca.pem', dest: '/etc/etcd/ca.pem' }
+    - { src: '/home/{{user}}/kubernetes-key.pem', dest: '/etc/etcd/kubernetes-key.pem' }
+    - { src: '/home/{{user}}/kubernetes.pem', dest: '/etc/etcd/kubernetes.pem' }
 
 - name: create etcd systemd unit file
   template:

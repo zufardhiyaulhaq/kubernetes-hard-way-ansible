@@ -113,8 +113,8 @@
     chdir: ~/certificate-template
   shell: |
     for instance in {{ worker_ip }}; do
-      scp ${instance}-key.pem ${instance}:/var/lib/kubelet/${instance}-key.pem
-      scp ${instance}.pem ${instance}:/var/lib/kubelet/${instance}.pem
+      scp ${instance}-key.pem {{ user }}@${instance}:/var/lib/kubelet/${instance}-key.pem
+      scp ${instance}.pem {{ user }}@${instance}:/var/lib/kubelet/${instance}.pem
     done
 
 - name: copy cert into etcd node
@@ -124,8 +124,8 @@
     chdir: ~/certificate-template
   shell: |
     for instance in {{ etcd_ip }}; do
-      scp kubernetes-key.pem ${instance}:/etc/etcd/kubernetes-key.pem
-      scp kubernetes.pem ${instance}:/etc/etcd/kubernetes.pem
+      scp kubernetes-key.pem {{ user }}@${instance}:/etc/etcd/kubernetes-key.pem
+      scp kubernetes.pem {{ user }}@${instance}:/etc/etcd/kubernetes.pem
     done
 
 - name: copy cert into master node
@@ -135,12 +135,12 @@
     chdir: ~/certificate-template
   shell: |
     for instance in {{ master_ip }}; do
-      scp kubernetes-key.pem ${instance}:/var/lib/kubernetes/kubernetes-key.pem
-      scp kubernetes.pem ${instance}:/var/lib/kubernetes/kubernetes.pem
-      scp service-account-key.pem ${instance}:/var/lib/kubernetes/service-account-key.pem
-      scp service-account.pem ${instance}:/var/lib/kubernetes/service-account.pem
-      scp aggregator-proxy-client.pem ${instance}:/var/lib/kubernetes/aggregator-proxy-client.pem
-      scp aggregator-proxy-client-key.pem ${instance}:/var/lib/kubernetes/aggregator-proxy-client-key.pem
-      scp ${instance}-key.pem ${instance}:/var/lib/kubelet/${instance}-key.pem
-      scp ${instance}.pem ${instance}:/var/lib/kubelet/${instance}.pem
+      scp kubernetes-key.pem {{ user }}@${instance}:/var/lib/kubernetes/kubernetes-key.pem
+      scp kubernetes.pem {{ user }}@${instance}:/var/lib/kubernetes/kubernetes.pem
+      scp service-account-key.pem {{ user }}@${instance}:/var/lib/kubernetes/service-account-key.pem
+      scp service-account.pem {{ user }}@${instance}:/var/lib/kubernetes/service-account.pem
+      scp aggregator-proxy-client.pem {{ user }}@${instance}:/var/lib/kubernetes/aggregator-proxy-client.pem
+      scp aggregator-proxy-client-key.pem {{ user }}@${instance}:/var/lib/kubernetes/aggregator-proxy-client-key.pem
+      scp ${instance}-key.pem {{ user }}@${instance}:/var/lib/kubelet/${instance}-key.pem
+      scp ${instance}.pem {{ user }}@${instance}:/var/lib/kubelet/${instance}.pem
     done
