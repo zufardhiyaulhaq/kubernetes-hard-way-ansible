@@ -27,10 +27,25 @@ sudo apt install ansible
 ```
 * Make sure deployer have root access into all nodes (tips using ssh-copy-id)
 ```
-ssh-copy-id root@deployer
-ssh-copy-id root@etcdX
-ssh-copy-id root@masterX
-ssh-copy-id root@workerX
+ssh-keygen
+
+# copy to deployer itself
+ssh-copy-id ubuntu@10.102.102.40
+
+# copy to etcd node
+ssh-copy-id ubuntu@10.102.102.10
+ssh-copy-id ubuntu@10.102.102.11
+ssh-copy-id ubuntu@10.102.102.12
+
+# copy to master node
+ssh-copy-id ubuntu@10.102.102.20
+ssh-copy-id ubuntu@10.102.102.21
+ssh-copy-id ubuntu@10.102.102.22
+
+# copy to master node
+ssh-copy-id ubuntu@10.102.102.30
+ssh-copy-id ubuntu@10.102.102.31
+ssh-copy-id ubuntu@10.102.102.32
 ```
 * Clone this repository
 ```
