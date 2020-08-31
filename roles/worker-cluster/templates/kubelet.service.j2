@@ -17,7 +17,7 @@ ExecStart=/usr/local/bin/kubelet \
   --network-plugin=cni \
   --register-node=true \
   --v=2 \
-  --hostname-override={{ ansible_default_ipv4.address }}
+  --hostname-override={{ hostvars[inventory_hostname].ansible_host }}
 Restart=on-failure
 RestartSec=5
 
