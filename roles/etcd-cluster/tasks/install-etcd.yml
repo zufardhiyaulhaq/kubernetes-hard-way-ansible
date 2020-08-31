@@ -23,6 +23,7 @@
   file:
     path: /var/lib/etcd
     state: directory
+    mode: 0700
 
 - name: Copy cert
   copy: 
