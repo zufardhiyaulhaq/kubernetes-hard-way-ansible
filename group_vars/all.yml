@@ -22,7 +22,7 @@ runc_version: v1.0.0-rc91
 etcd_version: v3.4.10
 
 # containerd version
-containerd_version: v1.3.6
+containerd_version: 1.3.6
 
 # coredns version
 coredns_version: 1.7.0
