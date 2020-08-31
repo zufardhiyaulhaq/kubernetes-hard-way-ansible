@@ -122,6 +122,12 @@
     daemon_reload: yes
     enabled: yes
 
+- name: copy custom resolv.conf
+  template:
+    src: "resolv.conf.j2"
+    dest: "/var/lib/kubernetes/resolv.conf"
+    mode: 644
+
 - name: copy kubelet config
   template:
     src: "kubelet-config.yml.j2"
@@ -159,8 +165,5 @@
     state: restarted
     daemon_reload: yes
     enabled: yes
-
-- name: fix DNS
-  shell: ln -s /run/resolvconf/ /run/systemd/resolve
 
 

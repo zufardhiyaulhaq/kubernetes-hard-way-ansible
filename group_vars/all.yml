@@ -35,3 +35,7 @@ virtual_ip_k8s_port: 64430
 keepalived_master: 10.200.100.10
 keepalived_interface: eth1
 keepalived_rid: 50
+
+# Kubernetes nameserver
+nameserver:
+- 172.30.0.3
