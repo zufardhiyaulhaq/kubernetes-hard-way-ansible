@@ -27,14 +27,6 @@ sshpass -p "vagrant" ssh-copy-id -o StrictHostKeyChecking=no vagrant@10.200.100.
 sshpass -p "vagrant" ssh-copy-id -o StrictHostKeyChecking=no vagrant@10.200.100.22
 ```
 
-* disable ansible hostkey checking
-```bash
-vi ~/.ansible.cfg
-
-[defaults]
-host_key_checking = False
-```
-
 * Clone this repository
 ```bash
 git clone https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible.git
