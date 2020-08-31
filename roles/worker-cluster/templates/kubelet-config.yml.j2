@@ -13,7 +13,7 @@ clusterDomain: "cluster.local"
 clusterDNS:
   - "10.32.0.10"
 podCIDR: "10.244.0.0/16"
-resolvConf: "/etc/kubernetes/resolv.conf"
+resolvConf: "/var/lib/kubernetes/resolv.conf"
 runtimeRequestTimeout: "15m"
 rotateCertificates: true
 tlsCertFile: "/var/lib/kubelet/{{ inventory_hostname }}.pem"
