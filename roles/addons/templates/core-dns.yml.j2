@@ -62,6 +62,7 @@ data:
         }
         prometheus :9153
         forward . {% for ip in nameserver %} {{ ip }} {% endfor %}
+
         cache 30
         loop
         reload

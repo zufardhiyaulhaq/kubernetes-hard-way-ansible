@@ -2,15 +2,12 @@ Vagrant.configure('2') do |config|
   config.vm.box = 'hashicorp/bionic64'
 
   $dns_script = <<-'SCRIPT'
-  sudo apt update -y
-  sudo apt upgrade -y
   echo "nameserver 172.30.0.3" > /etc/resolv.conf
   SCRIPT
 
   $ansible_script = <<-'SCRIPT'
+  sudo apt update -y
   sudo apt install ansible sshpass -y
-  echo "[defaults]" >> ~/.ansible.cfg
-  echo "host_key_checking = False" >> ~/.ansible.cfg
   SCRIPT
 
   (0..2).each do |i|
