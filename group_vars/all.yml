@@ -25,7 +25,7 @@ etcd_version: v3.4.10
 containerd_version: v1.3.6
 
 # coredns version
-coredns_version: 1.70
+coredns_version: 1.7.0
 
 # virtual ip configuration
 virtual_ip: 10.200.100.100

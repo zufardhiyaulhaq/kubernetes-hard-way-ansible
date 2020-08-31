@@ -8,7 +8,7 @@ Vagrant.configure('2') do |config|
   SCRIPT
 
   $ansible_script = <<-'SCRIPT'
-  sudo apt install ansible -y
+  sudo apt install ansible sshpass -y
   echo "[defaults]" >> ~/.ansible.cfg
   echo "host_key_checking = False" >> ~/.ansible.cfg
   SCRIPT
@@ -43,7 +43,7 @@ Vagrant.configure('2') do |config|
 
   config.vm.define 'kubernetes-deployer' do |deployer|
     deployer.vm.hostname = 'kubernetes-deployer'
-    deployer.vm.network 'private_network', ip: '10.200.200.30'
+    deployer.vm.network 'private_network', ip: '10.200.100.30'
     deployer.vm.provision 'shell', inline: $dns_script, run: "always"
     deployer.vm.provision 'shell', inline: $ansible_script
     deployer.vm.provider 'virtualbox' do |vb|
