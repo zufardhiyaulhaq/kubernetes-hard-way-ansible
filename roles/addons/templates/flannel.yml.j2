@@ -190,7 +190,7 @@ spec:
         args:
         - --ip-masq
         - --kube-subnet-mgr
-        - --iface={[ flannel_interface }}
+        - --iface={{ flannel_interface }}
         resources:
           requests:
             cpu: "100m"
@@ -286,7 +286,7 @@ spec:
         args:
         - --ip-masq
         - --kube-subnet-mgr
-        - --iface={[ flannel_interface }}
+        - --iface={{ flannel_interface }}
         resources:
           requests:
             cpu: "100m"
@@ -382,7 +382,7 @@ spec:
         args:
         - --ip-masq
         - --kube-subnet-mgr
-        - --iface={[ flannel_interface }}
+        - --iface={{ flannel_interface }}
         resources:
           requests:
             cpu: "100m"
@@ -478,7 +478,7 @@ spec:
         args:
         - --ip-masq
         - --kube-subnet-mgr
-        - --iface={[ flannel_interface }}
+        - --iface={{ flannel_interface }}
         resources:
           requests:
             cpu: "100m"
@@ -574,7 +574,7 @@ spec:
         args:
         - --ip-masq
         - --kube-subnet-mgr
-        - --iface={[ flannel_interface }}
+        - --iface={{ flannel_interface }}
         resources:
           requests:
             cpu: "100m"
