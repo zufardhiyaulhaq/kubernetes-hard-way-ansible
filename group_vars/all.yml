@@ -40,9 +40,7 @@ keepalived_interface: eth1
 keepalived_rid: 50
 
 # flannel interface
-# this interface used for tunnel specific
-# can be combine with management also
-flannel_interface: eth2
+flannel_interface: eth1
 
 # Kubernetes DNS nameserver
 nameserver:
