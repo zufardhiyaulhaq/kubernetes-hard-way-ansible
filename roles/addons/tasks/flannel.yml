@@ -1,3 +1,9 @@
-- name: apply rbac template
-  shell: kubectl create -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+- name: create flannel from template
+  template:
+    src: "flannel.yml.j2"
+    dest: "~/flannel.yml"
+  when: inventory_hostname == '{{ keepalived_master }}'
+  
+- name: apply flannel template
+  shell: kubectl apply -f ~/flannel.yml
   when: inventory_hostname == '{{ keepalived_master }}'

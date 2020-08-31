@@ -27,6 +27,9 @@ containerd_version: 1.3.6
 # coredns version
 coredns_version: 1.7.0
 
+# flannel version
+flannel_version: v0.12.0
+
 # virtual ip configuration
 virtual_ip: 10.200.100.100
 virtual_ip_k8s_port: 64430
@@ -36,6 +39,11 @@ keepalived_master: 10.200.100.10
 keepalived_interface: eth1
 keepalived_rid: 50
 
-# Kubernetes nameserver
+# flannel interface
+# this interface used for tunnel specific
+# can be combine with management also
+flannel_interface: eth2
+
+# Kubernetes DNS nameserver
 nameserver:
 - 172.30.0.3

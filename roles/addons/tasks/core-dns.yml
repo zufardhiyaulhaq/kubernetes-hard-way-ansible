@@ -9,5 +9,5 @@
   when: inventory_hostname == '{{ keepalived_master }}'
   
 - name: apply core-dns template
-  shell: kubectl create -f ~/core-dns.yml
+  shell: kubectl apply -f ~/core-dns.yml
   when: inventory_hostname == '{{ keepalived_master }}'

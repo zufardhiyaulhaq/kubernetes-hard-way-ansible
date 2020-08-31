@@ -1,7 +1,7 @@
 # Kubernetes the easy way
 Ansible template to create kubernetes cluster with the following specs:
 * Kubernetes 1.18.6
-* Latest Flannel
+* Flannel v1.12.0
 * CNI v0.8.6
 * CRI v1.18.0
 * runc v1.0.0-rc91

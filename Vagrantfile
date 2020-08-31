@@ -17,12 +17,14 @@ Vagrant.configure('2') do |config|
     config.vm.define "kubernetes-master-#{i}" do |master|
       master.vm.hostname = "kubernetes-master-#{i}"
       master.vm.network 'private_network', ip: "10.200.100.1#{i}"
+      master.vm.network 'private_network', ip: "10.200.200.1#{i}"
       master.vm.provision 'shell', inline: $dns_script, run: "always"
       master.vm.provider 'virtualbox' do |vb|
         vb.name = "kubernetes-master-#{i}"
         vb.memory = 8000
         vb.cpus = 4
         vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
+        vb.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
       end
     end
   end
@@ -31,12 +33,14 @@ Vagrant.configure('2') do |config|
     config.vm.define "kubernetes-worker-#{i}" do |worker|
       worker.vm.hostname = "kubernetes-worker-#{i}"
       worker.vm.network 'private_network', ip: "10.200.100.2#{i}"
+      worker.vm.network 'private_network', ip: "10.200.200.2#{i}"
       worker.vm.provision 'shell', inline: $dns_script, run: "always"
       worker.vm.provider 'virtualbox' do |vb|
         vb.name = "kubernetes-worker-#{i}"
         vb.memory = 8000
         vb.cpus = 4
         vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
+        vb.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
       end
     end
   end
