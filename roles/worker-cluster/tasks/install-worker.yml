@@ -54,7 +54,7 @@
 
 - name: Download and extract containerd
   unarchive:
-    src:   https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/containerd-{{ containerd_version }}.linux-amd64.tar.gz
+    src:   https://github.com/containerd/containerd/releases/download/{{ containerd_version }}/containerd-{{ containerd_version }}.linux-amd64.tar.gz
     dest: /opt/containerd
     remote_src: yes
 
@@ -124,8 +124,8 @@
 
 - name: copy kubelet config
   template:
-    src: "kubelet-config.yaml.j2"
-    dest: "/var/lib/kubelet/kubelet-config.yaml"
+    src: "kubelet-config.yml.j2"
+    dest: "/var/lib/kubelet/kubelet-config.yml"
     mode: 644
 
 - name: copy kubelet service
@@ -136,8 +136,8 @@
 
 - name: copy kube-proxy config
   template:
-    src: "kube-proxy-config.yaml.j2"
-    dest: "/var/lib/kube-proxy/kube-proxy-config.yaml"
+    src: "kube-proxy-config.yml.j2"
+    dest: "/var/lib/kube-proxy/kube-proxy-config.yml"
     mode: 644
 
 - name: copy kube-proxy service

@@ -6,7 +6,7 @@ Requires=containerd.service
 
 [Service]
 ExecStart=/usr/local/bin/kubelet \
-  --config=/var/lib/kubelet/kubelet-config.yaml \
+  --config=/var/lib/kubelet/kubelet-config.yml \
   --pod-cidr="10.244.0.0/16" \
   --cni-bin-dir=/opt/cni/bin \
   --cni-conf-dir=/etc/cni/net.d \

@@ -9,8 +9,8 @@
 
 - name: copy data encryption template
   template:
-    src: "encryption-config.yaml.j2"
-    dest: "~/certificate-template/encryption-config.yaml"
+    src: "encryption-config.yml.j2"
+    dest: "~/certificate-template/encryption-config.yml"
 
 - name: copy into master node
   vars:
@@ -19,7 +19,7 @@
     chdir: ~/certificate-template
   shell: |
     for instance in {{ master_ip }}; do
-      scp encryption-config.yaml {{user}}@${instance}:~/
+      scp encryption-config.yml {{ user }}@${instance}:~/
     done
 
   

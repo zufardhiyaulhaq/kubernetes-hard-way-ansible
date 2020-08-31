@@ -3,25 +3,35 @@
 ansible_python_interpreter: /usr/bin/python3
 
 # user on all nodes
-user: ubuntu
+user: vagrant
 
 # kubernetes version
-kubernetes_version: v1.15.5
-
-# cri version
-cri_version: v1.15.0
-
-# cni version
-cni_version: v0.8.2
-
-# runc version
-runc_version: v1.0.0-rc8
-
-# kubernetes version
-containerd_version: 1.3.2
+kubernetes_version: v1.18.6
 kubernetes_master_number: 3
 
+# cri version
+cri_version: v1.18.0
+
+# cni version
+cni_version: v0.8.6
+
+# runc version
+runc_version: v1.0.0-rc91
+
+# etcd version
+etcd_version: v3.4.10
+
+# containerd version
+containerd_version: v1.3.6
+
+# coredns version
+coredns_version: 1.70
+
 # virtual ip configuration
-virtual_ip: 10.102.102.100
+virtual_ip: 10.200.100.100
 virtual_ip_k8s_port: 64430
 
+# keepalived
+keepalived_master: 10.200.100.10
+keepalived_interface: ens3
+keepalived_rid: 50

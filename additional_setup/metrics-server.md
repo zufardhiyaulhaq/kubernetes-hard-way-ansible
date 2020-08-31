@@ -22,7 +22,7 @@ systemctl restart kube-apiserver
 ```
 ### Create RBAC
 ```
-cat > rbac.yaml << EOF
+cat > rbac.yml << EOF
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -53,7 +53,7 @@ subjects:
 EOF
 ```
 ```
-kubectl create -f rbac.yaml
+kubectl create -f rbac.yml
 ```
 ### Deploy metrics-server
 ```

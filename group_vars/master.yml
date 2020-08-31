@@ -1,3 +1,0 @@
-keepalived_master: 10.102.102.20
-keepalived_interface: ens3
-keepalived_rid: 50
