@@ -4,7 +4,7 @@ Documentation=https://github.com/kubernetes/kubernetes
 
 [Service]
 ExecStart=/usr/local/bin/kube-apiserver \
-  --advertise-address={{ hostvars[inventory_hostname].ansible_host }} \
+  --advertise-address={{ hostvars[inventory_hostname].inventory_hostname }} \
   --allow-privileged=true \
   --apiserver-count={{ kubernetes_master_number }} \
   --audit-log-maxage=30 \
