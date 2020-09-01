@@ -4,9 +4,11 @@
 
 - name: create rbac from template
   template:
-    src: "rbac.yaml.j2"
-    dest: "~/rbac.yaml"
+    src: "rbac.yml.j2"
+    dest: "~/rbac.yml"
   when: inventory_hostname == '{{ keepalived_master }}'
+
 - name: apply rbac template
-  shell: kubectl create -f ~/rbac.yaml
+  shell: kubectl create -f ~/rbac.yml
   when: inventory_hostname == '{{ keepalived_master }}'
+  ignore_errors: yes

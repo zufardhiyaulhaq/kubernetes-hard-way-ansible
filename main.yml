@@ -46,7 +46,7 @@
   become: yes
   hosts: master
   roles:
-    - cni-dns
+    - addons
 
 
 

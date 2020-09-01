@@ -4,7 +4,7 @@ Documentation=https://github.com/kubernetes/kubernetes
 
 [Service]
 ExecStart=/usr/local/bin/kube-apiserver \
-  --advertise-address={{ ansible_default_ipv4.address }} \
+  --advertise-address={{ hostvars[inventory_hostname].inventory_hostname }} \
   --allow-privileged=true \
   --apiserver-count={{ kubernetes_master_number }} \
   --audit-log-maxage=30 \
@@ -20,14 +20,14 @@ ExecStart=/usr/local/bin/kube-apiserver \
   --etcd-keyfile=/var/lib/kubernetes/kubernetes-key.pem \
   --etcd-servers={% for node in groups['etcd'] %}https://{{ node }}:2379{% if not loop.last %},{% endif %}{% endfor %} \
   --event-ttl=1h \
-  --encryption-provider-config=/var/lib/kubernetes/encryption-config.yaml \
+  --encryption-provider-config=/var/lib/kubernetes/encryption-config.yml \
   --kubelet-certificate-authority=/var/lib/kubernetes/ca.pem \
   --kubelet-client-certificate=/var/lib/kubernetes/kubernetes.pem \
   --kubelet-client-key=/var/lib/kubernetes/kubernetes-key.pem \
   --kubelet-https=true \
-  --runtime-config=api/all \
+  --runtime-config='api/all=true' \
   --service-account-key-file=/var/lib/kubernetes/service-account.pem \
-  --service-cluster-ip-range=10.32.0.0/24 \
+  --service-cluster-ip-range=10.32.0.0/16 \
   --service-node-port-range=30000-32767 \
   --tls-cert-file=/var/lib/kubernetes/kubernetes.pem \
   --tls-private-key-file=/var/lib/kubernetes/kubernetes-key.pem \

@@ -1,3 +1,0 @@
-- name: apply rbac template
-  shell: kubectl create -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-  when: inventory_hostname == '{{ keepalived_master }}'

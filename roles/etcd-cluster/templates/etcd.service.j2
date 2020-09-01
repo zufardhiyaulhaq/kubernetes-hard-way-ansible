@@ -14,10 +14,10 @@ ExecStart=/usr/local/bin/etcd \
   --peer-trusted-ca-file=/etc/etcd/ca.pem \
   --peer-client-cert-auth \
   --client-cert-auth \
-  --initial-advertise-peer-urls https://{{ ansible_default_ipv4.address }}:2380 \
-  --listen-peer-urls https://{{ ansible_default_ipv4.address }}:2380 \
-  --listen-client-urls https://{{ ansible_default_ipv4.address }}:2379,https://127.0.0.1:2379 \
-  --advertise-client-urls https://{{ ansible_default_ipv4.address }}:2379 \
+  --initial-advertise-peer-urls https://{{ hostvars[inventory_hostname].inventory_hostname }}:2380 \
+  --listen-peer-urls https://{{ hostvars[inventory_hostname].inventory_hostname }}:2380 \
+  --listen-client-urls https://{{ hostvars[inventory_hostname].inventory_hostname }}:2379,https://127.0.0.1:2379 \
+  --advertise-client-urls https://{{ hostvars[inventory_hostname].inventory_hostname }}:2379 \
   --initial-cluster-token etcd-cluster-0 \
   --initial-cluster {% for node in groups['etcd'] %}{{ node }}=https://{{ node }}:2380{% if not loop.last %},{% endif %}{% endfor %} \
   --initial-cluster-state new \

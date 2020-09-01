@@ -4,10 +4,10 @@
 
 - name: create core-dns from template
   template:
-    src: "core-dns.yaml.j2"
-    dest: "~/core-dns.yaml"
+    src: "core-dns.yml.j2"
+    dest: "~/core-dns.yml"
   when: inventory_hostname == '{{ keepalived_master }}'
   
 - name: apply core-dns template
-  shell: kubectl create -f ~/core-dns.yaml
+  shell: kubectl apply -f ~/core-dns.yml
   when: inventory_hostname == '{{ keepalived_master }}'

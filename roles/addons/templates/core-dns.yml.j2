@@ -61,6 +61,8 @@ data:
           fallthrough in-addr.arpa ip6.arpa
         }
         prometheus :9153
+        forward . {% for ip in nameserver %} {{ ip }} {% endfor %}
+
         cache 30
         loop
         reload
@@ -98,7 +100,7 @@ spec:
         beta.kubernetes.io/os: linux
       containers:
       - name: coredns
-        image: coredns/coredns:1.6.2
+        image: coredns/coredns:{{ coredns_version }}
         imagePullPolicy: IfNotPresent
         resources:
           limits:

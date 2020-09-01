@@ -1,0 +1,9 @@
+- name: create flannel from template
+  template:
+    src: "flannel.yml.j2"
+    dest: "~/flannel.yml"
+  when: inventory_hostname == '{{ keepalived_master }}'
+  
+- name: apply flannel template
+  shell: kubectl apply -f ~/flannel.yml
+  when: inventory_hostname == '{{ keepalived_master }}'

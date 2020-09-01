@@ -54,7 +54,7 @@
 
 - name: Download and extract containerd
   unarchive:
-    src:   https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/containerd-{{ containerd_version }}.linux-amd64.tar.gz
+    src:   https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/containerd-{{ containerd_version }}-linux-amd64.tar.gz
     dest: /opt/containerd
     remote_src: yes
 
@@ -105,6 +105,31 @@
 
 - name: copy containerd config
   template:
+    src: "containerd.conf.j2"
+    dest: "/etc/modules-load.d/containerd.conf"
+    mode: 644
+
+- name: Add the overlay module
+  modprobe:
+    name: overlay
+    state: present
+
+- name: Add the br_netfilter module
+  modprobe:
+    name: br_netfilter
+    state: present
+
+- name: copy 99-kubernetes-cri.conf config
+  template:
+    src: "99-kubernetes-cri.conf.j2"
+    dest: "/etc/sysctl.d/99-kubernetes-cri.conf"
+    mode: 644
+
+- name: relaod sysctl
+  shell: sysctl --system
+
+- name: copy containerd config
+  template:
     src: "config.toml.j2"
     dest: "/etc/containerd/config.toml"
     mode: 644
@@ -122,10 +147,16 @@
     daemon_reload: yes
     enabled: yes
 
+- name: copy custom resolv.conf
+  template:
+    src: "resolv.conf.j2"
+    dest: "/var/lib/kubernetes/resolv.conf"
+    mode: 644
+
 - name: copy kubelet config
   template:
-    src: "kubelet-config.yaml.j2"
-    dest: "/var/lib/kubelet/kubelet-config.yaml"
+    src: "kubelet-config.yml.j2"
+    dest: "/var/lib/kubelet/kubelet-config.yml"
     mode: 644
 
 - name: copy kubelet service
@@ -136,8 +167,8 @@
 
 - name: copy kube-proxy config
   template:
-    src: "kube-proxy-config.yaml.j2"
-    dest: "/var/lib/kube-proxy/kube-proxy-config.yaml"
+    src: "kube-proxy-config.yml.j2"
+    dest: "/var/lib/kube-proxy/kube-proxy-config.yml"
     mode: 644
 
 - name: copy kube-proxy service
@@ -159,8 +190,5 @@
     state: restarted
     daemon_reload: yes
     enabled: yes
-
-- name: fix DNS
-  shell: ln -s /run/resolvconf/ /run/systemd/resolve
 
 

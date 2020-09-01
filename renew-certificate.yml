@@ -1,0 +1,12 @@
+#############################
+##### Renew Certificate #####
+#############################
+#
+# run this roles if certificate is expired
+#
+
+- name: renew Certificate
+  become: yes
+  hosts: deployer
+  roles:
+    - renew-certificate
