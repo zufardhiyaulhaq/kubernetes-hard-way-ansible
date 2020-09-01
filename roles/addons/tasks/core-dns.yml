@@ -6,8 +6,8 @@
   template:
     src: "core-dns.yml.j2"
     dest: "~/core-dns.yml"
-  when: inventory_hostname == '{{ keepalived_master }}'
+  when: inventory_hostname == '{{ infrastructure.keepalived.masterIP }}'
   
 - name: apply core-dns template
   shell: kubectl apply -f ~/core-dns.yml
-  when: inventory_hostname == '{{ keepalived_master }}'
+  when: inventory_hostname == '{{ infrastructure.keepalived.masterIP }}'

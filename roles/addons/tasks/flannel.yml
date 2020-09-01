@@ -2,8 +2,8 @@
   template:
     src: "flannel.yml.j2"
     dest: "~/flannel.yml"
-  when: inventory_hostname == '{{ keepalived_master }}'
+  when: inventory_hostname == '{{ infrastructure.keepalived.masterIP }}'
   
 - name: apply flannel template
   shell: kubectl apply -f ~/flannel.yml
-  when: inventory_hostname == '{{ keepalived_master }}'
+  when: inventory_hostname == '{{ infrastructure.keepalived.masterIP }}'

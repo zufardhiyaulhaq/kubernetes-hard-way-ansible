@@ -1,3 +1,3 @@
-{% for ip in nameserver %}
+{% for ip in kubernetes.addonsComponents.coredns.nameservers %}
 nameserver {{ ip }}
 {% endfor %}
