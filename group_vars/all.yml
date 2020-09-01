@@ -45,3 +45,12 @@ flannel_interface: eth1
 # Kubernetes DNS nameserver
 nameserver:
 - 172.30.0.3
+
+# cluster spesific naming
+cluster_name: kubernetes-cluster
+
+# CA information
+ca_country: ID
+ca_province: Jakarta
+ca_city: Jakarta
+ca_organization_unit: Kubernetes
