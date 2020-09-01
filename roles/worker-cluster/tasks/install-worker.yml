@@ -105,6 +105,31 @@
 
 - name: copy containerd config
   template:
+    src: "containerd.conf.j2"
+    dest: "/etc/modules-load.d/containerd.conf"
+    mode: 644
+
+- name: Add the overlay module
+  modprobe:
+    name: overlay
+    state: present
+
+- name: Add the br_netfilter module
+  modprobe:
+    name: br_netfilter
+    state: present
+
+- name: copy 99-kubernetes-cri.conf config
+  template:
+    src: "99-kubernetes-cri.conf.j2"
+    dest: "/etc/sysctl.d/99-kubernetes-cri.conf"
+    mode: 644
+
+- name: relaod sysctl
+  shell: sysctl --system
+
+- name: copy containerd config
+  template:
     src: "config.toml.j2"
     dest: "/etc/containerd/config.toml"
     mode: 644
