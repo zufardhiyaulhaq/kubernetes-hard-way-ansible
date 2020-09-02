@@ -26,7 +26,6 @@ ExecStart=/usr/local/bin/kube-apiserver \
   --kubelet-client-key=/var/lib/kubernetes/kubernetes-key.pem \
   --kubelet-https=true \
   --runtime-config='api/all=true' \
-
 {% if kubernetes.addonsComponents.metricsServer.enabled %}
   --proxy-client-cert-file=/var/lib/kubernetes/aggregator-proxy-client.pem \
   --proxy-client-key-file=/var/lib/kubernetes/aggregator-proxy-client-key.pem \
@@ -36,7 +35,6 @@ ExecStart=/usr/local/bin/kube-apiserver \
   --requestheader-group-headers=X-Remote-Group \
   --requestheader-username-headers=X-Remote-User \
 {% endif %}
-
   --service-account-key-file=/var/lib/kubernetes/service-account.pem \
   --service-cluster-ip-range=10.32.0.0/16 \
   --service-node-port-range=30000-32767 \
