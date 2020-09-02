@@ -7,8 +7,8 @@ vrrp_script haproxy-check {
 vrrp_instance haproxy-vip {
 
 interface {{ infrastructure.keepalived.interface }}
-state {% if hostvars[inventory_hostname].inventory_hostname == keepalived_master %} MASTER {% else %} backup {% endif %}
-priority {% if hostvars[inventory_hostname].inventory_hostname == keepalived_master %} 100 {% else %} 99 {% endif %}
+state {% if hostvars[inventory_hostname].inventory_hostname == infrastructure.keepalived.masterIP %} MASTER {% else %} backup {% endif %}
+priority {% if hostvars[inventory_hostname].inventory_hostname == infrastructure.keepalived.masterIP %} 100 {% else %} 99 {% endif %}
 
 virtual_router_id {{ infrastructure.keepalived.routerID }}
 unicast_src_ip {{ hostvars[inventory_hostname].inventory_hostname }}
