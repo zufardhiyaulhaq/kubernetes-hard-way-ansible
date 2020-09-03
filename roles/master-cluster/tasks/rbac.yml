@@ -6,9 +6,9 @@
   template:
     src: "rbac.yml.j2"
     dest: "~/rbac.yml"
-  when: inventory_hostname == '{{ keepalived_master }}'
+  when: inventory_hostname == '{{ infrastructure.keepalived.masterIP }}'
 
 - name: apply rbac template
   shell: kubectl create -f ~/rbac.yml
-  when: inventory_hostname == '{{ keepalived_master }}'
+  when: inventory_hostname == '{{ infrastructure.keepalived.masterIP }}'
   ignore_errors: yes

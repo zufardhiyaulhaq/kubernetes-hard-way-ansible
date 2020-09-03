@@ -15,7 +15,7 @@
 
 - name: Download and extract Kubernetes server
   unarchive:
-    src: https://dl.k8s.io/{{ kubernetes_version }}/kubernetes-server-linux-amd64.tar.gz
+    src: https://dl.k8s.io/{{ kubernetes.version }}/kubernetes-server-linux-amd64.tar.gz
     dest: /opt/
     remote_src: yes
 

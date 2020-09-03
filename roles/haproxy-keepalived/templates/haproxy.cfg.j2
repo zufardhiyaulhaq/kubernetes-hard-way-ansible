@@ -25,7 +25,7 @@ defaults
         errorfile 504 /etc/haproxy/errors/504.http
 
 frontend k8s-api-server
-        bind 0.0.0.0:{{ virtual_ip_k8s_port }}
+        bind 0.0.0.0:{{ infrastructure.keepalived.virtualIPPort }}
         option tcplog
         mode tcp
         default_backend k8s-api-server-backend

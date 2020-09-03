@@ -170,7 +170,7 @@ spec:
       serviceAccountName: flannel
       initContainers:
       - name: install-cni
-        image: quay.io/coreos/flannel:{{ flannel_version }}-amd64
+        image: quay.io/coreos/flannel:{{ kubernetes.addonsComponents.flannel.version }}-amd64
         command:
         - cp
         args:
@@ -184,13 +184,13 @@ spec:
           mountPath: /etc/kube-flannel/
       containers:
       - name: kube-flannel
-        image: quay.io/coreos/flannel:{{ flannel_version }}-amd64
+        image: quay.io/coreos/flannel:{{ kubernetes.addonsComponents.flannel.version }}-amd64
         command:
         - /opt/bin/flanneld
         args:
         - --ip-masq
         - --kube-subnet-mgr
-        - --iface={{ flannel_interface }}
+        - --iface={{ kubernetes.addonsComponents.flannel.interface }}
         resources:
           requests:
             cpu: "100m"
@@ -266,7 +266,7 @@ spec:
       serviceAccountName: flannel
       initContainers:
       - name: install-cni
-        image: quay.io/coreos/flannel:{{ flannel_version }}-arm64
+        image: quay.io/coreos/flannel:{{ kubernetes.addonsComponents.flannel.version }}-arm64
         command:
         - cp
         args:
@@ -280,13 +280,13 @@ spec:
           mountPath: /etc/kube-flannel/
       containers:
       - name: kube-flannel
-        image: quay.io/coreos/flannel:{{ flannel_version }}-arm64
+        image: quay.io/coreos/flannel:{{ kubernetes.addonsComponents.flannel.version }}-arm64
         command:
         - /opt/bin/flanneld
         args:
         - --ip-masq
         - --kube-subnet-mgr
-        - --iface={{ flannel_interface }}
+        - --iface={{ kubernetes.addonsComponents.flannel.interface }}
         resources:
           requests:
             cpu: "100m"
@@ -362,7 +362,7 @@ spec:
       serviceAccountName: flannel
       initContainers:
       - name: install-cni
-        image: quay.io/coreos/flannel:{{ flannel_version }}-arm
+        image: quay.io/coreos/flannel:{{ kubernetes.addonsComponents.flannel.version }}-arm
         command:
         - cp
         args:
@@ -376,13 +376,13 @@ spec:
           mountPath: /etc/kube-flannel/
       containers:
       - name: kube-flannel
-        image: quay.io/coreos/flannel:{{ flannel_version }}-arm
+        image: quay.io/coreos/flannel:{{ kubernetes.addonsComponents.flannel.version }}-arm
         command:
         - /opt/bin/flanneld
         args:
         - --ip-masq
         - --kube-subnet-mgr
-        - --iface={{ flannel_interface }}
+        - --iface={{ kubernetes.addonsComponents.flannel.interface }}
         resources:
           requests:
             cpu: "100m"
@@ -458,7 +458,7 @@ spec:
       serviceAccountName: flannel
       initContainers:
       - name: install-cni
-        image: quay.io/coreos/flannel:{{ flannel_version }}-ppc64le
+        image: quay.io/coreos/flannel:{{ kubernetes.addonsComponents.flannel.version }}-ppc64le
         command:
         - cp
         args:
@@ -472,13 +472,13 @@ spec:
           mountPath: /etc/kube-flannel/
       containers:
       - name: kube-flannel
-        image: quay.io/coreos/flannel:{{ flannel_version }}-ppc64le
+        image: quay.io/coreos/flannel:{{ kubernetes.addonsComponents.flannel.version }}-ppc64le
         command:
         - /opt/bin/flanneld
         args:
         - --ip-masq
         - --kube-subnet-mgr
-        - --iface={{ flannel_interface }}
+        - --iface={{ kubernetes.addonsComponents.flannel.interface }}
         resources:
           requests:
             cpu: "100m"
@@ -554,7 +554,7 @@ spec:
       serviceAccountName: flannel
       initContainers:
       - name: install-cni
-        image: quay.io/coreos/flannel:{{ flannel_version }}-s390x
+        image: quay.io/coreos/flannel:{{ kubernetes.addonsComponents.flannel.version }}-s390x
         command:
         - cp
         args:
@@ -568,13 +568,13 @@ spec:
           mountPath: /etc/kube-flannel/
       containers:
       - name: kube-flannel
-        image: quay.io/coreos/flannel:{{ flannel_version }}-s390x
+        image: quay.io/coreos/flannel:{{ kubernetes.addonsComponents.flannel.version }}-s390x
         command:
         - /opt/bin/flanneld
         args:
         - --ip-masq
         - --kube-subnet-mgr
-        - --iface={{ flannel_interface }}
+        - --iface={{ kubernetes.addonsComponents.flannel.interface }}
         resources:
           requests:
             cpu: "100m"
