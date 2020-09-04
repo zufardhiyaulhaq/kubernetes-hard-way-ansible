@@ -46,6 +46,12 @@ kubernetes:
       usernameClaim: preferred_username
       groupsPrefix: "oidc:"
       usernamePrefix: "oidc:"
+  certificate:
+    # directory created in deployer node for certificate
+    directory: ~/kubernetes-certificate
+    # create client kubeconfig
+    # will be generated in the certificate directory
+    createClientKubeconfig: true
   # number of Kubernetes master
   masterNumber: 3
   version: v1.18.6

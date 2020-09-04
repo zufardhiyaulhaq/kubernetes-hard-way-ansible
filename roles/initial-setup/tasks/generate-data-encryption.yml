@@ -10,13 +10,13 @@
 - name: copy data encryption template
   template:
     src: "encryption-config.yml.j2"
-    dest: "~/certificate-template/encryption-config.yml"
+    dest: "{{ kubernetes.certificate.directory }}/encryption-config.yml"
 
 - name: copy into master node
   vars:
     master_ip: "{{ groups['master'] | join(' ') }}"
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
   shell: |
     for instance in {{ master_ip }}; do
       scp encryption-config.yml {{ user }}@${instance}:~/

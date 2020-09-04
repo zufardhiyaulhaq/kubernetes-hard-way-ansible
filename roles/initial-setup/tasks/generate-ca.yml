@@ -1,19 +1,19 @@
 ---
 - name: create certificate directory
   file:
-    path: ~/certificate-template
+    path: {{ kubernetes.certificate.directory }}
     state: directory
 
 - name: copy worker certificate
   template:
     src: "worker-csr.json.j2"
-    dest: "~/certificate-template/{{ item }}-csr.json"
+    dest: "{{ kubernetes.certificate.directory }}/{{ item }}-csr.json"
   with_items: "{{ groups['worker'] }}"
 
 - name: copy master certificate
   template:
     src: "master-csr.json.j2"
-    dest: "~/certificate-template/{{ item }}-csr.json"
+    dest: "{{ kubernetes.certificate.directory }}/{{ item }}-csr.json"
   with_items: "{{ groups['master'] }}"
 
 - name: copy all template
@@ -21,25 +21,25 @@
     src: "{{item.src}}"
     dest: "{{item.dest}}"
   with_items:
-    - { src: 'admin-csr.json.j2', dest: '~/certificate-template/admin-csr.json' }
-    - { src: 'ca-config.json.j2', dest: '~/certificate-template/ca-config.json' }
-    - { src: 'ca-csr.json.j2', dest: '~/certificate-template/ca-csr.json' }
-    - { src: 'kube-controller-manager-csr.json.j2', dest: '~/certificate-template/kube-controller-manager-csr.json' }
-    - { src: 'kube-proxy-csr.json.j2', dest: '~/certificate-template/kube-proxy-csr.json' }
-    - { src: 'kube-scheduler-csr.json.j2', dest: '~/certificate-template/kube-scheduler-csr.json' }
-    - { src: 'kubernetes-csr.json.j2', dest: '~/certificate-template/kubernetes-csr.json' }
-    - { src: 'service-account-csr.json.j2', dest: '~/certificate-template/service-account-csr.json' }
-    - { src: 'metrics-server-csr.json.j2', dest: '~/certificate-template/metrics-server-csr.json' }
+    - { src: 'admin-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/admin-csr.json' }
+    - { src: 'ca-config.json.j2', dest: '{{ kubernetes.certificate.directory }}/ca-config.json' }
+    - { src: 'ca-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/ca-csr.json' }
+    - { src: 'kube-controller-manager-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/kube-controller-manager-csr.json' }
+    - { src: 'kube-proxy-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/kube-proxy-csr.json' }
+    - { src: 'kube-scheduler-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/kube-scheduler-csr.json' }
+    - { src: 'kubernetes-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/kubernetes-csr.json' }
+    - { src: 'service-account-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/service-account-csr.json' }
+    - { src: 'metrics-server-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/metrics-server-csr.json' }
 
 
 - name: generate CA 
   shell: cfssl gencert -initca ca-csr.json | cfssljson -bare ca
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
 
 - name: generate admin certificate
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
   shell: |
     cfssl gencert \
     -ca=ca.pem \
@@ -50,7 +50,7 @@
 
 - name: generate worker certificate
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
   shell: |
     cfssl gencert \
     -ca=ca.pem \
@@ -63,7 +63,7 @@
 
 - name: generate master certificate
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
   shell: |
     cfssl gencert \
     -ca=ca.pem \
@@ -76,7 +76,7 @@
 
 - name: generate controller-manager certificate
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
   shell: |
     cfssl gencert \
     -ca=ca.pem \
@@ -87,7 +87,7 @@
 
 - name: generate kube-proxy certificate
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
   shell: |
     cfssl gencert \
     -ca=ca.pem \
@@ -98,7 +98,7 @@
 
 - name: generate scheduler certificate
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
   shell: |
     cfssl gencert \
     -ca=ca.pem \
@@ -109,7 +109,7 @@
     
 - name: generate service-account certificate
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
   shell: |
     cfssl gencert \
     -ca=ca.pem \
@@ -120,7 +120,7 @@
 
 - name: generate metrics-server certificate
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
   shell: |
     cfssl gencert \
     -ca=ca.pem \
@@ -134,7 +134,7 @@
     etcd_ip: "{{ groups['etcd'] | join(',') }}"
     master_ip: "{{ groups['master'] | join(',') }}"
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
   shell: |
     cfssl gencert \
     -ca=ca.pem \
@@ -148,7 +148,7 @@
   vars:
     worker_ip: "{{ groups['worker'] | join(' ') }}"
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
   shell: |
     for instance in {{ worker_ip }}; do
       scp ca.pem {{ user }}@${instance}:~/
@@ -160,7 +160,7 @@
   vars:
     etcd_ip: "{{ groups['etcd'] | join(' ') }}"
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
   shell: |
     for instance in {{ etcd_ip }}; do
       scp ca.pem {{ user }}@${instance}:~/
@@ -172,7 +172,7 @@
   vars:
     master_ip: "{{ groups['master'] | join(' ') }}"
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
   shell: |
     for instance in {{ master_ip }}; do
       scp ca.pem {{ user }}@${instance}:~/

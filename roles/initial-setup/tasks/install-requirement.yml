@@ -15,6 +15,7 @@
     src: /opt/kubernetes/client/bin/kubectl
     dest: /usr/local/bin/kubectl
     mode: a+x
+    remote_src: yes
 
 - name: install cfssl
   get_url:

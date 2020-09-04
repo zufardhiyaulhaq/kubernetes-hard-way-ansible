@@ -19,13 +19,15 @@ Ansible template to create kubernetes cluster with the following specs:
 * Ubuntu 18.04
 
 ## Step Installation
-* Prepare deployer nodes (ansible is installed in here)
+Execution happen on the deployer node. All the ceritificate generated and store in the deployer node. The deployer node cannot be deleted. All this step executed in the deployer node.
+
+* Prepare ansible
 ```bash
 sudo apt-add-repository ppa:ansible/ansible -y
 sudo apt update
 sudo apt install ansible -y
 ```
-* Make sure deployer have access into all nodes (tips using ssh-copy-id)
+* Make sure have access into all nodes
 
 please make sure that <user> have privilege access, you can add the user in sudoers files, after bootstrap is done, fell free to remove that.
 ```bash
@@ -49,6 +51,7 @@ ssh-copy-id <user>@10.102.102.30
 ssh-copy-id <user>@10.102.102.31
 ssh-copy-id <user>@10.102.102.32
 ```
+
 * disable ansible hostkey checking
 ```bash
 vi ~/.ansible.cfg
@@ -56,15 +59,18 @@ vi ~/.ansible.cfg
 [defaults]
 host_key_checking = False
 ```
+
 * Clone this repository
 ```bash
 git clone https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible.git
 ```
+
 * Change some variable
 ```
 vi group_vars/all.yml
 vi hosts/hosts
 ```
+
 * Run ansible
 ```
 ansible-playbook main.yml -i hosts/hosts

@@ -2,12 +2,12 @@
 - name: copy worker certificate
   template:
     src: "worker-csr.json.j2"
-    dest: "~/certificate-template/{{ item }}-csr.json"
+    dest: "{{ kubernetes.certificate.directory }}/{{ item }}-csr.json"
   with_items: "{{ groups['worker'] }}"
 
 - name: generate worker certificate
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
   shell: |
     cfssl gencert \
     -ca=ca.pem \
@@ -22,7 +22,7 @@
   vars:
     worker_ip: "{{ groups['worker'] | join(' ') }}"
   args:
-    chdir: ~/certificate-template
+    chdir: {{ kubernetes.certificate.directory }}
   shell: |
     for instance in {{ worker_ip }}; do
       scp ca.pem {{ user }}@${instance}:~/

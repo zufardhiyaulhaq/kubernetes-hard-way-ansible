@@ -45,3 +45,12 @@ cd kubernetes-hardway-ansible
 ```
 ansible-playbook main.yml -i hosts/hosts
 ```
+
+* Copy client.kubeconfig from deployer nodes and merge with your kubeconfig
+This needed if you want to access kubernetes from other node rather than deployer mode
+```
+mkdir /tmp/kubeconfig
+scp vagrant@10.200.100.30:~/.kube/config /tmp/kubeconfig/config
+
+KUBECONFIG=~/.kube/config:/tmp/kubeconfig/config kubectl config view --flatten > ~/.kube/config
+```
