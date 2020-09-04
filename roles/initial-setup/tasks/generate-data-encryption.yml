@@ -16,7 +16,7 @@
   vars:
     master_ip: "{{ groups['master'] | join(' ') }}"
   args:
-    chdir: {{ kubernetes.certificate.directory }}
+    chdir: "{{ kubernetes.certificate.directory }}"
   shell: |
     for instance in {{ master_ip }}; do
       scp encryption-config.yml {{ user }}@${instance}:~/
