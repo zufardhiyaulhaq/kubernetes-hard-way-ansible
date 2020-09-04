@@ -18,7 +18,7 @@ Vagrant.configure('2') do |config|
       master.vm.network 'private_network', ip: "10.200.100.1#{i}"
 
       ### uncomment this to add custom DNS to your VM
-      # worker.vm.provision 'shell', inline: $dns_script, run: "always"
+      # master.vm.provision 'shell', inline: $dns_script, run: "always"
 
       ### uncomment this to add host public ssh key to your VM
       ### you need to have the public ssh key in ~/.ssh/id_rsa.pub 
