@@ -26,6 +26,26 @@ ExecStart=/usr/local/bin/kube-apiserver \
   --kubelet-client-key=/var/lib/kubernetes/kubernetes-key.pem \
   --kubelet-https=true \
   --runtime-config='api/all=true' \
+{% if kubernetes.addonsComponents.oidc.enabled %}
+{% if kubernetes.addonsComponents.oidc.issuerURL %}
+{% if kubernetes.addonsComponents.oidc.clientID %}
+  --oidc-issuer-url={{ kubernetes.addonsComponents.oidc.issuerURL }} \
+  --oidc-client-id={{ kubernetes.addonsComponents.oidc.clientID }} \
+{% endif %}
+{% if kubernetes.addonsComponents.oidc.groupsClaim %}
+  --oidc-groups-claim={{ kubernetes.addonsComponents.oidc.groupsClaim }} \
+{% endif %}
+{% if kubernetes.addonsComponents.oidc.usernameClaim %}
+  --oidc-groups-claim={{ kubernetes.addonsComponents.oidc.usernameClaim }} \
+{% endif %}
+{% if kubernetes.addonsComponents.oidc.groupsPrefix %}
+  --oidc-groups-claim={{ kubernetes.addonsComponents.oidc.groupsPrefix }} \
+{% endif %}
+{% if kubernetes.addonsComponents.oidc.usernamePrefix %}
+  --oidc-groups-claim={{ kubernetes.addonsComponents.oidc.usernamePrefix }} \
+{% endif %}
+{% endif %}
+{% endif %}
 {% if kubernetes.addonsComponents.metricsServer.enabled %}
   --proxy-client-cert-file=/var/lib/kubernetes/aggregator-proxy-client.pem \
   --proxy-client-key-file=/var/lib/kubernetes/aggregator-proxy-client-key.pem \
