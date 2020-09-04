@@ -52,5 +52,8 @@ This needed if you want to access kubernetes from other node rather than deploye
 mkdir /tmp/kubeconfig
 scp vagrant@10.200.100.30:~/.kube/config /tmp/kubeconfig/config
 
-KUBECONFIG=~/.kube/config:/tmp/kubeconfig/config kubectl config view --flatten > ~/.kube/config
+cp ~/.kube/config ~/.kube/config.bak
+
+KUBECONFIG=~/.kube/config:/tmp/kubeconfig/config kubectl config view --flatten > /tmp/merge
+cp /tmp/merge ~/.kube/config
 ```
