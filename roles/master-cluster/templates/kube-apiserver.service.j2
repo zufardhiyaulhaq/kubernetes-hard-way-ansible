@@ -36,7 +36,7 @@ ExecStart=/usr/local/bin/kube-apiserver \
   --oidc-groups-claim={{ kubernetes.addonsComponents.oidc.groupsClaim }} \
 {% endif %}
 {% if kubernetes.addonsComponents.oidc.usernameClaim %}
-  --oidc-groups-claim={{ kubernetes.addonsComponents.oidc.usernameClaim }} \
+  --oidc-username-claim={{ kubernetes.addonsComponents.oidc.usernameClaim }} \
 {% endif %}
 {% if kubernetes.addonsComponents.oidc.groupsPrefix %}
   --oidc-groups-claim={{ kubernetes.addonsComponents.oidc.groupsPrefix }} \
