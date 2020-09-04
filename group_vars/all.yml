@@ -44,9 +44,9 @@ kubernetes:
       issuerURL: https://keycloak.zufar.io:8443/auth/realms/IAM
       clientID: kubernetes
       groupsClaim: user_groups
-      usernameClaim: preferred_username
       groupsPrefix: "oidc:"
-      usernamePrefix: "oidc:"
+      # usernameClaim: preferred_username
+      # usernamePrefix: "oidc:"
   certificate:
     # directory created in deployer node for certificate
     directory: ~/kubernetes-certificate
