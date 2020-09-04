@@ -8,8 +8,9 @@ Ansible template to create kubernetes cluster with the following specs:
 * containerd v1.3.6
 * etcd v3.4.10
 * core-dns 1.7.0
-* metrics-server
+* metrics-server v0.3.7
 * Haproxy & keepalived
+* OIDC supported
 * Secure communication between component
 * playbook for renewing certificate
 
@@ -77,7 +78,7 @@ ansible-playbook main.yml -i hosts/hosts
 ```
 
 ### Additional Setup
-* [metrics-server](additional_setup/metrics-server.md)
+* [metalLB](additional_setup/metallb.md)
 * [Private Insecure Registry](additional_setup/insecure-registry.md)
 * [Renew Certificate](additional_setup/insecure-registry.md)
 * [Add new Worker](additional_setup/insecure-registry.md)

@@ -1,4 +1,16 @@
 ## Step Installation
+* Clone repository
+```
+git clone https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible.git
+cd kubernetes-hardway-ansible
+```
+
+* Change some Vagrant variable if you need that
+```
+cat Vagrantfile
+vi Vagrantfile
+```
+
 * Start Vagrant
 ```
 vagrant up
