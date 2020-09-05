@@ -18,7 +18,7 @@ vagrant up
 
 * SSH to deployer node
 ```bash
-vagrant ssh kubernetes-deployer
+ssh vagrant@10.200.100.30
 ```
 
 * Make sure deployer have access into all nodes
