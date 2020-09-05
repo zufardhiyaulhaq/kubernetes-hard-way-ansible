@@ -5,7 +5,7 @@ git clone https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible.git
 cd kubernetes-hardway-ansible
 ```
 
-* Change some Vagrant variable if you need that
+* Change some Vagrant variable if needed
 ```
 cat Vagrantfile
 vi Vagrantfile
@@ -51,6 +51,12 @@ host_key_checking = False
 ```bash
 git clone https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible.git
 cd kubernetes-hardway-ansible
+```
+
+* Change some variable if needed
+```
+vi group_vars/all.yml
+vi hosts/hosts
 ```
 
 * Run ansible
