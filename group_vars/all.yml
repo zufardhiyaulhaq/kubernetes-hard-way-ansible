@@ -33,19 +33,23 @@ kubernetes:
       interface: eth1
       version: v0.12.0
     # enabled metrics server
-    # add flags for metrics server
     metricsServer:
       enabled: true
       version: v0.3.7
     # enabled oidc
-    # add flags for oidc
     oidc:
       enabled: true
+      # your OIDC identity provider URL
       issuerURL: https://keycloak.zufar.io:8443/auth/realms/IAM
+      # your client ID from identity provider
       clientID: kubernetes
+      # information for group Kubernetes in JWT token
       groupsClaim: user_groups
+      # adding prefix in front of groupsClaim
       groupsPrefix: "oidc:"
+      # information for user Kubernetes in JWT token
       usernameClaim: preferred_username
+      # adding prefix in front of usernameClaim
       usernamePrefix: "oidc:"
   certificate:
     # directory created in deployer node for certificate
@@ -60,6 +64,7 @@ kubernetes:
 # Infrastructure configuration
 infrastructure:
   ca:
+    expireTime: 8760h
     city: Jakarta
     country: ID
     organizationUnit: Kubernetes

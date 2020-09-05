@@ -1,4 +1,4 @@
-# Kubernetes Hardway Ansible
+# Kubernetes Hard Way Ansible
 Ansible template to create kubernetes cluster with the following specs:
 * Kubernetes 1.18.6
 * Flannel v1.12.0
@@ -10,17 +10,23 @@ Ansible template to create kubernetes cluster with the following specs:
 * core-dns 1.7.0
 * metrics-server v0.3.7
 * Haproxy & keepalived
-* OIDC supported
 * Secure communication between component
-* playbook for renewing certificate
 
-### Testing in
-* 3 etcd nodes, 3 master nodes, 3 worker nodes
-* 3 etcd & master nodes, 3 worker nodes
+### Additional Feature
+* OIDC supported
+* MetalLB supported
+* Vagrant installation supported
+* Insecure Registry supported
+* Renewing certificate playbook
+* Adding worker node playbook
+
+### Tested Environment
 * Ubuntu 18.04
+    * 3 master nodes, 3 worker nodes
+    * 3 etcd nodes, 3 master nodes, 3 worker nodes
 
 ## Step Installation
-Execution happen on the deployer node. All the ceritificate generated and store in the deployer node. The deployer node cannot be deleted. All this step executed in the deployer node.
+Execution happen on the deployer node. All the ceritificate generated and store in the deployer node. The deployer node cannot be deleted if you want to renew certificate or extending kubernetes worker node. All this step executed in the deployer node.
 
 * Prepare ansible
 ```bash
@@ -77,8 +83,11 @@ vi hosts/hosts
 ansible-playbook main.yml -i hosts/hosts
 ```
 
+Please backup certificate directory in the deployer node!
+
 ### Additional Setup
+* [OIDC](additional_setup/oidc.md)
 * [metalLB](additional_setup/metallb.md)
 * [Private Insecure Registry](additional_setup/insecure-registry.md)
-* [Renew Certificate](additional_setup/insecure-registry.md)
-* [Add new Worker](additional_setup/insecure-registry.md)
+* [Renew Certificate](RENEW-CERTIFICATE.md)
+* [Add new Worker](ADD-WORKER.md)
