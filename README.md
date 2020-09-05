@@ -1,4 +1,4 @@
-# Kubernetes the easy way
+# Kubernetes Hardway Ansible
 Ansible template to create kubernetes cluster with the following specs:
 * Kubernetes 1.18.6
 * Flannel v1.12.0
