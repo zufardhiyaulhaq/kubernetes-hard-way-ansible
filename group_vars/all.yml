@@ -5,7 +5,7 @@ ansible_python_interpreter: /usr/bin/python3
 # Kubernetes configuration
 kubernetes:
   # cluster name
-  clusterName: kubernetes-cluster
+  clusterName: kubernetes-cluster-01
   # list of main Kubernetes component
   components:
     cri:
