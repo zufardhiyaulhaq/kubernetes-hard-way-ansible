@@ -114,7 +114,7 @@ Vagrant.configure('2') do |config|
 
     deployer.vm.provision 'shell', inline: $ansible_script
     deployer.vm.provider 'virtualbox' do |vb|
-      vb.name = '#{cluster_name}-deployer'
+      vb.name = "#{cluster_name}-deployer"
       vb.memory = 1024
       vb.cpus = 2
     end
