@@ -8,6 +8,9 @@ kubernetes:
   clusterName: kubernetes-cluster-01
   # list of main Kubernetes component
   components:
+    master:
+      # disable scheduling workload to master
+      noSchedule: true
     cri:
       version: v1.18.0
     cni:

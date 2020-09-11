@@ -15,4 +15,4 @@
 - name: taint master node
   shell: kubectl taint nodes {{ item }} node-role.kubernetes.io/master="":NoSchedule
   with_items: "{{ groups['master'] }}"
-  when: inventory_hostname == '{{ infrastructure.keepalived.masterIP }}'
+  when: inventory_hostname == '{{ infrastructure.keepalived.masterIP }}' and kubernetes.components.master.noSchedule
