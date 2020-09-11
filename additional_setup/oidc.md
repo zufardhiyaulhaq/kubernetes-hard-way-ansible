@@ -1,5 +1,7 @@
 # OIDC
-Please setup OIDC in the `group_vars/all.yml`. If you already setup and running the bootstraping. In cases of OIDC, you only need to apply RBAC for accessing Kubernetes cluster from OIDC. For example:
+Please setup OIDC in the `group_vars/all.yml`. This document don't include step how to setup the OIDC identity provider. If you enable OIDC, you will get `client-oidc.kubeconfig` located in deployer node. Please distribute this to the user if you want the user to login using OIDC. User can install and setup kube-login plugin.
+
+If you already setup and running the bootstraping. In cases of OIDC, you only need to apply RBAC for accessing Kubernetes cluster from OIDC. For example:
 
 ```
 cat <<EOF | kubectl apply -f -
