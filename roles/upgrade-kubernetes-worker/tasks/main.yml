@@ -1,2 +1,2 @@
 ---
-- include: install-worker.yml
+- include: upgrade-worker.yml
