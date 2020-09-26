@@ -90,4 +90,4 @@ Please backup certificate directory in the deployer node!
 * [metalLB](additional_setup/metallb.md)
 * [Private Insecure Registry](additional_setup/insecure-registry.md)
 * [Renew Certificate](RENEW-CERTIFICATE.md)
-* [Add new Worker](ADD-WORKER.md)
+* [Add new Worker](NEW-WORKER.md)

@@ -1,0 +1,36 @@
+---
+- name: create certificate directory
+  file:
+    path: "{{ kubernetes.certificate.directory }}"
+    state: directory
+
+- name: copy worker certificate
+  template:
+    src: "worker-csr.json.j2"
+    dest: "{{ kubernetes.certificate.directory }}/{{ item }}-csr.json"
+  with_items: "{{ groups['worker'] }}"
+
+- name: generate worker certificate
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}"
+  shell: |
+    cfssl gencert \
+    -ca=ca.pem \
+    -ca-key=ca-key.pem \
+    -config=ca-config.json \
+    -hostname={{ item }} \
+    -profile=kubernetes \
+    {{ item }}-csr.json | cfssljson -bare {{ item }}
+  with_items: "{{ groups['worker'] }}"
+
+- name: copy cert into worker node
+  vars:
+    worker_ip: "{{ groups['worker'] | join(' ') }}"
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}"
+  shell: |
+    for instance in {{ worker_ip }}; do
+      scp ca.pem {{ user }}@${instance}:~/
+      scp ${instance}-key.pem {{ user }}@${instance}:~/
+      scp ${instance}.pem {{ user }}@${instance}:~/
+    done

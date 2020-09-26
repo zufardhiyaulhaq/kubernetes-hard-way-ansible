@@ -1,0 +1,8 @@
+---
+- include: requirement.yml
+- include: certificate-worker.yml
+  become: yes
+  become_user: "{{ user }}"
+- include: kubeconfig-worker.yml
+  become: yes
+  become_user: "{{ user }}"

@@ -1,0 +1,30 @@
+#############################
+##### Renew Certificate #####
+#############################
+#
+# run this roles if certificate is expired
+#
+
+#
+# this role generate new certificate in deployer node
+# and send into the node
+#
+- name: Generate Certificate for new worker
+  become: yes
+  hosts: deployer
+  roles:
+    - worker-certificate
+
+#
+# This roles setup worker cluster in the node
+#
+- name: Deploy New Worker
+  become: yes
+  hosts: worker
+  roles:
+    - kubernetes-worker
+
+#
+# After new node is deployed, dont forget to append `worker` 
+# section in `hosts/hosts` file with new worker IP Address
+#

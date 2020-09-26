@@ -1,0 +1,7 @@
+---
+- include: certificate-master.yml
+  become: yes
+  become_user: "{{ user }}"
+- include: kubeconfig-master.yml
+  become: yes
+  become_user: "{{ user }}"
