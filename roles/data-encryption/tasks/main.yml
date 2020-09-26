@@ -1,4 +1,4 @@
 ---
-- include: generate-data-encryption.yml
+- include: data-encryption.yml
   become: yes
   become_user: "{{ user }}"
