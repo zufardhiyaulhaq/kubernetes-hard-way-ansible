@@ -1,0 +1,35 @@
+---
+- name: copy all template
+  template:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+  with_items:
+    - { src: 'ca-config.json.j2', dest: '{{ kubernetes.certificate.directory }}/ca-config.json' }
+    - { src: 'kubernetes-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/kubernetes-csr.json' }
+
+- name: generate api-server certificate
+  vars:
+    etcd_ip: "{{ groups['etcd'] | join(',') }}"
+    master_ip: "{{ groups['master'] | join(',') }}"
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}"
+  shell: |
+    cfssl gencert \
+    -ca=ca.pem \
+    -ca-key=ca-key.pem \
+    -config=ca-config.json \
+    -hostname=10.32.0.1,{{ etcd_ip }},{{ master_ip }},{{ infrastructure.keepalived.virtualIP }}{% if kubernetes.components.APIServer.additionalIP is defined %},{{ kubernetes.components.APIServer.additionalIP }}{% endif %},127.0.0.1,kubernetes,kubernetes.default \
+    -profile=kubernetes \
+    kubernetes-csr.json | cfssljson -bare kubernetes
+
+- name: copy cert into etcd node
+  vars:
+    etcd_ip: "{{ groups['etcd'] | join(' ') }}"
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}"
+  shell: |
+    for instance in {{ etcd_ip }}; do
+      scp ca.pem {{ user }}@${instance}:~/
+      scp kubernetes-key.pem {{ user }}@${instance}:~/
+      scp kubernetes.pem {{ user }}@${instance}:~/
+    done

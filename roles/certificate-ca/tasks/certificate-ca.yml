@@ -1,0 +1,21 @@
+---
+- name: create certificate directory
+  file:
+    path: "{{ kubernetes.certificate.directory }}"
+    state: directory
+
+- name: copy all template
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'ca-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/ca-csr.json' }
+
+
+- name: generate CA 
+  shell: cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}"
+
+
+

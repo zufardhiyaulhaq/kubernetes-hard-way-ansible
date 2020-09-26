@@ -1,7 +1,0 @@
----
-- include: generate-ca.yml
-  become: yes
-  become_user: "{{ user }}"
-- include: generate-kubeconfig.yml
-  become: yes
-  become_user: "{{ user }}"

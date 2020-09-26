@@ -1,7 +1,0 @@
----
-- include: renew-certificate.yml
-  become: yes
-  become_user: "{{ user }}"
-- include: renew-kubeconfig.yml
-  become: yes
-  become_user: "{{ user }}"

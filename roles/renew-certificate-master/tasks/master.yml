@@ -1,0 +1,44 @@
+- name: Copy cert
+  copy: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    remote_src: yes
+    mode: 400
+  with_items:
+    - { src: '/home/{{ user }}/ca.pem', dest: '/var/lib/kubernetes/ca.pem' }
+    - { src: '/home/{{ user }}/ca-key.pem', dest: '/var/lib/kubernetes/ca-key.pem' }
+    - { src: '/home/{{ user }}/kubernetes-key.pem', dest: '/var/lib/kubernetes/kubernetes-key.pem' }
+    - { src: '/home/{{ user }}/kubernetes.pem', dest: '/var/lib/kubernetes/kubernetes.pem' }
+    - { src: '/home/{{ user }}/service-account-key.pem', dest: '/var/lib/kubernetes/service-account-key.pem' }
+    - { src: '/home/{{ user }}/service-account.pem', dest: '/var/lib/kubernetes/service-account.pem' }
+    - { src: '/home/{{ user }}/aggregator-proxy-client.pem', dest: '/var/lib/kubernetes/aggregator-proxy-client.pem' }
+    - { src: '/home/{{ user }}/aggregator-proxy-client-key.pem', dest: '/var/lib/kubernetes/aggregator-proxy-client-key.pem' }
+    - { src: '/home/{{ user }}/encryption-config.yml', dest: '/var/lib/kubernetes/encryption-config.yml' }
+    - { src: '/home/{{ user }}/kube-controller-manager.kubeconfig', dest: '/var/lib/kubernetes/kube-controller-manager.kubeconfig' }
+    - { src: '/home/{{ user }}/kube-scheduler.kubeconfig', dest: '/var/lib/kubernetes/kube-scheduler.kubeconfig' }
+    - { src: '/home/{{ user }}/admin.kubeconfig', dest: '/root/.kube/config' }
+
+- name: restart kube-apiserver
+  systemd:
+    name: kube-apiserver
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+
+- name: restart kube-controller-manager
+  systemd:
+    name: kube-controller-manager
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+
+- name: restart kube-scheduler
+  systemd:
+    name: kube-scheduler
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+
+
+
+

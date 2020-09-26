@@ -2,11 +2,24 @@
 # This roles generate CA & kubeconfig in deployer node
 # deployer node send the CA & kubeconfig into all nodes
 #
-- name: generate CA & kubeconfig
+- name: generate certificate & kubeconfig
   become: yes
   hosts: deployer
   roles:
-    - initial-setup
+    - certificate-ca
+    - certificate-etcd
+    - certificate-master
+    - certificate-worker
+
+#
+# data encryption for etcd
+# https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/
+#
+- name: generate data-encryption
+  become: yes
+  hosts: deployer
+  roles:
+    - data-encryption
 
 #
 # This roles setup etcd cluster in etcd group ansible
@@ -17,7 +30,7 @@
   become: yes
   hosts: etcd
   roles:
-    - etcd-cluster
+    - kubernetes-etcd
 
 #
 # This roles setup haproxy keepalived in master node
@@ -27,8 +40,8 @@
   become: yes
   hosts: master
   roles:
-    - haproxy-keepalived
-    - master-cluster
+    - kubernetes-loadbalancer
+    - kubernetes-master
 
 #
 # This roles setup worker cluster in master & worker node
@@ -37,16 +50,16 @@
   become: yes
   hosts: worker,master
   roles:
-    - worker-cluster
+    - kubernetes-worker
 
 #
 # this roles setup CNI, DNS, and taint master node
 #
-- name: Setup CNI & core-dns
+- name: Setup Addons
   become: yes
   hosts: master
   roles:
-    - addons
+    - kubernetes-addons
 
 
 

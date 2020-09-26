@@ -5,8 +5,37 @@
 # run this roles if certificate is expired
 #
 
-- name: renew Certificate
+- name: create new Certificate
   become: yes
   hosts: deployer
   roles:
-    - renew-certificate
+    - certificate-etcd
+    - certificate-master
+    - certificate-worker
+
+#
+# copy certificate and restart etcd
+#
+- name: Copy certificate and restart etcd
+  become: yes
+  hosts: etcd
+  roles:
+    - renew-certificate-etcd
+
+#
+# copy certificate and restart master component
+#
+- name: Copy certificate and restart master component
+  become: yes
+  hosts: master
+  roles:
+    - renew-certificate-master
+
+#
+# copy certificate and restart worker component
+#
+- name: Copy certificate and restart worker component
+  become: yes
+  hosts: worker,master
+  roles:
+    - renew-certificate-worker
