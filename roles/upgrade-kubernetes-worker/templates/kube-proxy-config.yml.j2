@@ -1,0 +1,8 @@
+kind: KubeProxyConfiguration
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+bindAddress: 0.0.0.0
+clientConnection:
+  kubeconfig: "/var/lib/kube-proxy/kubeconfig"
+clusterCIDR: 10.244.0.0/16
+mode: "iptables"
+metricsBindAddress: 127.0.0.1:10249

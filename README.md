@@ -1,6 +1,6 @@
 # Kubernetes Hard Way Ansible
 Ansible template to create kubernetes cluster with the following specs:
-* Kubernetes 1.18.6
+* Kubernetes 1.18.7
 * Flannel v1.12.0
 * CNI v0.8.6
 * CRI v1.18.0
@@ -91,3 +91,4 @@ Please backup certificate directory in the deployer node!
 * [Private Insecure Registry](additional_setup/insecure-registry.md)
 * [Renew Certificate](renew-certificate.md)
 * [Add new Worker](new-worker.md)
+* [Upgrade Kubernetes](upgrade-kubernetes.md)

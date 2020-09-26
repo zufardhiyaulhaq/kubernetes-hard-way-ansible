@@ -1,0 +1,57 @@
+- name: Download and extract Kubernetes server
+  unarchive:
+    src: https://dl.k8s.io/{{ kubernetes.version }}/kubernetes-server-linux-amd64.tar.gz
+    dest: /opt/
+    remote_src: yes
+
+- name: install kubernetes service
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: a+x
+    remote_src: yes
+  with_items:
+  - { src: '/opt/kubernetes/server/bin/kube-apiserver', dest: '/usr/local/bin/kube-apiserver' }
+  - { src: '/opt/kubernetes/server/bin/kube-controller-manager', dest: '/usr/local/bin/kube-controller-manager' }
+  - { src: '/opt/kubernetes/server/bin/kube-scheduler', dest: '/usr/local/bin/kube-scheduler' }
+  - { src: '/opt/kubernetes/server/bin/kubectl', dest: '/usr/local/bin/kubectl' }
+
+- name: create kubernetes service files
+  template:
+    src: "kube-scheduler.yml.j2"
+    dest: "/etc/kubernetes/config/kube-scheduler.yml"
+
+- name: create kubernetes service files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 644
+  with_items:
+    - { src: 'kube-controller-manager.service.j2', dest: '/etc/systemd/system/kube-controller-manager.service' }
+    - { src: 'kube-apiserver.service.j2', dest: '/etc/systemd/system/kube-apiserver.service' }
+    - { src: 'kube-scheduler.service.j2', dest: '/etc/systemd/system/kube-scheduler.service' }
+
+- name: restart kube-apiserver
+  systemd:
+    name: kube-apiserver
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+
+- name: restart kube-controller-manager
+  systemd:
+    name: kube-controller-manager
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+
+- name: restart kube-scheduler
+  systemd:
+    name: kube-scheduler
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+
+
+
+

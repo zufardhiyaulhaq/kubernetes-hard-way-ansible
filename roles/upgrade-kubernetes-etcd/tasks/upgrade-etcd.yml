@@ -1,0 +1,28 @@
+- name: Downlaod and Extract etcd-{{ kubernetes.components.etcd.version }}-linux-amd64.tar.gz into /tmp/
+  unarchive:
+    src: https://github.com/coreos/etcd/releases/download/{{ kubernetes.components.etcd.version }}/etcd-{{ kubernetes.components.etcd.version }}-linux-amd64.tar.gz
+    dest: /tmp/
+    remote_src: yes
+
+- name: Move etcd files
+  copy:
+    src: "/tmp/etcd-{{ kubernetes.components.etcd.version }}-linux-amd64/{{item}}"
+    dest: "/usr/local/bin/{{item}}"
+    remote_src: yes
+    mode: 0544
+  with_items:
+  - etcd
+  - etcdctl
+
+- name: create etcd systemd unit file
+  template:
+    src: etcd.service.j2
+    dest: /etc/systemd/system/etcd.service
+    mode: 644
+
+- name: restart etcd
+  systemd:
+    name: etcd
+    state: restarted
+    daemon_reload: yes
+    enabled: yes

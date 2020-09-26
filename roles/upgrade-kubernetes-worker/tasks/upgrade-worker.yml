@@ -1,0 +1,56 @@
+- name: Download and extract Kubernetes server
+  unarchive:
+    src: https://dl.k8s.io/{{ kubernetes.version }}/kubernetes-server-linux-amd64.tar.gz
+    dest: /opt/
+    remote_src: yes
+
+- name: install kubectl, kube-proxy, and kubelet
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: a+x
+    remote_src: yes
+  with_items:
+  - { src: '/opt/kubernetes/server/bin/kubelet', dest: '/usr/local/bin/kubelet' }
+  - { src: '/opt/kubernetes/server/bin/kube-proxy', dest: '/usr/local/bin/kube-proxy' }
+  - { src: '/opt/kubernetes/server/bin/kubectl', dest: '/usr/local/bin/kubectl' }
+
+- name: copy kubelet config
+  template:
+    src: "kubelet-config.yml.j2"
+    dest: "/var/lib/kubelet/kubelet-config.yml"
+    mode: 644
+
+- name: copy kubelet service
+  template:
+    src: "kubelet.service.j2"
+    dest: "/etc/systemd/system/kubelet.service"
+    mode: 644
+
+- name: copy kube-proxy config
+  template:
+    src: "kube-proxy-config.yml.j2"
+    dest: "/var/lib/kube-proxy/kube-proxy-config.yml"
+    mode: 644
+
+- name: copy kube-proxy service
+  template:
+    src: "kube-proxy.service.j2"
+    dest: "/etc/systemd/system/kube-proxy.service"
+    mode: 644
+
+- name: restart kubelet
+  systemd:
+    name: kubelet
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+
+- name: restart kube-proxy
+  systemd:
+    name: kube-proxy
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+
+

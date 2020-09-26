@@ -1,0 +1,24 @@
+##############################
+##### Upgrade Kubernetes #####
+##############################
+
+- name: Upgrade Kubernetes etcd
+  become: yes
+  hosts: etcd
+  serial: 1
+  roles:
+    - upgrade-kubernetes-etcd
+
+- name: Upgrade Kubernetes master
+  become: yes
+  hosts: master
+  serial: 1
+  roles:
+    - upgrade-kubernetes-master
+
+- name: Upgrade Kubernetes worker
+  become: yes
+  hosts: worker
+  serial: 1
+  roles:
+    - upgrade-kubernetes-worker
