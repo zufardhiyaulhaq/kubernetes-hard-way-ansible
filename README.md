@@ -19,6 +19,7 @@ Ansible template to create kubernetes cluster with the following specs:
 * Insecure Registry supported
 * Renewing certificate playbook
 * Adding worker node playbook
+* Upgrade Kubernetes playbook
 
 ### Tested Environment
 * Ubuntu 18.04
