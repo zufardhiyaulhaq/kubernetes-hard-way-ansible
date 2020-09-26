@@ -71,7 +71,11 @@ kubernetes:
 ### Infrastructure configuration
 infrastructure:
   ca:
-    expireTime: 8760h
+    # root CA expired time (10 year)
+    expireTime: 87600h
+    # certificate expired time (1 year)
+    certificate:
+      expireTime: 8760h
     city: Jakarta
     country: ID
     organizationUnit: Kubernetes

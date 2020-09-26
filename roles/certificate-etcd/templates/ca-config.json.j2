@@ -1,12 +1,12 @@
 {
   "signing": {
     "default": {
-      "expiry": "{{ infrastructure.ca.expireTime }}"
+      "expiry": "{{ infrastructure.ca.certificate.expireTime }}"
     },
     "profiles": {
       "kubernetes": {
         "usages": ["signing", "key encipherment", "server auth", "client auth"],
-        "expiry": "{{ infrastructure.ca.expireTime }}"
+        "expiry": "{{ infrastructure.ca.certificate.expireTime }}"
       }
     }
   }
