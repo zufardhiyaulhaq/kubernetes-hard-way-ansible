@@ -89,5 +89,5 @@ Please backup certificate directory in the deployer node!
 * [OIDC](additional_setup/oidc.md)
 * [metalLB](additional_setup/metallb.md)
 * [Private Insecure Registry](additional_setup/insecure-registry.md)
-* [Renew Certificate](RENEW-CERTIFICATE.md)
-* [Add new Worker](NEW-WORKER.md)
+* [Renew Certificate](renew-certificate.md)
+* [Add new Worker](new-worker.md)
