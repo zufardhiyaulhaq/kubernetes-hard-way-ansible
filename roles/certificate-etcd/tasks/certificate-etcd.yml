@@ -7,6 +7,7 @@
     - { src: 'ca-config.json.j2', dest: '{{ kubernetes.certificate.directory }}/ca-config.json' }
     - { src: 'kubernetes-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/kubernetes-csr.json' }
 
+# used in all nodes
 - name: generate api-server certificate
   vars:
     etcd_ip: "{{ groups['etcd'] | join(',') }}"
@@ -29,7 +30,10 @@
     chdir: "{{ kubernetes.certificate.directory }}"
   shell: |
     for instance in {{ etcd_ip }}; do
+      # copy root CA
       scp ca.pem {{ user }}@${instance}:~/
+
+      # copy API server certificate
       scp kubernetes-key.pem {{ user }}@${instance}:~/
       scp kubernetes.pem {{ user }}@${instance}:~/
     done

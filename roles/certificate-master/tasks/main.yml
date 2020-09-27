@@ -5,3 +5,6 @@
 - include: kubeconfig-master.yml
   become: yes
   become_user: "{{ user }}"
+- include: kubeconfig-client.yml
+  become: yes
+  become_user: "{{ user }}"
