@@ -19,12 +19,12 @@
 
 - name: install cfssl
   get_url:
-    url: https://pkg.cfssl.org/R1.2/cfssl_linux-amd64
+    url: https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssl
     dest: /usr/local/bin/cfssl
     mode: a+x
 
 - name: install cfssljson
   get_url:
-    url: https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
+    url: https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssljson
     dest: /usr/local/bin/cfssljson
     mode: a+x
