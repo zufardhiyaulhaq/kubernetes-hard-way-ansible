@@ -19,7 +19,7 @@
     -ca=ca.pem \
     -ca-key=ca-key.pem \
     -config=ca-config.json \
-    -hostname=10.32.0.1,{{ etcd_ip }},{{ master_ip }},{{ infrastructure.keepalived.virtualIP }}{% if kubernetes.components.APIServer.additionalIP is defined %},{{ kubernetes.components.APIServer.additionalIP }}{% endif %},127.0.0.1,kubernetes,kubernetes.default \
+    -hostname=10.32.0.1,{{ etcd_ip }},{{ master_ip }},{{ infrastructure.keepalived.virtualIP }}{% if kubernetes.components.APIServer.additionalIP is defined %},{{ kubernetes.components.APIServer.additionalIP }}{% endif %},127.0.0.1,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local \
     -profile=kubernetes \
     kubernetes-csr.json | cfssljson -bare kubernetes
 
