@@ -7,7 +7,6 @@ cd kubernetes-hardway-ansible
 
 * Change some Vagrant variable if needed
 ```
-cat Vagrantfile
 vi Vagrantfile
 ```
 
@@ -53,9 +52,13 @@ git clone https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible.git
 cd kubernetes-hardway-ansible
 ```
 
-* Change some variable if needed
+* Adjust variable in the group_vars
 ```
 vi group_vars/all.yml
+```
+
+* Adjust Kubernetes host and nodes
+```
 vi hosts/hosts
 ```
 

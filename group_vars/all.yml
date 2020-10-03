@@ -13,8 +13,8 @@ kubernetes:
     APIServer:
       ### additional IP that can be included in the API Server CA
       ### this useful when you run Kubernetes behind a proxy
-      ### add IP with comma separated, example 172.16.0.1,172.16.0.2
-      additionalIP: "172.16.0.1,172.16.0.2"
+      ### add IP or domain with comma separated
+      additionalIP: "172.16.0.1,172.16.0.2,kubernetes.zufar.io"
     cri:
       version: v1.18.0
     cni:
@@ -25,6 +25,18 @@ kubernetes:
       version: v1.0.0-rc91
     containerd:
       version: 1.3.6
+    # encrypt stored resources in etcd
+    encryptionProvider:
+      # supported provider is aescbc, secretbox, and aesgcm
+      provider: aescbc
+      # Kubernetes resources encrypted
+      resources:
+        - secret
+      # 32 byte random key and base64 encode
+      # generate with command
+      # head -c 32 /dev/urandom | base64
+      # please regenerate this
+      keys: falsmL6m75H0ghVKVWloOAvGlfz68e4XWhC9DejynoA=
   ### list of addons Kubernetes component
   addonsComponents:
     ### Kubernetes cluster will use different resolv.conf

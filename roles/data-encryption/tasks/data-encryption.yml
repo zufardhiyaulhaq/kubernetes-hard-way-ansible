@@ -1,12 +1,4 @@
 ---
-- name: Generate random key
-  shell: "head -c 32 /dev/urandom | base64"
-  register: random_key_raw
-
-- name: set variable 
-  set_fact:
-    random_key: "{{ random_key_raw.stdout }}"
-
 - name: copy data encryption template
   template:
     src: "encryption-config.yml.j2"

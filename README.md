@@ -42,22 +42,22 @@ please make sure that <user> have privilege access, you can add the user in sudo
 ssh-keygen
 
 # copy to deployer itself
-ssh-copy-id <user>@10.102.102.40
+ssh-copy-id <user>@<deployer-node>
 
 # copy to etcd node
-ssh-copy-id <user>@10.102.102.10
-ssh-copy-id <user>@10.102.102.11
-ssh-copy-id <user>@10.102.102.12
+ssh-copy-id <user>@<etcd-node>
+ssh-copy-id <user>@<etcd-node>
+ssh-copy-id <user>@<etcd-node>
 
 # copy to master node
-ssh-copy-id <user>@10.102.102.20
-ssh-copy-id <user>@10.102.102.21
-ssh-copy-id <user>@10.102.102.22
+ssh-copy-id <user>@<master-node>
+ssh-copy-id <user>@<master-node>
+ssh-copy-id <user>@<master-node>
 
 # copy to master node
-ssh-copy-id <user>@10.102.102.30
-ssh-copy-id <user>@10.102.102.31
-ssh-copy-id <user>@10.102.102.32
+ssh-copy-id <user>@<worker-node>
+ssh-copy-id <user>@<worker-node>
+ssh-copy-id <user>@<worker-node>
 ```
 
 * disable ansible hostkey checking
@@ -73,9 +73,13 @@ host_key_checking = False
 git clone https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible.git
 ```
 
-* Change some variable
+* Adjust variable in the group_vars
 ```
 vi group_vars/all.yml
+```
+
+* Adjust Kubernetes host and nodes
+```
 vi hosts/hosts
 ```
 
