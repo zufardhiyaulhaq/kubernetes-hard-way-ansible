@@ -2,10 +2,12 @@ kind: EncryptionConfig
 apiVersion: v1
 resources:
   - resources:
-      - secrets
+{% for resource in kubernetes.components.encryptionProvider.resources %}
+      - {{ resource }}
+{% endfor %}
     providers:
       - aescbc:
           keys:
-            - name: key1
-              secret: {{ random_key }}
+            - name: primary
+              secret: {{ kubernetes.components.encryptionProvider.key }}
       - identity: {}

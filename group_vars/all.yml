@@ -25,6 +25,21 @@ kubernetes:
       version: v1.0.0-rc91
     containerd:
       version: 1.3.6
+<<<<<<< Updated upstream
+=======
+    # encrypt stored resources in etcd
+    encryptionProvider:
+      # supported provider is aescbc, secretbox, and aesgcm
+      provider: aescbc
+      # Kubernetes resources encrypted
+      resources:
+        - secret
+      # 32 byte random key and base64 encode
+      # generate with command
+      # head -c 32 /dev/urandom | base64
+      # please regenerate this
+      key: falsmL6m75H0ghVKVWloOAvGlfz68e4XWhC9DejynoA=
+>>>>>>> Stashed changes
   ### list of addons Kubernetes component
   addonsComponents:
     ### Kubernetes cluster will use different resolv.conf

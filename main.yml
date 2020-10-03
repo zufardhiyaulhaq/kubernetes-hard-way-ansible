@@ -60,6 +60,3 @@
   hosts: master
   roles:
     - kubernetes-addons
-
-
-
