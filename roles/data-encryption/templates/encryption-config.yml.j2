@@ -6,7 +6,7 @@ resources:
       - {{ resource }}
 {% endfor %}
     providers:
-      - aescbc:
+      - {{ kubernetes.components.encryptionProvider.provider }}:
           keys:
             - name: primary
               secret: {{ kubernetes.components.encryptionProvider.key }}
