@@ -1,74 +1,95 @@
 ---
-- name: copy all template
+- name: create certificate directory
+  file:
+    path: "{{ item.src }}"
+    state: directory
+  with_items:
+    - { path: '{{ kubernetes.certificate.directory }}/certificates/kube-apiserver'}
+    - { path: '{{ kubernetes.certificate.directory }}/certificates/kube-apiserver-kubelet-client'}
+    - { path: '{{ kubernetes.certificate.directory }}/certificates/kubernetes-admin'}
+    - { path: '{{ kubernetes.certificate.directory }}/certificates/kube-controller-manager'}
+    - { path: '{{ kubernetes.certificate.directory }}/certificates/kube-scheduler'}
+    - { path: '{{ kubernetes.certificate.directory }}/certificates/front-proxy-client'}
+
+- name: copy csr template
   template:
     src: "{{item.src}}"
     dest: "{{item.dest}}"
   with_items:
-    - { src: 'admin-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/admin-csr.json' }
-    - { src: 'kube-controller-manager-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/kube-controller-manager-csr.json' }
-    - { src: 'kube-scheduler-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/kube-scheduler-csr.json' }
-    - { src: 'service-account-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/service-account-csr.json' }
-    - { src: 'metrics-server-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/metrics-server-csr.json' }
+    - { src: 'kube-apiserver-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-apiserver-csr.json' }
+    - { src: 'kube-apiserver-kubelet-client-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-apiserver-kubelet-client-csr.json' }
+    - { src: 'kubernetes-admin-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/template/kubernetes-admin-csr.json' }
+    - { src: 'kube-controller-manager-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/template/kube-controller-manager-csr.json' }
+    - { src: 'kube-scheduler-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/template/kube-scheduler-csr.json' }
+    - { src: 'front-proxy-client-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/template/front-proxy-client-csr.json' }
 
-# used in admin kubeconfig
-- name: generate admin certificate
+- name: generate kube-apiserver certificate
   args:
-    chdir: "{{ kubernetes.certificate.directory }}"
+    chdir: "{{ kubernetes.certificate.directory }}/certificates/kube-apiserver"
   shell: |
     cfssl gencert \
-    -ca=ca.pem \
-    -ca-key=ca-key.pem \
-    -config=ca-config.json \
-    -profile=kubernetes \
-    admin-csr.json | cfssljson -bare admin
+    -ca={{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca/kubernetes-ca.pem \
+    -ca-key={{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca/kubernetes-ca-key.pem \
+    -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
+    -profile=server \
+    -hostname=localhost,127.0.0.1,{{ item }},{{ infrastructure.keepalived.virtualIP }}{% if kubernetes.components.APIServer.additionalIP is defined %},{{ kubernetes.components.APIServer.additionalIP }}{% endif %},kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local \
+    {{ kubernetes.certificate.directory }}/templates/kube-apiserver-csr.json | cfssljson -bare {{ item }}-kube-apiserver
+  with_items: "{{ groups['master'] }}"
 
-# used in kube-controller-manager kubeconfig
-- name: generate controller-manager certificate
+- name: generate kube-apiserver-kubelet-client certificate
   args:
-    chdir: "{{ kubernetes.certificate.directory }}"
+    chdir: "{{ kubernetes.certificate.directory }}/certificates/kube-apiserver-kubelet-client"
   shell: |
     cfssl gencert \
-    -ca=ca.pem \
-    -ca-key=ca-key.pem \
-    -config=ca-config.json \
-    -profile=kubernetes \
-    kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager
+    -ca={{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca/kubernetes-ca.pem \
+    -ca-key={{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca/kubernetes-ca-key.pem \
+    -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
+    -profile=client \
+    {{ kubernetes.certificate.directory }}/templates/kube-apiserver-kubelet-client-csr.json | cfssljson -bare kube-apiserver-kubelet-client
 
-# used in kube-scheduler kubeconfig
-- name: generate scheduler certificate
+- name: generate kubernetes-admin certificate
   args:
-    chdir: "{{ kubernetes.certificate.directory }}"
+    chdir: "{{ kubernetes.certificate.directory }}/certificates/kubernetes-admin"
   shell: |
     cfssl gencert \
-    -ca=ca.pem \
-    -ca-key=ca-key.pem \
-    -config=ca-config.json \
-    -profile=kubernetes \
-    kube-scheduler-csr.json | cfssljson -bare kube-scheduler
+    -ca={{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca/kubernetes-ca.pem \
+    -ca-key={{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca/kubernetes-ca-key.pem \
+    -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
+    -profile=client \
+    {{ kubernetes.certificate.directory }}/templates/kubernetes-admin-csr.json | cfssljson -bare kubernetes-admin
 
-# used as flags in kube-apiserver and kube-controller-manager
-- name: generate service-account certificate
+- name: generate kube-controller-manager certificate
   args:
-    chdir: "{{ kubernetes.certificate.directory }}"
+    chdir: "{{ kubernetes.certificate.directory }}/certificates/kube-controller-manager"
   shell: |
     cfssl gencert \
-    -ca=ca.pem \
-    -ca-key=ca-key.pem \
-    -config=ca-config.json \
-    -profile=kubernetes \
-    service-account-csr.json | cfssljson -bare service-account
+    -ca={{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca/kubernetes-ca.pem \
+    -ca-key={{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca/kubernetes-ca-key.pem \
+    -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
+    -profile=client \
+    {{ kubernetes.certificate.directory }}/templates/kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager
 
-# used as flags in kube-apiserver
-- name: generate metrics-server certificate
+- name: generate kube-scheduler certificate
   args:
-    chdir: "{{ kubernetes.certificate.directory }}"
+    chdir: "{{ kubernetes.certificate.directory }}/certificates/kube-scheduler"
   shell: |
     cfssl gencert \
-    -ca=ca.pem \
-    -ca-key=ca-key.pem \
-    -config=ca-config.json \
-    -profile=kubernetes \
-    metrics-server-csr.json | cfssljson -bare aggregator-proxy-client
+    -ca={{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca/kubernetes-ca.pem \
+    -ca-key={{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca/kubernetes-ca-key.pem \
+    -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
+    -profile=client \
+    {{ kubernetes.certificate.directory }}/templates/kube-scheduler-csr.json | cfssljson -bare kube-scheduler
+
+- name: generate front-proxy-client certificate
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}/certificates/front-proxy-client"
+  shell: |
+    cfssl gencert \
+    -ca={{ kubernetes.certificate.directory }}/intermediates/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca.pem \
+    -ca-key={{ kubernetes.certificate.directory }}/intermediates/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca-key.pem \
+    -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
+    -profile=client \
+    {{ kubernetes.certificate.directory }}/templates/front-proxy-client-csr.json | cfssljson -bare front-proxy-client
 
 - name: copy cert into master node
   vars:
@@ -77,19 +98,10 @@
     chdir: "{{ kubernetes.certificate.directory }}"
   shell: |
     for instance in {{ master_ip }}; do
-      # copy root CA and key
-      scp ca.pem {{ user }}@${instance}:~/
-      scp ca-key.pem {{ user }}@${instance}:~/
-
-      # copy API server certificate
-      scp kubernetes-key.pem {{ user }}@${instance}:~/
-      scp kubernetes.pem {{ user }}@${instance}:~/
-
-      # copy service account certificate
-      scp service-account-key.pem {{ user }}@${instance}:~/
-      scp service-account.pem {{ user }}@${instance}:~/
-
-      # copy metrics-server certificate
-      scp aggregator-proxy-client.pem {{ user }}@${instance}:~/
-      scp aggregator-proxy-client-key.pem {{ user }}@${instance}:~/
+      scp ${instance}-kube-apiserver.pem {{ user }}@${instance}:~/kube-apiserver.pem
+      scp ${instance}-kube-apiserver-key.pem {{ user }}@${instance}:~/kube-apiserver-key.pem
+      scp ${instance}-kube-apiserver-kubelet-client.pem {{ user }}@${instance}:~/kube-apiserver-kubelet-client.pem
+      scp ${instance}-kube-apiserver-kubelet-client-key.pem {{ user }}@${instance}:~/kube-apiserver-kubelet-client-key.pem
+      scp ${instance}-front-proxy-client.pem {{ user }}@${instance}:~/front-proxy-client.pem
+      scp ${instance}-front-proxy-client-key.pem {{ user }}@${instance}:~/front-proxy-client-key.pem
     done

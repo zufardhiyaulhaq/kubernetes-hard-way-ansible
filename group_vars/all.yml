@@ -83,8 +83,10 @@ kubernetes:
 ### Infrastructure configuration
 infrastructure:
   ca:
-    # root CA expired time (10 year)
-    expireTime: 87600h
+    # root CA expired time (20 year)
+    expireTime: 175200h
+    # intermediate CA expired time (10 year)
+    intermediateExpireTime: 87600h
     # certificate expired time (1 year)
     certificate:
       expireTime: 8760h
