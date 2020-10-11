@@ -98,10 +98,10 @@
     chdir: "{{ kubernetes.certificate.directory }}"
   shell: |
     for instance in {{ master_ip }}; do
-      scp ${instance}-kube-apiserver.pem {{ user }}@${instance}:~/kube-apiserver.pem
-      scp ${instance}-kube-apiserver-key.pem {{ user }}@${instance}:~/kube-apiserver-key.pem
-      scp kube-apiserver-kubelet-client.pem {{ user }}@${instance}:~/kube-apiserver-kubelet-client.pem
-      scp kube-apiserver-kubelet-client-key.pem {{ user }}@${instance}:~/kube-apiserver-kubelet-client-key.pem
-      scp front-proxy-client.pem {{ user }}@${instance}:~/front-proxy-client.pem
-      scp front-proxy-client-key.pem {{ user }}@${instance}:~/front-proxy-client-key.pem
+      scp {{ kubernetes.certificate.directory }}/certificates/kube-apiserver/${instance}-kube-apiserver.pem {{ user }}@${instance}:~/kube-apiserver.pem
+      scp {{ kubernetes.certificate.directory }}/certificates/kube-apiserver/${instance}-kube-apiserver-key.pem {{ user }}@${instance}:~/kube-apiserver-key.pem
+      scp {{ kubernetes.certificate.directory }}/certificates/kube-apiserver-kubelet-client/kube-apiserver-kubelet-client.pem {{ user }}@${instance}:~/kube-apiserver-kubelet-client.pem
+      scp {{ kubernetes.certificate.directory }}/certificates/kube-apiserver-kubelet-client/kube-apiserver-kubelet-client-key.pem {{ user }}@${instance}:~/kube-apiserver-kubelet-client-key.pem
+      scp {{ kubernetes.certificate.directory }}/certificates/front-proxy-client/front-proxy-client.pem {{ user }}@${instance}:~/front-proxy-client.pem
+      scp {{ kubernetes.certificate.directory }}/certificates/front-proxy-client/front-proxy-client-key.pem {{ user }}@${instance}:~/front-proxy-client-key.pem
     done
