@@ -17,7 +17,7 @@
     dest: "{{ item.dest }}"
   with_items:
     - { src: 'ca-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/ca-csr.json' }
-    - { src: 'config.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/config.json' }
+    - { src: 'config.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/ca-config.json' }
     - { src: 'kubernetes-ca-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kubernetes-ca-csr.json' }
     - { src: 'etcd-ca-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/etcd-ca-csr.json' }
     - { src: 'kubernetes-front-proxy-ca-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kubernetes-front-proxy-ca-csr.json' }
