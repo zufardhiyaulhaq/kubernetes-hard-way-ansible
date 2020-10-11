@@ -44,6 +44,8 @@
     - { src: '/home/{{ user }}/kubernetes-front-proxy-ca.pem', dest: '/var/lib/kubernetes/kubernetes-front-proxy-ca.pem' }
     - { src: '/home/{{ user }}/kubernetes-service-account-management-ca.pem', dest: '/var/lib/kubernetes/kubernetes-service-account-management-ca.pem' }
     - { src: '/home/{{ user }}/kubernetes-service-account-management-ca-key.pem', dest: '/var/lib/kubernetes/kubernetes-service-account-management-ca-key.pem' }
+    - { src: '/home/{{ user }}/{{ inventory_hostname }}-kube-apiserver.pem', dest: '/var/lib/kubernetes/kube-apiserver.pem' }
+    - { src: '/home/{{ user }}/{{ inventory_hostname }}-kube-apiserver-key.pem', dest: '/var/lib/kubelet/kube-apiserver-key.pem' }
     - { src: '/home/{{ user }}/kube-apiserver-etcd-client.pem', dest: '/var/lib/kubernetes/kube-apiserver-etcd-client.pem' }
     - { src: '/home/{{ user }}/kube-apiserver-etcd-client-key.pem', dest: '/var/lib/kubernetes/kube-apiserver-etcd-client-key.pem' }
     - { src: '/home/{{ user }}/kube-apiserver-kubelet-client.pem', dest: '/var/lib/kubernetes/kube-apiserver-kubelet-client.pem' }
