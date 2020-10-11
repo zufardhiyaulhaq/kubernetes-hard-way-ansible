@@ -100,8 +100,8 @@
     for instance in {{ master_ip }}; do
       scp ${instance}-kube-apiserver.pem {{ user }}@${instance}:~/kube-apiserver.pem
       scp ${instance}-kube-apiserver-key.pem {{ user }}@${instance}:~/kube-apiserver-key.pem
-      scp ${instance}-kube-apiserver-kubelet-client.pem {{ user }}@${instance}:~/kube-apiserver-kubelet-client.pem
-      scp ${instance}-kube-apiserver-kubelet-client-key.pem {{ user }}@${instance}:~/kube-apiserver-kubelet-client-key.pem
-      scp ${instance}-front-proxy-client.pem {{ user }}@${instance}:~/front-proxy-client.pem
-      scp ${instance}-front-proxy-client-key.pem {{ user }}@${instance}:~/front-proxy-client-key.pem
+      scp kube-apiserver-kubelet-client.pem {{ user }}@${instance}:~/kube-apiserver-kubelet-client.pem
+      scp kube-apiserver-kubelet-client-key.pem {{ user }}@${instance}:~/kube-apiserver-kubelet-client-key.pem
+      scp front-proxy-client.pem {{ user }}@${instance}:~/front-proxy-client.pem
+      scp front-proxy-client-key.pem {{ user }}@${instance}:~/front-proxy-client-key.pem
     done
