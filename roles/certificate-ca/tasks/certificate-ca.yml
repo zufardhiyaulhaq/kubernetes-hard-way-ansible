@@ -24,7 +24,7 @@
     - { src: 'kubernetes-service-account-management-ca-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kubernetes-service-account-management-ca-csr.json' }
 
 - name: generate root CA
-  shell: cfssl gencert -initca ../template/ca-csr.json | cfssljson -bare ca
+  shell: cfssl gencert -initca {{ kubernetes.certificate.directory }}/templates/ca-csr.json | cfssljson -bare ca
   args:
     chdir: "{{ kubernetes.certificate.directory }}/ca/"
 
