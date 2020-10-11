@@ -71,8 +71,8 @@ kubernetes:
       ### adding prefix in front of usernameClaim
       usernamePrefix: "oidc:"
   certificate:
-    ### directory created in deployer node for certificate
-    directory: ~/kubernetes-certificate
+    ### directory created in deployer node for certificate (full path)
+    directory: /home/vagrant/kubernetes-certificate
     ### create client kubeconfig
     ### will be generated in the certificate directory
     createClientKubeconfig: true
