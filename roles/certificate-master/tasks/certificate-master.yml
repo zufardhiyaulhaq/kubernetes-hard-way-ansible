@@ -18,10 +18,10 @@
   with_items:
     - { src: 'kube-apiserver-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-apiserver-csr.json' }
     - { src: 'kube-apiserver-kubelet-client-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-apiserver-kubelet-client-csr.json' }
-    - { src: 'kubernetes-admin-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/template/kubernetes-admin-csr.json' }
-    - { src: 'kube-controller-manager-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/template/kube-controller-manager-csr.json' }
-    - { src: 'kube-scheduler-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/template/kube-scheduler-csr.json' }
-    - { src: 'front-proxy-client-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/template/front-proxy-client-csr.json' }
+    - { src: 'kubernetes-admin-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kubernetes-admin-csr.json' }
+    - { src: 'kube-controller-manager-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-controller-manager-csr.json' }
+    - { src: 'kube-scheduler-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-scheduler-csr.json' }
+    - { src: 'front-proxy-client-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/front-proxy-client-csr.json' }
 
 - name: generate kube-apiserver certificate
   args:
