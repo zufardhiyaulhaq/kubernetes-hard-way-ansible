@@ -1,7 +1,7 @@
 ---
-- name: create certificate directory
+- name: create master certificate directory
   file:
-    path: "{{ item.src }}"
+    path: "{{ item.path }}"
     state: directory
   with_items:
     - { path: '{{ kubernetes.certificate.directory }}/certificates/kube-apiserver'}
@@ -11,7 +11,7 @@
     - { path: '{{ kubernetes.certificate.directory }}/certificates/kube-scheduler'}
     - { path: '{{ kubernetes.certificate.directory }}/certificates/front-proxy-client'}
 
-- name: copy csr template
+- name: copy master csr template
   template:
     src: "{{item.src}}"
     dest: "{{item.dest}}"

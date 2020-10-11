@@ -1,7 +1,7 @@
 ---
-- name: create certificate directory
+- name: create ca certificate directory
   file:
-    path: "{{ item.src }}"
+    path: "{{ item.path }}"
     state: directory
   with_items:
     - { path: '{{ kubernetes.certificate.directory }}/templates'}
@@ -11,7 +11,7 @@
     - { path: '{{ kubernetes.certificate.directory }}/intermediates/kubernetes-front-proxy-ca'}
     - { path: '{{ kubernetes.certificate.directory }}/intermediates/kubernetes-service-account-management-ca'}
 
-- name: copy all template
+- name: copy ca template
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"

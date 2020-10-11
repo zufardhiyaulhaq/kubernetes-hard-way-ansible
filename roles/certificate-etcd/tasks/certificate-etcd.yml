@@ -1,7 +1,7 @@
 ---
-- name: create certificate directory
+- name: create etcd certificate directory
   file:
-    path: "{{ item.src }}"
+    path: "{{ item.path }}"
     state: directory
   with_items:
     - { path: '{{ kubernetes.certificate.directory }}/certificates/kube-etcd'}
@@ -11,8 +11,8 @@
 
 - name: copy csr template
   template:
-    src: "{{item.src}}"
-    dest: "{{item.dest}}"
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
   with_items:
     - { src: 'kube-etcd-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-etcd-csr.json' }
     - { src: 'kube-etcd-peer-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-etcd-peer-csr.json' }
