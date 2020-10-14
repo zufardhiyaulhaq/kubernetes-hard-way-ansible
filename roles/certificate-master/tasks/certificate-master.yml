@@ -32,7 +32,7 @@
     -ca-key={{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca/kubernetes-ca-key.pem \
     -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
     -profile=server \
-    -hostname=localhost,127.0.0.1,{{ item }},{{ infrastructure.keepalived.virtualIP }}{% if kubernetes.components.APIServer.additionalIP is defined %},{{ kubernetes.components.APIServer.additionalIP }}{% endif %},kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local \
+    -hostname=localhost,127.0.0.1,10.32.0.1,{{ item }},{{ infrastructure.keepalived.virtualIP }}{% if kubernetes.components.APIServer.additionalIP is defined %},{{ kubernetes.components.APIServer.additionalIP }}{% endif %},kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local \
     {{ kubernetes.certificate.directory }}/templates/kube-apiserver-csr.json | cfssljson -bare {{ item }}-kube-apiserver
   with_items: "{{ groups['master'] }}"
 
