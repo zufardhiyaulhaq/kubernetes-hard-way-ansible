@@ -4,6 +4,7 @@ Vagrant.configure('2') do |config|
   ### uncomment this to add custom DNS to your VM
   $dns_script = <<-'SCRIPT'
   echo "nameserver 172.30.0.3" > /etc/resolv.conf
+  echo "127.0.0.1 localhost" >> /etc/hosts
   SCRIPT
 
   $ansible_script = <<-'SCRIPT'

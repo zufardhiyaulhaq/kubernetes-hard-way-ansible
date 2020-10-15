@@ -11,11 +11,12 @@
     - { path: '{{ kubernetes.certificate.directory }}/certificates/kube-scheduler'}
     - { path: '{{ kubernetes.certificate.directory }}/certificates/front-proxy-client'}
 
-- name: copy master csr template
+- name: copy ca-config & master csr template
   template:
     src: "{{item.src}}"
     dest: "{{item.dest}}"
   with_items:
+    - { src: 'ca-config.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/ca-config.json' }
     - { src: 'kube-apiserver-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-apiserver-csr.json' }
     - { src: 'kube-apiserver-kubelet-client-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-apiserver-kubelet-client-csr.json' }
     - { src: 'kubernetes-admin-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kubernetes-admin-csr.json' }
