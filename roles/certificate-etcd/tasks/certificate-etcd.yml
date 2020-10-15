@@ -9,11 +9,12 @@
     - { path: '{{ kubernetes.certificate.directory }}/certificates/kube-etcd-healthcheck-client'}
     - { path: '{{ kubernetes.certificate.directory }}/certificates/kube-apiserver-etcd-client'}
 
-- name: copy csr template
+- name: copy ca-config & etcd csr template
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
   with_items:
+    - { src: 'ca-config.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/ca-config.json' }
     - { src: 'kube-etcd-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-etcd-csr.json' }
     - { src: 'kube-etcd-peer-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-etcd-peer-csr.json' }
     - { src: 'kube-etcd-healthcheck-client-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-etcd-healthcheck-client-csr.json' }
