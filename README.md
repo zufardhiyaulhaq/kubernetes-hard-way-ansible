@@ -71,6 +71,7 @@ host_key_checking = False
 * Clone this repository
 ```bash
 git clone https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible.git
+git checkout --track origin/<TAG>
 ```
 
 * Adjust variable in the group_vars

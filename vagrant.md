@@ -50,6 +50,9 @@ host_key_checking = False
 ```bash
 git clone https://github.com/zufardhiyaulhaq/kubernetes-hardway-ansible.git
 cd kubernetes-hardway-ansible
+
+git fetch --all
+git checkout --track origin/<TAG>
 ```
 
 * Adjust variable in the group_vars
