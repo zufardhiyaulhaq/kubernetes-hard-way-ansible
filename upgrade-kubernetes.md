@@ -7,7 +7,7 @@ group_vars Change log:
 
 * Backup existing certificate directory
 ```
-mv ~/kubernetes-certificate kubernetes-certificate-backup
+mv ~/kubernetes-certificate ~/kubernetes-certificate-backup
 ```
 
 * bump local repository & make changes in group_vars/all.yml
