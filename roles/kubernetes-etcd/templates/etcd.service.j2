@@ -6,14 +6,14 @@ Documentation=https://github.com/coreos
 Type=notify
 ExecStart=/usr/local/bin/etcd \
   --name {{ inventory_hostname }} \
-  --cert-file=/etc/etcd/kubernetes.pem \
-  --key-file=/etc/etcd/kubernetes-key.pem \
-  --peer-cert-file=/etc/etcd/kubernetes.pem \
-  --peer-key-file=/etc/etcd/kubernetes-key.pem \
-  --trusted-ca-file=/etc/etcd/ca.pem \
-  --peer-trusted-ca-file=/etc/etcd/ca.pem \
-  --peer-client-cert-auth \
+  --cert-file=/etc/etcd/kube-etcd.pem \
+  --key-file=/etc/etcd/kube-etcd-key.pem \
+  --peer-cert-file=/etc/etcd/kube-etcd-peer.pem \
+  --peer-key-file=/etc/etcd/kube-etcd-peer-key.pem \
+  --trusted-ca-file=/etc/etcd/etcd-ca.pem \
+  --peer-trusted-ca-file=/etc/etcd/etcd-ca.pem \
   --client-cert-auth \
+  --peer-client-cert-auth \
   --initial-advertise-peer-urls https://{{ hostvars[inventory_hostname].inventory_hostname }}:2380 \
   --listen-peer-urls https://{{ hostvars[inventory_hostname].inventory_hostname }}:2380 \
   --listen-client-urls https://{{ hostvars[inventory_hostname].inventory_hostname }}:2379,https://127.0.0.1:2379 \

@@ -71,8 +71,8 @@ kubernetes:
       ### adding prefix in front of usernameClaim
       usernamePrefix: "oidc:"
   certificate:
-    ### directory created in deployer node for certificate
-    directory: ~/kubernetes-certificate
+    ### directory created in deployer node for certificate (full path)
+    directory: /home/vagrant/kubernetes-certificate
     ### create client kubeconfig
     ### will be generated in the certificate directory
     createClientKubeconfig: true
@@ -83,8 +83,10 @@ kubernetes:
 ### Infrastructure configuration
 infrastructure:
   ca:
-    # root CA expired time (10 year)
-    expireTime: 87600h
+    # root CA expired time (20 year)
+    expireTime: 175200h
+    # intermediate CA expired time (10 year)
+    intermediateExpireTime: 87600h
     # certificate expired time (1 year)
     certificate:
       expireTime: 8760h

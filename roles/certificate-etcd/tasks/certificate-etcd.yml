@@ -1,27 +1,72 @@
 ---
-- name: copy all template
-  template:
-    src: "{{item.src}}"
-    dest: "{{item.dest}}"
+- name: create etcd certificate directory
+  file:
+    path: "{{ item.path }}"
+    state: directory
   with_items:
-    - { src: 'ca-config.json.j2', dest: '{{ kubernetes.certificate.directory }}/ca-config.json' }
-    - { src: 'kubernetes-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/kubernetes-csr.json' }
+    - { path: '{{ kubernetes.certificate.directory }}/certificates/kube-etcd'}
+    - { path: '{{ kubernetes.certificate.directory }}/certificates/kube-etcd-peer'}
+    - { path: '{{ kubernetes.certificate.directory }}/certificates/kube-etcd-healthcheck-client'}
+    - { path: '{{ kubernetes.certificate.directory }}/certificates/kube-apiserver-etcd-client'}
 
-# used in all nodes
-- name: generate api-server certificate
-  vars:
-    etcd_ip: "{{ groups['etcd'] | join(',') }}"
-    master_ip: "{{ groups['master'] | join(',') }}"
+- name: copy csr template
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'kube-etcd-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-etcd-csr.json' }
+    - { src: 'kube-etcd-peer-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-etcd-peer-csr.json' }
+    - { src: 'kube-etcd-healthcheck-client-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-etcd-healthcheck-client-csr.json' }
+    - { src: 'kube-apiserver-etcd-client-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kube-apiserver-etcd-client-csr.json' }
+
+- name: generate kube-etcd certificate
   args:
-    chdir: "{{ kubernetes.certificate.directory }}"
+    chdir: "{{ kubernetes.certificate.directory }}/certificates/kube-etcd"
   shell: |
     cfssl gencert \
-    -ca=ca.pem \
-    -ca-key=ca-key.pem \
-    -config=ca-config.json \
-    -hostname=10.32.0.1,{{ etcd_ip }},{{ master_ip }},{{ infrastructure.keepalived.virtualIP }}{% if kubernetes.components.APIServer.additionalIP is defined %},{{ kubernetes.components.APIServer.additionalIP }}{% endif %},127.0.0.1,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local \
-    -profile=kubernetes \
-    kubernetes-csr.json | cfssljson -bare kubernetes
+    -ca={{ kubernetes.certificate.directory }}/intermediates/etcd-ca/etcd-ca.pem \
+    -ca-key={{ kubernetes.certificate.directory }}/intermediates/etcd-ca/etcd-ca-key.pem \
+    -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
+    -profile=client-server \
+    -hostname=localhost,127.0.0.1,{{ item }} \
+    {{ kubernetes.certificate.directory }}/templates/kube-etcd-csr.json | cfssljson -bare {{ item }}-kube-etcd
+  with_items: "{{ groups['etcd'] }}"
+
+- name: generate kube-etcd-peer certificate
+  vars:
+    etcd_ip: "{{ groups['etcd'] | join(',') }}"
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}/certificates/kube-etcd-peer"
+  shell: |
+    cfssl gencert \
+    -ca={{ kubernetes.certificate.directory }}/intermediates/etcd-ca/etcd-ca.pem \
+    -ca-key={{ kubernetes.certificate.directory }}/intermediates/etcd-ca/etcd-ca-key.pem \
+    -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
+    -profile=client-server \
+    -hostname=localhost,127.0.0.1,{{ etcd_ip }} \
+    {{ kubernetes.certificate.directory }}/templates/kube-etcd-peer-csr.json | cfssljson -bare kube-etcd-peer
+
+- name: generate kube-etcd-healthcheck-client certificate
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}/certificates/kube-etcd-healthcheck-client"
+  shell: |
+    cfssl gencert \
+    -ca={{ kubernetes.certificate.directory }}/intermediates/etcd-ca/etcd-ca.pem \
+    -ca-key={{ kubernetes.certificate.directory }}/intermediates/etcd-ca/etcd-ca-key.pem \
+    -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
+    -profile=client \
+    {{ kubernetes.certificate.directory }}/templates/kube-etcd-healthcheck-client-csr.json | cfssljson -bare kube-etcd-healthcheck-client
+
+- name: generate kube-apiserver-etcd-client certificate
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}/certificates/kube-apiserver-etcd-client"
+  shell: |
+    cfssl gencert \
+    -ca={{ kubernetes.certificate.directory }}/intermediates/etcd-ca/etcd-ca.pem \
+    -ca-key={{ kubernetes.certificate.directory }}/intermediates/etcd-ca/etcd-ca-key.pem \
+    -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
+    -profile=client \
+    {{ kubernetes.certificate.directory }}/templates/kube-apiserver-etcd-client-csr.json | cfssljson -bare kube-apiserver-etcd-client
 
 - name: copy cert into etcd node
   vars:
@@ -30,10 +75,21 @@
     chdir: "{{ kubernetes.certificate.directory }}"
   shell: |
     for instance in {{ etcd_ip }}; do
-      # copy root CA
-      scp ca.pem {{ user }}@${instance}:~/
+      scp {{ kubernetes.certificate.directory }}/certificates/kube-etcd/${instance}-kube-etcd.pem {{ user }}@${instance}:~/kube-etcd.pem
+      scp {{ kubernetes.certificate.directory }}/certificates/kube-etcd/${instance}-kube-etcd-key.pem {{ user }}@${instance}:~/kube-etcd-key.pem
+      scp {{ kubernetes.certificate.directory }}/certificates/kube-etcd-peer/kube-etcd-peer.pem {{ user }}@${instance}:~/
+      scp {{ kubernetes.certificate.directory }}/certificates/kube-etcd-peer/kube-etcd-peer-key.pem {{ user }}@${instance}:~/
+      scp {{ kubernetes.certificate.directory }}/certificates/kube-etcd-healthcheck-client/kube-etcd-healthcheck-client.pem {{ user }}@${instance}:~/
+      scp {{ kubernetes.certificate.directory }}/certificates/kube-etcd-healthcheck-client/kube-etcd-healthcheck-client-key.pem {{ user }}@${instance}:~/
+    done
 
-      # copy API server certificate
-      scp kubernetes-key.pem {{ user }}@${instance}:~/
-      scp kubernetes.pem {{ user }}@${instance}:~/
+- name: copy kube-apiserver-etcd-client cert into master node
+  vars:
+    master_ip: "{{ groups['master'] | join(' ') }}"
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}"
+  shell: |
+    for instance in {{ master_ip }}; do
+      scp {{ kubernetes.certificate.directory }}/certificates/kube-apiserver-etcd-client/kube-apiserver-etcd-client.pem {{ user }}@${instance}:~/
+      scp {{ kubernetes.certificate.directory }}/certificates/kube-apiserver-etcd-client/kube-apiserver-etcd-client-key.pem {{ user }}@${instance}:~/
     done

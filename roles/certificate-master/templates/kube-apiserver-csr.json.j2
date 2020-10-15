@@ -1,5 +1,5 @@
 {
-    "CN": "Kubernetes {{ kubernetes.clusterName }}",
+    "CN": "kube-apiserver",
     "key": {
         "algo": "rsa",
         "size": 2048
@@ -7,11 +7,8 @@
     "names": [{
         "C": "{{ infrastructure.ca.country }}",
         "L": "{{ infrastructure.ca.city }}",
-        "O": "Kubernetes {{ kubernetes.clusterName }}",
+        "O": "kube-apiserver",
         "OU": "{{ infrastructure.ca.organizationUnit }}",
         "ST": "{{ infrastructure.ca.province }}"
-    }],
-    "ca": {
-        "expiry": "{{ infrastructure.ca.expireTime }}"
-    }
+    }]
 }

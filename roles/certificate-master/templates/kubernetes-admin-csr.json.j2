@@ -1,5 +1,5 @@
 {
-  "CN": "aggregator",
+  "CN": "kubernetes-admin",
   "key": {
     "algo": "rsa",
     "size": 2048
@@ -8,7 +8,7 @@
     {
       "C": "{{ infrastructure.ca.country }}",
       "L": "{{ infrastructure.ca.city }}",
-      "O": "metrics-server",
+      "O": "system:masters",
       "OU": "{{ infrastructure.ca.organizationUnit }}",
       "ST": "{{ infrastructure.ca.province }}"
     }

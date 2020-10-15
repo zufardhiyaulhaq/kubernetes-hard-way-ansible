@@ -1,21 +1,120 @@
 ---
-- name: create certificate directory
+- name: create ca certificate directory
   file:
-    path: "{{ kubernetes.certificate.directory }}"
+    path: "{{ item.path }}"
     state: directory
+  with_items:
+    - { path: '{{ kubernetes.certificate.directory }}/templates'}
+    - { path: '{{ kubernetes.certificate.directory }}/ca'}
+    - { path: '{{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca'}
+    - { path: '{{ kubernetes.certificate.directory }}/intermediates/etcd-ca'}
+    - { path: '{{ kubernetes.certificate.directory }}/intermediates/kubernetes-front-proxy-ca'}
+    - { path: '{{ kubernetes.certificate.directory }}/intermediates/kubernetes-service-account-management-ca'}
 
-- name: copy all template
+- name: copy ca template
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
   with_items:
-    - { src: 'ca-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/ca-csr.json' }
+    - { src: 'ca-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/ca-csr.json' }
+    - { src: 'ca-config.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/ca-config.json' }
+    - { src: 'kubernetes-ca-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kubernetes-ca-csr.json' }
+    - { src: 'etcd-ca-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/etcd-ca-csr.json' }
+    - { src: 'kubernetes-front-proxy-ca-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kubernetes-front-proxy-ca-csr.json' }
+    - { src: 'kubernetes-service-account-management-ca-csr.json.j2', dest: '{{ kubernetes.certificate.directory }}/templates/kubernetes-service-account-management-ca-csr.json' }
 
+- name: generate root CA
+  shell: cfssl gencert -initca {{ kubernetes.certificate.directory }}/templates/ca-csr.json | cfssljson -bare ca
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}/ca/"
 
-- name: generate CA 
-  shell: cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+- name: generate intermediate kubernetes-ca 
+  shell: |
+    cfssl gencert \
+    -ca={{ kubernetes.certificate.directory }}/ca/ca.pem \
+    -ca-key={{ kubernetes.certificate.directory }}/ca/ca-key.pem \
+    -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
+    -profile=intermediate \
+    {{ kubernetes.certificate.directory }}/templates/kubernetes-ca-csr.json | cfssljson -bare kubernetes-ca
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca"
+
+- name: generate intermediate etcd-ca 
+  shell: |
+    cfssl gencert \
+    -ca={{ kubernetes.certificate.directory }}/ca/ca.pem \
+    -ca-key={{ kubernetes.certificate.directory }}/ca/ca-key.pem \
+    -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
+    -profile=intermediate \
+    {{ kubernetes.certificate.directory }}/templates/etcd-ca-csr.json | cfssljson -bare etcd-ca
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}/intermediates/etcd-ca"
+
+- name: generate intermediate kubernetes-front-proxy-ca
+  shell: |
+    cfssl gencert \
+    -ca={{ kubernetes.certificate.directory }}/ca/ca.pem \
+    -ca-key={{ kubernetes.certificate.directory }}/ca/ca-key.pem \
+    -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
+    -profile=intermediate \
+    {{ kubernetes.certificate.directory }}/templates/kubernetes-front-proxy-ca-csr.json | cfssljson -bare kubernetes-front-proxy-ca
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}/intermediates/kubernetes-front-proxy-ca"
+
+- name: generate intermediate kubernetes-front-proxy-ca
+  shell: |
+    cfssl gencert \
+    -ca={{ kubernetes.certificate.directory }}/ca/ca.pem \
+    -ca-key={{ kubernetes.certificate.directory }}/ca/ca-key.pem \
+    -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
+    -profile=intermediate \
+    {{ kubernetes.certificate.directory }}/templates/kubernetes-front-proxy-ca-csr.json | cfssljson -bare kubernetes-front-proxy-ca
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}/intermediates/kubernetes-front-proxy-ca"
+
+- name: generate intermediate kubernetes-service-account-management-ca
+  shell: |
+    cfssl gencert \
+    -ca={{ kubernetes.certificate.directory }}/ca/ca.pem \
+    -ca-key={{ kubernetes.certificate.directory }}/ca/ca-key.pem \
+    -config={{ kubernetes.certificate.directory }}/templates/ca-config.json \
+    -profile=intermediate \
+    {{ kubernetes.certificate.directory }}/templates/kubernetes-service-account-management-ca-csr.json | cfssljson -bare kubernetes-service-account-management-ca
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}/intermediates/kubernetes-service-account-management-ca"
+
+- name: copy intermediete ca certificate into etcd node
+  vars:
+    etcd_ip: "{{ groups['etcd'] | join(' ') }}"
   args:
     chdir: "{{ kubernetes.certificate.directory }}"
+  shell: |
+    for instance in {{ etcd_ip }}; do
+      scp {{ kubernetes.certificate.directory }}/intermediates/etcd-ca/etcd-ca.pem {{ user }}@${instance}:~/
+      scp {{ kubernetes.certificate.directory }}/intermediates/etcd-ca/etcd-ca-key.pem {{ user }}@${instance}:~/
+    done
 
+- name: copy intermediete ca certificate into master node
+  vars:
+    master_ip: "{{ groups['master'] | join(' ') }}"
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}"
+  shell: |
+    for instance in {{ master_ip }}; do
+      scp {{ kubernetes.certificate.directory }}/intermediates/etcd-ca/etcd-ca.pem {{ user }}@${instance}:~/
+      scp {{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca/kubernetes-ca.pem {{ user }}@${instance}:~/
+      scp {{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca/kubernetes-ca-key.pem {{ user }}@${instance}:~/
+      scp {{ kubernetes.certificate.directory }}/intermediates/kubernetes-front-proxy-ca/kubernetes-front-proxy-ca.pem {{ user }}@${instance}:~/
+      scp {{ kubernetes.certificate.directory }}/intermediates/kubernetes-service-account-management-ca/kubernetes-service-account-management-ca.pem {{ user }}@${instance}:~/
+      scp {{ kubernetes.certificate.directory }}/intermediates/kubernetes-service-account-management-ca/kubernetes-service-account-management-ca-key.pem {{ user }}@${instance}:~/
+    done
 
-
+- name: copy intermediete ca certificate into worker node
+  vars:
+    worker_ip: "{{ groups['worker'] | join(' ') }}"
+  args:
+    chdir: "{{ kubernetes.certificate.directory }}"
+  shell: |
+    for instance in {{ worker_ip }}; do
+      scp {{ kubernetes.certificate.directory }}/intermediates/kubernetes-ca/kubernetes-ca.pem {{ user }}@${instance}:~/
+    done
