@@ -5,6 +5,8 @@
     remote_src: yes
     mode: 400
   with_items:
+    - { src: '/home/{{ user }}/kube-apiserver.pem', dest: '/var/lib/kubernetes/kube-apiserver.pem' }
+    - { src: '/home/{{ user }}/kube-apiserver-key.pem', dest: '/var/lib/kubernetes/kube-apiserver-key.pem' }
     - { src: '/home/{{ user }}/kube-apiserver-etcd-client.pem', dest: '/var/lib/kubernetes/kube-apiserver-etcd-client.pem' }
     - { src: '/home/{{ user }}/kube-apiserver-etcd-client-key.pem', dest: '/var/lib/kubernetes/kube-apiserver-etcd-client-key.pem' }
     - { src: '/home/{{ user }}/kube-apiserver-kubelet-client.pem', dest: '/var/lib/kubernetes/kube-apiserver-kubelet-client.pem' }
