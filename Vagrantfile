@@ -9,7 +9,7 @@ Vagrant.configure('2') do |config|
 
   $ansible_script = <<-'SCRIPT'
   sudo apt update -y
-  sudo apt install ansible sshpass -y
+  sudo apt install ansible sshpass lvm2 -y
   SCRIPT
 
   ### cluster name configuration
@@ -86,6 +86,17 @@ Vagrant.configure('2') do |config|
         vb.memory = 4096
         vb.cpus = 4
         vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
+
+        unless File.exist?("./#{cluster_name}-worker-#{i}-disk-02.vdi")
+          vb.customize ['createhd', '--filename', "./#{cluster_name}-worker-#{i}-disk-02.vdi", '--variant', 'Fixed', '--size', 10 * 1024]
+        end
+
+        unless File.exist?("./#{cluster_name}-worker-#{i}-disk-03.vdi")
+          vb.customize ['createhd', '--filename', "./#{cluster_name}-worker-#{i}-disk-03.vdi", '--variant', 'Fixed', '--size', 10 * 1024]
+        end
+
+        vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', "./#{cluster_name}-worker-#{i}-disk-02.vdi"]
+        vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 2, '--device', 0, '--type', 'hdd', '--medium', "./#{cluster_name}-worker-#{i}-disk-03.vdi"]
       end
     end
   end
