@@ -16,15 +16,15 @@ kubernetes:
       ### add IP or domain with comma separated
       additionalIP: "172.16.0.1,172.16.0.2,kubernetes.zufar.io"
     cri:
-      version: v1.18.0
+      version: v1.19.0
     cni:
-      version: v0.8.6
+      version: v0.9.1
     etcd:
-      version: v3.4.10
+      version: v3.4.15
     runc:
-      version: v1.0.0-rc91
+      version: v1.0.0-rc93
     containerd:
-      version: 1.3.6
+      version: 1.4.4
     # encrypt stored resources in etcd
     encryptionProvider:
       # supported provider is aescbc, secretbox, and aesgcm
@@ -44,17 +44,17 @@ kubernetes:
     coredns:
       nameservers:
         - 172.30.0.3
-      version: 1.7.0
+      version: 1.8.3
     ### flannel interface, most Kubernetes installation using
     ### single interface, this enabled to use different interface
     ### TODO: support flannel tunneling on different interface as API
     flannel:
       interface: eth1
-      version: v0.12.0
+      version: v0.13.0
     ### enabled metrics server
     metricsServer:
       enabled: true
-      version: v0.3.7
+      version: v0.4.3
     ### enabled oidc
     oidc:
       enabled: true
@@ -73,12 +73,9 @@ kubernetes:
   certificate:
     ### directory created in deployer node for certificate (full path)
     directory: /home/vagrant/kubernetes-certificate
-    ### create client kubeconfig
-    ### will be generated in the certificate directory
-    createClientKubeconfig: true
   ### number of Kubernetes master
   masterNumber: 3
-  version: v1.18.7
+  version: v1.19.10
 
 ### Infrastructure configuration
 infrastructure:

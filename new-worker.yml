@@ -1,9 +1,6 @@
 #############################
 ##### Renew Certificate #####
 #############################
-#
-# run this roles if certificate is expired
-#
 
 #
 # this role generate new certificate in deployer node

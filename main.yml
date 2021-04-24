@@ -26,7 +26,7 @@
 # you can merge etcd into master
 # by changing etcd group IP into master IP
 #
-- name: Setup etcd cluster
+- name: setup etcd cluster
   become: yes
   hosts: etcd
   roles:
@@ -36,7 +36,7 @@
 # This roles setup haproxy keepalived in master node
 # and setup master cluster
 #
-- name: Setup Master Cluter
+- name: setup master cluter
   become: yes
   hosts: master
   roles:
@@ -46,7 +46,7 @@
 #
 # This roles setup worker cluster in master & worker node
 #
-- name: Setup Worker
+- name: setup worker
   become: yes
   hosts: worker,master
   roles:
@@ -55,7 +55,7 @@
 #
 # this roles setup CNI, DNS, and taint master node
 #
-- name: Setup Addons
+- name: setup addons
   become: yes
   hosts: master
   roles:

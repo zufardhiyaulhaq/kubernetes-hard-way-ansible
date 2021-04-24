@@ -69,4 +69,3 @@ kubectl config use-context ${CLUSTER_NAME}
 
 echo ""
 echo "# Please create RBAC for specific user or group for OIDC"
-echo "# Please create RBAC for specific user or group for OIDC"

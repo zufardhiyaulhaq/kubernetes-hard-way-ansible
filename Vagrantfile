@@ -2,10 +2,10 @@ Vagrant.configure('2') do |config|
   config.vm.box = 'hashicorp/bionic64'
 
   ### uncomment this to add custom DNS to your VM
-  $dns_script = <<-'SCRIPT'
-  echo "nameserver 172.30.0.3" > /etc/resolv.conf
-  echo "127.0.0.1 localhost" >> /etc/hosts
-  SCRIPT
+  # $dns_script = <<-'SCRIPT'
+  # echo "nameserver 172.30.0.3" > /etc/resolv.conf
+  # echo "127.0.0.1 localhost" >> /etc/hosts
+  # SCRIPT
 
   $ansible_script = <<-'SCRIPT'
   sudo apt update -y
@@ -43,7 +43,7 @@ Vagrant.configure('2') do |config|
       # end
       
       ### Uncomment this if you need to add self signed CA to trust
-      ### you need to install vagrant plugin
+      ### you need to install vagrant-certificates plugin
       ### vagrant plugin install vagrant-certificates
       # master.certificates.enabled = true
       # master.certificates.certs = Dir.glob('../../template/ca/root-cert.pem')
@@ -76,7 +76,7 @@ Vagrant.configure('2') do |config|
       # end
 
       ### Uncomment this if you need to add self signed CA to trust
-      ### you need to install vagrant plugin
+      ### you need to install vagrant-certificates plugin
       ### vagrant plugin install vagrant-certificates
       # worker.certificates.enabled = true
       # worker.certificates.certs = Dir.glob('../../template/ca/root-cert.pem')
@@ -88,15 +88,10 @@ Vagrant.configure('2') do |config|
         vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
 
         unless File.exist?("./#{cluster_name}-worker-#{i}-disk-02.vdi")
-          vb.customize ['createhd', '--filename', "./#{cluster_name}-worker-#{i}-disk-02.vdi", '--variant', 'Fixed', '--size', 10 * 1024]
-        end
-
-        unless File.exist?("./#{cluster_name}-worker-#{i}-disk-03.vdi")
-          vb.customize ['createhd', '--filename', "./#{cluster_name}-worker-#{i}-disk-03.vdi", '--variant', 'Fixed', '--size', 10 * 1024]
+          vb.customize ['createhd', '--filename', "./#{cluster_name}-worker-#{i}-disk-02.vdi", '--variant', 'Standard', '--size', 100 * 1024]
         end
 
         vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', "./#{cluster_name}-worker-#{i}-disk-02.vdi"]
-        vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 2, '--device', 0, '--type', 'hdd', '--medium', "./#{cluster_name}-worker-#{i}-disk-03.vdi"]
       end
     end
   end
@@ -119,7 +114,7 @@ Vagrant.configure('2') do |config|
     # end
 
     ### Uncomment this if you need to add self signed CA to trust
-    ### you need to install vagrant plugin
+    ### you need to install vagrant-certificates plugin
     ### vagrant plugin install vagrant-certificates
     # deployer.certificates.enabled = true
     # deployer.certificates.certs = Dir.glob('../../template/ca/root-cert.pem')
