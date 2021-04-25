@@ -44,7 +44,7 @@ kubernetes:
     coredns:
       nameservers:
         - 172.30.0.3
-      version: 1.8.3
+      version: 1.7.1
     ### flannel interface, most Kubernetes installation using
     ### single interface, this enabled to use different interface
     ### TODO: support flannel tunneling on different interface as API
