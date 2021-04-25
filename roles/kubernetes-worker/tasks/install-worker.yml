@@ -69,7 +69,7 @@
   - { src: '/opt/containerd/bin/containerd', dest: '/bin/containerd' }
   - { src: '/opt/containerd/bin/containerd-shim', dest: '/bin/containerd-shim' }
   - { src: '/opt/containerd/bin/containerd-shim-runc-v1', dest: '/bin/containerd-shim-runc-v1' }
-  - { src: '/opt/containerd/bin/containerd-stress', dest: '/bin/containerd-stress' }
+  - { src: '/opt/containerd/bin/containerd-shim-runc-v2', dest: '/bin/containerd-shim-runc-v2' }
   - { src: '/opt/containerd/bin/ctr', dest: '/bin/ctr' }
 
 

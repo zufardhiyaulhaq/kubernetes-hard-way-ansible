@@ -1,0 +1,9 @@
+- name: uncordon master nodes
+  shell: kubectl uncordon {{ item }}
+  with_items: "{{ groups['master'] }}"
+  when: inventory_hostname == '{{ infrastructure.keepalived.masterIP }}' and not {{ kubernetes.components.master.noSchedule }}
+
+- name: uncordon worker nodes
+  shell: kubectl uncordon {{ item }}
+  with_items: "{{ groups['worker'] }}"
+  when: inventory_hostname == '{{ infrastructure.keepalived.masterIP }}' 

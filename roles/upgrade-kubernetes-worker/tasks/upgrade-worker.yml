@@ -39,6 +39,51 @@
     dest: "/etc/systemd/system/kube-proxy.service"
     mode: 644
 
+- name: Download and extract containerd
+  unarchive:
+    src:   https://github.com/containerd/containerd/releases/download/v{{ kubernetes.components.containerd.version }}/containerd-{{ kubernetes.components.containerd.version }}-linux-amd64.tar.gz
+    dest: /opt/containerd
+    remote_src: yes
+
+- name: install containerd
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: a+x
+    remote_src: yes
+  with_items:
+  - { src: '/opt/containerd/bin/containerd', dest: '/bin/containerd' }
+  - { src: '/opt/containerd/bin/containerd-shim', dest: '/bin/containerd-shim' }
+  - { src: '/opt/containerd/bin/containerd-shim-runc-v1', dest: '/bin/containerd-shim-runc-v1' }
+  - { src: '/opt/containerd/bin/ctr', dest: '/bin/ctr' }
+
+
+- name: Downlaod and crictl-{{ kubernetes.components.cri.version }}-linux-amd64.tar.gz
+  unarchive:
+    src: https://github.com/kubernetes-sigs/cri-tools/releases/download/{{ kubernetes.components.cri.version }}/crictl-{{ kubernetes.components.cri.version }}-linux-amd64.tar.gz
+    dest: /usr/local/bin/
+    remote_src: yes
+
+- name: Downlaod runc
+  get_url:
+    url: https://github.com/opencontainers/runc/releases/download/{{ kubernetes.components.runc.version }}/runc.amd64
+    dest: /usr/local/bin/runc
+    remote_src: yes
+    mode: a+x
+
+- name: Downlaod and Extract cni-plugins-amd64-{{ kubernetes.components.cni.version }}.tgz
+  unarchive:
+    src: https://github.com/containernetworking/plugins/releases/download/{{ kubernetes.components.cni.version }}/cni-plugins-linux-amd64-{{ kubernetes.components.cni.version }}.tgz
+    dest: /opt/cni/bin/
+    remote_src: yes
+
+- name: restart containerd
+  systemd:
+    name: containerd
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+
 - name: restart kubelet
   systemd:
     name: kubelet
