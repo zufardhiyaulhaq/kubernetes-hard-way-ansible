@@ -7,3 +7,11 @@
 - name: apply flannel template
   shell: kubectl apply -f ~/flannel-{{ kubernetes.addonsComponents.flannel.version }}.yml
   when: inventory_hostname == '{{ infrastructure.keepalived.masterIP }}'
+
+- name: pause 1 minute
+  pause:
+    minutes: 1
+
+- name: remove old flannel
+  shell: kubectl delete daemonset -n kube-system kube-flannel-ds-amd64 kube-flannel-ds-arm kube-flannel-ds-arm64 kube-flannel-ds-ppc64le kube-flannel-ds-s390x
+  when: inventory_hostname == '{{ infrastructure.keepalived.masterIP }}'

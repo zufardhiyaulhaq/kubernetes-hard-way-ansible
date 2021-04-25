@@ -1,0 +1,4 @@
+---
+- include: flannel.yml
+- include: core-dns.yml
+- include: metrics-server.yml

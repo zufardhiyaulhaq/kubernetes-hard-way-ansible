@@ -1,0 +1,3 @@
+- name: apply metris-server template
+  shell: kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/{{ kubernetes.addonsComponents.metricsServer.version }}/components.yaml
+  when: inventory_hostname == '{{ infrastructure.keepalived.masterIP }}' and kubernetes.addonsComponents.metricsServer.enabled

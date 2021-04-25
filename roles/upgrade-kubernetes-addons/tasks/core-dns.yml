@@ -1,7 +1,3 @@
-- name: pause 1 minute
-  pause:
-    minutes: 1
-
 - name: create core-dns from template
   template:
     src: "core-dns.yml.j2"

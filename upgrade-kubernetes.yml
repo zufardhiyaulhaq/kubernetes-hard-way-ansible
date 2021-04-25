@@ -5,7 +5,7 @@
 - name: Cordon kubernetes worker
   hosts: master
   roles:
-    - upgrade-kubernetes--cordon
+    - upgrade-kubernetes-cordon
 
 - name: Upgrade Kubernetes etcd
   become: yes
@@ -32,3 +32,8 @@
   hosts: master
   roles:
     - upgrade-kubernetes-uncordon
+
+- name: Upgrade kubernetes addons
+  hosts: master
+  roles:
+    - upgrade-kubernetes-addons
