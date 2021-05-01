@@ -4,7 +4,9 @@ Documentation=https://github.com/kubernetes/kubernetes
 
 [Service]
 ExecStart=/usr/local/bin/kube-proxy \
-  --config=/var/lib/kube-proxy/kube-proxy-config.yml
+  --config=/var/lib/kube-proxy/kube-proxy-config.yml \
+  --hostname-override={{ hostvars[inventory_hostname].inventory_hostname }} \
+  --v=2
 Restart=on-failure
 RestartSec=5
 
