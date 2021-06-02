@@ -44,7 +44,7 @@
 - name: Downlaod runc
   get_url:
     url: https://github.com/opencontainers/runc/releases/download/{{ kubernetes.components.runc.version }}/runc.amd64
-    checksum: "sha256:{{ lookup('url', 'https://github.com/opencontainers/runc/releases/download/{{ kubernetes.components.runc.version }}/runc.sha256sum') }}"
+    force: yes
     dest: /usr/local/bin/runc
     remote_src: yes
     mode: a+x
@@ -52,7 +52,7 @@
 - name: Downlaod gvisor runsc
   get_url:
     url: https://storage.googleapis.com/gvisor/releases/release/{{ kubernetes.components.gvisor.version }}/x86_64/runsc
-    checksum: "sha512:{{ lookup('url', 'https://storage.googleapis.com/gvisor/releases/release/{{ kubernetes.components.gvisor.version }}/x86_64/runsc.sha512') }}"
+    force: yes
     dest: /usr/local/bin/runsc
     remote_src: yes
     mode: a+x
@@ -61,7 +61,7 @@
 - name: Downlaod gvisor containerd-shim-runsc-v1
   get_url:
     url: https://storage.googleapis.com/gvisor/releases/release/{{ kubernetes.components.gvisor.version }}/x86_64/containerd-shim-runsc-v1
-    checksum: "sha512:{{ lookup('url', 'https://storage.googleapis.com/gvisor/releases/release/{{ kubernetes.components.gvisor.version }}/x86_64/containerd-shim-runsc-v1.sha512') }}"
+    force: yes
     dest: /usr/local/bin/containerd-shim-runsc-v1
     remote_src: yes
     mode: a+x
