@@ -2,8 +2,8 @@
   template:
     src: "runtime-class.yml.j2"
     dest: "~/runtime-class.yml"
-  when: {{ kubernetes.components.gvisor.enabled }}
+  when: kubernetes.components.gvisor.enabled
   
 - name: apply runtime-class template
   shell: kubectl apply -f ~/runtime-class.yml
-  when: {{ kubernetes.components.gvisor.enabled }}
+  when: kubernetes.components.gvisor.enabled
