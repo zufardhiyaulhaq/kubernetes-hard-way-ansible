@@ -53,6 +53,7 @@ Vagrant.configure('2') do |config|
         vb.memory = 2048
         vb.cpus = 2
         vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
+        vb.customize ['modifyvm', :id, '--nested-hw-virt', 'on']
       end
     end
   end
@@ -86,6 +87,7 @@ Vagrant.configure('2') do |config|
         vb.memory = 4096
         vb.cpus = 4
         vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
+        vb.customize ['modifyvm', :id, '--nested-hw-virt', 'on']
 
         unless File.exist?("./#{cluster_name}-worker-#{i}-disk-02.vdi")
           vb.customize ['createhd', '--filename', "./#{cluster_name}-worker-#{i}-disk-02.vdi", '--variant', 'Standard', '--size', 100 * 1024]
@@ -124,6 +126,7 @@ Vagrant.configure('2') do |config|
       vb.name = "#{cluster_name}-deployer"
       vb.memory = 1024
       vb.cpus = 2
+      vb.customize ['modifyvm', :id, '--nested-hw-virt', 'on']
     end
   end
 end

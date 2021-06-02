@@ -20,11 +20,14 @@ kubernetes:
     cni:
       version: v0.9.1
     etcd:
-      version: v3.4.15
+      version: v3.4.16
     runc:
-      version: v1.0.0-rc93
+      version: v1.0.0-rc95
     containerd:
-      version: 1.4.4
+      version: 1.5.2
+    gvisor:
+      enabled: true
+      version: 20210518.0
     # encrypt stored resources in etcd
     encryptionProvider:
       # supported provider is aescbc, secretbox, and aesgcm

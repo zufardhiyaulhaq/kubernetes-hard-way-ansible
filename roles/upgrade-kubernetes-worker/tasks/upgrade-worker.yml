@@ -15,6 +15,90 @@
   - { src: '/opt/kubernetes/server/bin/kube-proxy', dest: '/usr/local/bin/kube-proxy' }
   - { src: '/opt/kubernetes/server/bin/kubectl', dest: '/usr/local/bin/kubectl' }
 
+- name: Download and extract containerd
+  unarchive:
+    src:   https://github.com/containerd/containerd/releases/download/v{{ kubernetes.components.containerd.version }}/containerd-{{ kubernetes.components.containerd.version }}-linux-amd64.tar.gz
+    dest: /opt/containerd
+    remote_src: yes
+
+- name: install containerd
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: a+x
+    remote_src: yes
+  with_items:
+  - { src: '/opt/containerd/bin/containerd', dest: '/usr/local/bin/containerd' }
+  - { src: '/opt/containerd/bin/containerd-shim', dest: '/usr/local/bin/containerd-shim' }
+  - { src: '/opt/containerd/bin/containerd-shim-runc-v1', dest: '/usr/local/bin/containerd-shim-runc-v1' }
+  - { src: '/opt/containerd/bin/containerd-shim-runc-v2', dest: '/usr/local/bin/containerd-shim-runc-v2' }
+  - { src: '/opt/containerd/bin/ctr', dest: '/usr/local/bin/ctr' }
+  - { src: '/opt/containerd/bin/containerd-stress', dest: '/usr/local/bin/containerd-stress' }
+
+
+- name: Downlaod and crictl-{{ kubernetes.components.cri.version }}-linux-amd64.tar.gz
+  unarchive:
+    src: https://github.com/kubernetes-sigs/cri-tools/releases/download/{{ kubernetes.components.cri.version }}/crictl-{{ kubernetes.components.cri.version }}-linux-amd64.tar.gz
+    dest: /usr/local/bin/
+    remote_src: yes
+
+- name: Downlaod runc
+  get_url:
+    url: https://github.com/opencontainers/runc/releases/download/{{ kubernetes.components.runc.version }}/runc.amd64
+    dest: /usr/local/bin/runc
+    remote_src: yes
+    mode: a+x
+
+- name: Downlaod gvisor runsc
+  get_url:
+    src: https://storage.googleapis.com/gvisor/releases/release/{{ kubernetes.components.gvisor.version }}/x86_64/runsc
+    dest: /usr/local/bin/runsc
+    remote_src: yes
+  when: {{ kubernetes.components.gvisor.enabled }}
+
+- name: Downlaod gvisor containerd-shim-runsc-v1
+  get_url:
+    src: https://storage.googleapis.com/gvisor/releases/release/{{ kubernetes.components.gvisor.version }}/x86_64/containerd-shim-runsc-v1
+    dest: /usr/local/bin/containerd-shim-runsc-v1
+    remote_src: yes
+  when: {{ kubernetes.components.gvisor.enabled }}
+
+- name: Downlaod and Extract cni-plugins-amd64-{{ kubernetes.components.cni.version }}.tgz
+  unarchive:
+    src: https://github.com/containernetworking/plugins/releases/download/{{ kubernetes.components.cni.version }}/cni-plugins-linux-amd64-{{ kubernetes.components.cni.version }}.tgz
+    dest: /opt/cni/bin/
+    remote_src: yes
+
+- name: copy containerd config
+  template:
+    src: "containerd.conf.j2"
+    dest: "/etc/modules-load.d/containerd.conf"
+    mode: 644
+
+- name: copy 99-kubernetes-cri.conf config
+  template:
+    src: "99-kubernetes-cri.conf.j2"
+    dest: "/etc/sysctl.d/99-kubernetes-cri.conf"
+    mode: 644
+
+- name: copy containerd config
+  template:
+    src: "config.toml.j2"
+    dest: "/etc/containerd/config.toml"
+    mode: 644
+
+- name: copy containerd service
+  template:
+    src: "containerd.service.j2"
+    dest: "/etc/systemd/system/containerd.service"
+    mode: 644
+
+- name: copy custom resolv.conf
+  template:
+    src: "resolv.conf.j2"
+    dest: "/var/lib/kubernetes/resolv.conf"
+    mode: 644
+
 - name: copy kubelet config
   template:
     src: "kubelet-config.yml.j2"
@@ -39,44 +123,8 @@
     dest: "/etc/systemd/system/kube-proxy.service"
     mode: 644
 
-- name: Download and extract containerd
-  unarchive:
-    src:   https://github.com/containerd/containerd/releases/download/v{{ kubernetes.components.containerd.version }}/containerd-{{ kubernetes.components.containerd.version }}-linux-amd64.tar.gz
-    dest: /opt/containerd
-    remote_src: yes
-
-- name: install containerd
-  copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: a+x
-    remote_src: yes
-  with_items:
-  - { src: '/opt/containerd/bin/containerd', dest: '/bin/containerd' }
-  - { src: '/opt/containerd/bin/containerd-shim', dest: '/bin/containerd-shim' }
-  - { src: '/opt/containerd/bin/containerd-shim-runc-v1', dest: '/bin/containerd-shim-runc-v1' }
-  - { src: '/opt/containerd/bin/containerd-shim-runc-v2', dest: '/bin/containerd-shim-runc-v2' }
-  - { src: '/opt/containerd/bin/ctr', dest: '/bin/ctr' }
-
-
-- name: Downlaod and crictl-{{ kubernetes.components.cri.version }}-linux-amd64.tar.gz
-  unarchive:
-    src: https://github.com/kubernetes-sigs/cri-tools/releases/download/{{ kubernetes.components.cri.version }}/crictl-{{ kubernetes.components.cri.version }}-linux-amd64.tar.gz
-    dest: /usr/local/bin/
-    remote_src: yes
-
-- name: Downlaod runc
-  get_url:
-    url: https://github.com/opencontainers/runc/releases/download/{{ kubernetes.components.runc.version }}/runc.amd64
-    dest: /usr/local/bin/runc
-    remote_src: yes
-    mode: a+x
-
-- name: Downlaod and Extract cni-plugins-amd64-{{ kubernetes.components.cni.version }}.tgz
-  unarchive:
-    src: https://github.com/containernetworking/plugins/releases/download/{{ kubernetes.components.cni.version }}/cni-plugins-linux-amd64-{{ kubernetes.components.cni.version }}.tgz
-    dest: /opt/cni/bin/
-    remote_src: yes
+- name: relaod sysctl
+  shell: sysctl --system
 
 - name: restart containerd
   systemd:
