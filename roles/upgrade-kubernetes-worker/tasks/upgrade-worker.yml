@@ -51,16 +51,18 @@
 
 - name: Downlaod gvisor runsc
   get_url:
-    src: https://storage.googleapis.com/gvisor/releases/release/{{ kubernetes.components.gvisor.version }}/x86_64/runsc
+    url: https://storage.googleapis.com/gvisor/releases/release/{{ kubernetes.components.gvisor.version }}/x86_64/runsc
     dest: /usr/local/bin/runsc
     remote_src: yes
+    mode: a+x
   when: kubernetes.components.gvisor.enabled
 
 - name: Downlaod gvisor containerd-shim-runsc-v1
   get_url:
-    src: https://storage.googleapis.com/gvisor/releases/release/{{ kubernetes.components.gvisor.version }}/x86_64/containerd-shim-runsc-v1
+    url: https://storage.googleapis.com/gvisor/releases/release/{{ kubernetes.components.gvisor.version }}/x86_64/containerd-shim-runsc-v1
     dest: /usr/local/bin/containerd-shim-runsc-v1
     remote_src: yes
+    mode: a+x
   when: kubernetes.components.gvisor.enabled
 
 - name: Downlaod and Extract cni-plugins-amd64-{{ kubernetes.components.cni.version }}.tgz
