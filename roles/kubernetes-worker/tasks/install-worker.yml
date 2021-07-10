@@ -146,7 +146,7 @@
     dest: "/etc/sysctl.d/99-kubernetes-cri.conf"
     mode: 644
 
-- name: relaod sysctl
+- name: reload sysctl
   shell: sysctl --system
 
 - name: copy containerd config

@@ -127,7 +127,7 @@
     dest: "/etc/systemd/system/kube-proxy.service"
     mode: 644
 
-- name: relaod sysctl
+- name: reload sysctl
   shell: sysctl --system
 
 - name: restart containerd
