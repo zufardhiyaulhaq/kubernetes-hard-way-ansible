@@ -94,7 +94,7 @@
     enabled: yes
 
 - name: setup cronjob to restart master daily
-  ansible.builtin.cron:
+  cron:
     name: "restart-master"
     special_time: daily
     job: "systemctl restart kube-apiserver kube-controller-manager kube-scheduler"

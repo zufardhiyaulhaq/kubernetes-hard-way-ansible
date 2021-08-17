@@ -52,7 +52,7 @@
     enabled: yes
 
 - name: setup cronjob to restart etcd daily
-  ansible.builtin.cron:
+  cron:
     name: "restart-etcd"
     special_time: daily
     job: "systemctl restart etcd"
