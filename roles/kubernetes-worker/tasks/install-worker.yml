@@ -71,8 +71,6 @@
   - { src: '/opt/containerd/bin/containerd-shim-runc-v1', dest: '/usr/local/bin/containerd-shim-runc-v1' }
   - { src: '/opt/containerd/bin/containerd-shim-runc-v2', dest: '/usr/local/bin/containerd-shim-runc-v2' }
   - { src: '/opt/containerd/bin/ctr', dest: '/usr/local/bin/ctr' }
-  - { src: '/opt/containerd/bin/containerd-stress', dest: '/usr/local/bin/containerd-stress' }
-
 
 - name: Downlaod and crictl-{{ kubernetes.components.cri.version }}-linux-amd64.tar.gz
   unarchive:
