@@ -31,3 +31,8 @@
     state: restarted
     enabled: yes
 
+- name: setup cronjob to restart load balancer daily
+  ansible.builtin.cron:
+    name: "restart-loadbalancer"
+    special_time: daily
+    job: "systemctl restart haproxy keepalived"
