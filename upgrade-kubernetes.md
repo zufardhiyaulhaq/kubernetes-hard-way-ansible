@@ -1,8 +1,8 @@
 # Upgrade Kubernetes
 
-### Upgrade from v1.19.10 to 1.20.13
+### Upgrade from v1.19.10 to 1.20.12
 
-Please note that upgrading from v1.19.10 to v1.20.13 will also upgrade flannel, coredns, and metrics-server. Please test in staging or testing cluster before upgrading.
+Please note that upgrading from v1.19.10 to v1.20.12 will also upgrade flannel, coredns, and metrics-server. Please test in staging or testing cluster before upgrading.
 
 #### Upgrade step
 * SSH to deployer node
@@ -13,7 +13,7 @@ ssh vagrant@10.200.100.30
 * Go to `kubernetes-hardway-ansible` directory, checkout to master
 ```
 git fetch --all
-git checkout --track origin/v1.20.13
+git checkout --track origin/v1.20.12
 ```
 
 * Adjust variable in the group_vars
