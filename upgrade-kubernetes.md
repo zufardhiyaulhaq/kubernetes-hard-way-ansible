@@ -1,5 +1,45 @@
 # Upgrade Kubernetes
 
+### Upgrade from v1.19.10 to 1.20.13
+
+Please note that upgrading from v1.19.10 to v1.20.13 will also upgrade flannel, coredns, and metrics-server. Please test in staging or testing cluster before upgrading.
+
+#### Upgrade step
+* SSH to deployer node
+```bash
+ssh vagrant@10.200.100.30
+```
+
+* Go to `kubernetes-hardway-ansible` directory, checkout to master
+```
+git fetch --all
+git checkout --track origin/v1.20.13
+```
+
+* Adjust variable in the group_vars
+```
+vi group_vars/all.yml
+```
+
+* Adjust Kubernetes host and nodes
+```
+vi hosts/hosts
+```
+
+* Run ansible
+```
+ansible-playbook upgrade-kubernetes.yml -i hosts/hosts
+```
+
+* Verify version
+```
+kubectl version
+kubectl get nodes
+
+kubectl describe deployment coredns --namespace kube-system | grep Image
+kubectl get daemonset kube-flannel-ds --namespace kube-system -o=jsonpath='{$.spec.template.spec.containers[:1].image}'
+```
+
 ### Upgrade from v1.18.7 to 1.19.10
 
 Please note that upgrading from v1.18.7 to v1.19.10 will also upgrade flannel, coredns, and metrics-server. Please test in staging or testing cluster before upgrading.
