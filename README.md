@@ -10,6 +10,7 @@ Ansible template to create kubernetes cluster with the following specs:
 * etcd v3.5.1
 * core-dns 1.8.6
 * metrics-server v0.5.2
+* metallb v0.11.0
 * Haproxy & keepalived
 * Secure communication between component
 
