@@ -24,7 +24,6 @@ ExecStart=/usr/local/bin/kube-apiserver \
   --kubelet-certificate-authority=/var/lib/kubernetes/kubernetes-ca.pem \
   --kubelet-client-certificate=/var/lib/kubernetes/kube-apiserver-kubelet-client.pem \
   --kubelet-client-key=/var/lib/kubernetes/kube-apiserver-kubelet-client-key.pem \
-  --kubelet-https=true \
   --runtime-config='api/all=true' \
 {% if kubernetes.addonsComponents.oidc.enabled %}
 {% if kubernetes.addonsComponents.oidc.issuerURL %}
