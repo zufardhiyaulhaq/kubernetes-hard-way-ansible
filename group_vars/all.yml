@@ -27,7 +27,7 @@ kubernetes:
       version: 1.5.8
     gvisor:
       enabled: true
-      version: 20211122.0
+      version: 20211122
     # encrypt stored resources in etcd
     encryptionProvider:
       # supported provider is aescbc, secretbox, and aesgcm
