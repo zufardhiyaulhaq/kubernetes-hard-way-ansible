@@ -21,10 +21,6 @@
   roles:
     - upgrade-kubernetes-master
 
-- name: pause 10 minute
-  pause:
-    minutes: 10
-
 - name: Upgrade Kubernetes worker
   become: yes
   hosts: master,worker
