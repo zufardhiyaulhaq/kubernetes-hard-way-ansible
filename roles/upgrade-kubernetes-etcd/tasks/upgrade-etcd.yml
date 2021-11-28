@@ -26,3 +26,7 @@
     state: restarted
     daemon_reload: yes
     enabled: yes
+
+- name: pause 1 minute
+  pause:
+    minutes: 1

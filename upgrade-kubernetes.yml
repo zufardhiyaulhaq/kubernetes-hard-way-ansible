@@ -29,11 +29,13 @@
     - upgrade-kubernetes-worker
 
 - name: Uncordon kubernetes worker
+  become: yes
   hosts: master
   roles:
     - upgrade-kubernetes-uncordon
 
 - name: Upgrade kubernetes addons
+  become: yes
   hosts: master
   roles:
     - upgrade-kubernetes-addons

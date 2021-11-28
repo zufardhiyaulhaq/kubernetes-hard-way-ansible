@@ -52,6 +52,6 @@
     daemon_reload: yes
     enabled: yes
 
-
-
-
+- name: pause 5 minute
+  pause:
+    minutes: 5
