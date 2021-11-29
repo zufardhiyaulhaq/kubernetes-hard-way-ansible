@@ -3,6 +3,7 @@
 ##############################
 
 - name: Cordon kubernetes worker
+  become: yes
   hosts: master
   roles:
     - upgrade-kubernetes-cordon
