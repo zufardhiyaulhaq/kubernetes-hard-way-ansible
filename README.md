@@ -1,9 +1,9 @@
 # Kubernetes Hard Way Ansible
 Ansible template to create kubernetes cluster with the following specs:
-* Kubernetes v1.20.12
+* Kubernetes v1.21.7
 * Flannel v0.15.1
 * CNI v1.0.1
-* CRI v1.20.0
+* CRI v1.21.0
 * runc v1.0.2
 * containerd v1.5.8
 * gvisor 20211122
