@@ -16,7 +16,7 @@ kubernetes:
       ### add IP or domain with comma separated
       additionalIP: "172.16.0.1,172.16.0.2,kubernetes.zufar.io"
     cri:
-      version: v1.20.0
+      version: v1.21.0
     cni:
       version: v1.0.1
     etcd:
@@ -78,7 +78,7 @@ kubernetes:
     directory: /home/vagrant/kubernetes-certificate
   ### number of Kubernetes master
   masterNumber: 3
-  version: v1.20.12
+  version: v1.21.7
 
 ### Infrastructure configuration
 infrastructure:
