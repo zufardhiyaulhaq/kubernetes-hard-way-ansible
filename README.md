@@ -1,16 +1,16 @@
 # Kubernetes Hard Way Ansible
 Ansible template to create kubernetes cluster with the following specs:
-* Kubernetes v1.21.7
-* Flannel v0.15.1
-* CNI v1.0.1
-* CRI v1.21.0
-* runc v1.0.2
-* containerd v1.5.8
-* gvisor 20211122
-* etcd v3.5.1
-* core-dns 1.8.6
-* metrics-server v0.5.2
-* metallb v0.11.0
+* Kubernetes v1.22.10
+* Flannel v0.18.1
+* CNI v1.1.1
+* CRI v1.22.0
+* runc v1.1.3
+* containerd v1.6.6
+* gvisor 20220516
+* etcd v3.5.4
+* core-dns 1.9.3
+* metrics-server v0.6.1
+* metallb v0.12.1
 * Haproxy & keepalived
 * Secure communication between component
 
