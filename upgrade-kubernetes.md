@@ -31,7 +31,7 @@ ssh vagrant@10.200.100.30
 * Go to `kubernetes-hardway-ansible` directory, checkout to master
 ```
 git fetch --all
-git checkout --track origin/v1.21.7
+git checkout --track origin/v1.22.10
 ```
 
 * Adjust variable in the group_vars
