@@ -170,7 +170,7 @@ spec:
       serviceAccountName: flannel
       initContainers:
       - name: install-cni-plugin
-        image: rancher/mirrored-flannelcni-flannel-cni-plugin:v1.0.0
+        image: rancher/mirrored-flannelcni-flannel-cni-plugin:v1.1.0
         command:
         - cp
         args:
@@ -181,7 +181,7 @@ spec:
         - name: cni-plugin
           mountPath: /opt/cni/bin
       - name: install-cni
-        image: quay.io/coreos/flannel:{{ kubernetes.addonsComponents.flannel.version }}
+        image: rancher/mirrored-flannelcni-flannel:{{ kubernetes.addonsComponents.flannel.version }}
         command:
         - cp
         args:
@@ -195,7 +195,7 @@ spec:
           mountPath: /etc/kube-flannel/
       containers:
       - name: kube-flannel
-        image: quay.io/coreos/flannel:{{ kubernetes.addonsComponents.flannel.version }}
+        image: rancher/mirrored-flannelcni-flannel:{{ kubernetes.addonsComponents.flannel.version }}
         command:
         - /opt/bin/flanneld
         args:
@@ -222,11 +222,15 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        - name: EVENT_QUEUE_DEPTH
+          value: "5000"
         volumeMounts:
         - name: run
           mountPath: /run/flannel
         - name: flannel-cfg
           mountPath: /etc/kube-flannel/
+        - name: xtables-lock
+          mountPath: /run/xtables.lock
       volumes:
       - name: run
         hostPath:
@@ -240,3 +244,7 @@ spec:
       - name: flannel-cfg
         configMap:
           name: kube-flannel-cfg
+      - name: xtables-lock
+        hostPath:
+          path: /run/xtables.lock
+          type: FileOrCreate
